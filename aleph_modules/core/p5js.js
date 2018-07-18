@@ -3,13 +3,16 @@ const p5_audio = require("p5/lib/addons/p5.sound.js");
 
 // p5.disableFriendlyErrors = true;
 
-let cnv, song, spectrum, waveform, bass, mid, high, moduleName;
+let cnv, song, spectrum, waveform, centroid, bass, mid, high, moduleName;
 
 let simpleSpectrum = document.querySelector("#simpleSpectrum")
 	.addEventListener("click", () => moduleName = "simpleSpectrum");
 
 let simpleWaveform = document.querySelector("#simpleWaveform")
 	.addEventListener("click", () => moduleName = "simpleWaveform");
+
+let spectralCentroid = document.querySelector("#spectralCentroid")
+	.addEventListener("click", () => moduleName = "spectralCentroid");
 
 function preload() {
 	song = loadSound("./../../a.mp3");
@@ -29,7 +32,7 @@ function draw() {
 	if (moduleName !== undefined){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
-			moduleFile.run(volume, spectrum, waveform, bass, mid, high);
+			moduleFile.run(volume, bass, mid, high, spectrum, waveform, spectralCentroid);
 		} 
 
 		catch (err){
@@ -45,4 +48,5 @@ function myFFT(){
 	bass = fft.getEnergy("bass");
 	mid = fft.getEnergy("mid");
 	high = fft.getEnergy("treble");
+	spectralCentroid = fft.getCentroid();
 }
