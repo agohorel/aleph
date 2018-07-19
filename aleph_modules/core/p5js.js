@@ -15,7 +15,7 @@ let spectralCentroid = document.querySelector("#spectralCentroid")
 	.addEventListener("click", () => moduleName = "spectralCentroid");
 
 function setup() {
-	cnv = createCanvas(1920, 1080);
+	cnv = createCanvas(1900, 1023);
 	
 	input = new p5.AudioIn();
 	input.start();

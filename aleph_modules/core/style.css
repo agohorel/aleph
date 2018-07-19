@@ -1,5 +1,6 @@
 body {
 	background-color: #000;
+	margin: 0;
 }
 
 button {
@@ -8,4 +9,8 @@ button {
 	font-weight: lighter;
 	font-size: 24px;
 	font-family: monospace;
+}
+
+#buttons {
+	padding: 10px;
 }
