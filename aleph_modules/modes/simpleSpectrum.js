@@ -1,6 +1,3 @@
-const p5 = require("p5");
-const p5_audio = require("p5/lib/addons/p5.sound.js");
-
 exports.run = (fft, volume, bass, mid, high, spectrum) => {
 	background(0);
 	noStroke();
