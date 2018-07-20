@@ -5,17 +5,17 @@ const ipc = electron.ipcRenderer;
 const simpleSpectrum = document.querySelector("#simpleSpectrum");
 
 simpleSpectrum.addEventListener("click", () => {
-	ipc.send("send", "simpleSpectrum");
+	ipc.send("changeMode", "simpleSpectrum");
 });
 
 const simpleWaveform = document.querySelector("#simpleWaveform");
 
 simpleWaveform.addEventListener("click", () => {
-	ipc.send("send", "simpleWaveform");
+	ipc.send("changeMode", "simpleWaveform");
 });
 
 const centroid = document.querySelector("#spectralCentroid");
 
 centroid.addEventListener("click", () => {
-	ipc.send("send", "spectralCentroid");
+	ipc.send("changeMode", "spectralCentroid");
 });

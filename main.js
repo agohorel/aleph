@@ -13,6 +13,6 @@ function createWindow() {
 
 app.on("ready", createWindow);
 
-ipcMain.on("send", (event, arg) => {
+ipcMain.on("changeMode", (event, arg) => {
 	displayWindow.webContents.send("modeSelector", arg);
 });
