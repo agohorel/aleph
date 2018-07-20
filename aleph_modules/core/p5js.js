@@ -1,18 +1,11 @@
+const electron = require("electron");
+const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 
 // p5.disableFriendlyErrors = true;
 
-let cnv, fft, input, spectrum, waveform, centroid, bass, mid, high, moduleName;
-
-let simpleSpectrum = document.querySelector("#simpleSpectrum")
-	.addEventListener("click", () => moduleName = "simpleSpectrum");
-
-let simpleWaveform = document.querySelector("#simpleWaveform")
-	.addEventListener("click", () => moduleName = "simpleWaveform");
-
-let spectralCentroid = document.querySelector("#spectralCentroid")
-	.addEventListener("click", () => moduleName = "spectralCentroid");
+let cnv, fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "simpleWaveform";
 
 function setup() {
 	cnv = createCanvas(1900, 1023);
@@ -48,3 +41,7 @@ function myFFT(){
 	high = fft.getEnergy("treble");
 	spectralCentroid = fft.getCentroid();
 }
+
+ipc.on("modeSelector", (event, arg) => {
+	moduleName = arg;
+});

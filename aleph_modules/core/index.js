@@ -1,9 +1,21 @@
 const electron = require("electron");
 const BrowserWindow = electron.remote.BrowserWindow;
+const ipc = electron.ipcRenderer;
 
-let newWindow = document.querySelector("#newWindow")
-	.addEventListener("click", function(event){
-		console.log("clicked!");
-		let win2 = new BrowserWindow({width: 400, height: 300});
-		win2.show();
-	});
+const simpleSpectrum = document.querySelector("#simpleSpectrum");
+
+simpleSpectrum.addEventListener("click", () => {
+	ipc.send("send", "simpleSpectrum");
+});
+
+const simpleWaveform = document.querySelector("#simpleWaveform");
+
+simpleWaveform.addEventListener("click", () => {
+	ipc.send("send", "simpleWaveform");
+});
+
+const centroid = document.querySelector("#spectralCentroid");
+
+centroid.addEventListener("click", () => {
+	ipc.send("send", "spectralCentroid");
+});

@@ -1,9 +1,18 @@
-const {app, BrowserWindow} = require("electron");
+const {app, BrowserWindow, ipcMain} = require("electron");
+
+// global reference to windows to prevent closing on js garbage collection
+let editorWindow, displayWindow;
 
 function createWindow() {
-	win = new BrowserWindow({width: 1920, height: 1080, autoHideMenuBar: true});
+	editorWindow = new BrowserWindow({width: 1920, height: 1080});
+	displayWindow = new BrowserWindow({width: 1920, height: 1080, autoHideMenuBar: true});
 
-	win.loadFile("./aleph_modules/core/index.html");
+	editorWindow.loadFile("./aleph_modules/core/index.html");
+	displayWindow.loadFile("./aleph_modules/core/displayWindow.html");
 }
 
 app.on("ready", createWindow);
+
+ipcMain.on("send", (event, arg) => {
+	displayWindow.webContents.send("modeSelector", arg);
+});
