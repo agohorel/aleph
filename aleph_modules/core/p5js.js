@@ -2,6 +2,21 @@ const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
+const easymidi = require("easymidi");
+
+// let inputs = easymidi.getInputs();
+// console.log(inputs);
+
+let midi = new easymidi.Input("Launch Control 2");
+console.log(midi);
+
+midi.on('noteon', (msg) => {
+  console.log(msg);
+});
+
+midi.on("cc", (msg) => {
+	console.log(msg);
+});
 
 // p5.disableFriendlyErrors = true;
 
