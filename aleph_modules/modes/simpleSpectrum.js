@@ -1,7 +1,10 @@
-exports.run = (fft, volume, bass, mid, high, spectrum) => {
-	background(0);
+exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, ccObj, noteObj) => {
+	let r = bass, g = mid, b = high, colorMod;
+	colorMod = ccObj.value;
+
+	background(0, colorMod);
 	noStroke();
-	fill(bass, mid, high);
+	fill(r + colorMod, g + colorMod, b + colorMod);
 
 	for (let i = 0; i < spectrum.length; i++){
 		let x = map(i, 0, spectrum.length, 0, width);
