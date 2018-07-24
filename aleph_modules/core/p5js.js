@@ -20,12 +20,11 @@ function setup() {
 
 function draw() {	
 	myFFT();
-	console.log(midi);
 
 	if (moduleName !== undefined){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
-			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.knob1);
+			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls);
 		} 
 
 		catch (err){

@@ -1,7 +1,7 @@
 // let opacity = 255;
 // let knob1 = 0, knob2 = 0;
 
-exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, knob1) => {
+exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midiControls) => {
 	let r = bass, g = mid, b = high, colorMod;
 
 	// switch (ccObj.controller){
@@ -25,10 +25,9 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 	// channel 8
 	// controller: 21-28, 41-48
 
-	background(0, knob1);
+	background(0, midiControls.knob1);
 	noStroke();
-	// fill(r + knob1, g + knob1, b + knob1);
-	fill(r,g,b);
+	fill(r, g, b + midiControls.knob2);
 
 	for (let i = 0; i < spectrum.length; i++){
 		let x = map(i, 0, spectrum.length, 0, width);
