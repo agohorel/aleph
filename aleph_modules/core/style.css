@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300');
+
 body {
 	background-color: #000;
 	margin: 0;
@@ -5,10 +7,18 @@ body {
 
 button {
 	background-color: #666;
+	border: none;
 	color: #fff;
-	font-weight: lighter;
-	font-size: 24px;
-	font-family: monospace;
+	font-size: 18px;
+	font-family: Roboto Mono;
+	margin: 5px;
+	padding: 5px 10px 5px 10px;
+}
+
+button:hover {
+	background-color: #555;
+	cursor: pointer;
+	color: #eee;
 }
 
 #buttons {
