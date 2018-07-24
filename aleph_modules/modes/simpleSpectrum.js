@@ -25,7 +25,7 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 	// channel 8
 	// controller: 21-28, 41-48
 
-	background(0, midiControls.knob1);
+	background(midiControls.btn1, midiControls.knob1);
 	noStroke();
 	fill(r, g, b + midiControls.knob2);
 
