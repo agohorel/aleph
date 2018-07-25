@@ -10,7 +10,7 @@ button {
 	border: none;
 	color: #fff;
 	font-size: 18px;
-	font-family: Roboto Mono;
+	font-family: Roboto Mono, monospace;
 	margin: 5px;
 	padding: 5px 10px 5px 10px;
 }
@@ -21,17 +21,14 @@ button:hover {
 	color: #eee;
 }
 
-h3 {
-	font-family: Roboto;
-	color: #999;
-	margin: 0px;
-}
-
 .buttons {
 	padding: 10px;
 }
 
 .textHeaders {
+	font-family: Roboto, sans-serif;
+	color: #999;
+	margin: 0px;
 	padding-left: 15px;
 }
 
@@ -40,7 +37,7 @@ h3 {
 }
 
 #midiDeviceList {
-	font-family: Roboto Mono;
+	font-family: Roboto Mono, monospace;
 	font-weight: normal;
 	color: #666;
 	margin: 10px 0px 10px 0px;
