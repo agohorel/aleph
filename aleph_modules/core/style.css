@@ -27,12 +27,16 @@ h3 {
 	margin: 0px;
 }
 
-#buttons {
+.buttons {
 	padding: 10px;
 }
 
-.controllerSelection {
-	margin-left: 15px;
+.textHeaders {
+	padding-left: 15px;
+}
+
+#modeSelectorDiv {
+	margin-top: 15px;
 }
 
 #midiDeviceList {

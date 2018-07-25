@@ -20,8 +20,11 @@ centroid.addEventListener("click", () => {
 	ipc.send("changeMode", "spectralCentroid");
 });
 
-const midiDeviceDisplay = document.querySelector("#midiDeviceList");
-
 ipc.on("displayMidi", (event, arg) => {
-	midiDeviceList.innerText = arg;
+	for (let i = 0; i < arg.length; i++){
+		let btn = document.createElement("BUTTON");
+		let text = document.createTextNode(arg[i]);
+		btn.appendChild(text);                              
+		document.querySelector("#midiDeviceButtons").appendChild(btn);       
+	}
 });

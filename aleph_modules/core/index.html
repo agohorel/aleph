@@ -6,15 +6,20 @@
 </head>
 <body>
 
-	<div id="buttons">
-		<button id="simpleSpectrum">spectrum</button>
-		<button id="simpleWaveform">waveform</button>
-		<button id="spectralCentroid">centroid</button>
+	<div id="modeSelectorDiv">
+		<h3 class="textHeaders">Mode Selection:</h3>
+		<div class="buttons">		
+			<button id="simpleSpectrum">spectrum</button>
+			<button id="simpleWaveform">waveform</button>
+			<button id="spectralCentroid">centroid</button>
+		</div>
 	</div>
 
-	<div class="controllerSelection">
-		<h3>Midi Device List:</h3>
-		<p id="midiDeviceList"></p>
+	<div id="midiSelectorDiv">
+		<h3 class="textHeaders">Midi Device Selection:</h3>
+		<div id="midiDeviceButtons" class="buttons">
+			<!-- dynamically generated buttons go here -->
+		</div>
 	</div>
 
 	<script type="text/javascript" src="index.js"></script>
