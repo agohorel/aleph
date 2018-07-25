@@ -19,3 +19,9 @@ const centroid = document.querySelector("#spectralCentroid");
 centroid.addEventListener("click", () => {
 	ipc.send("changeMode", "spectralCentroid");
 });
+
+const midiDeviceDisplay = document.querySelector("#midiDeviceList");
+
+ipc.on("displayMidi", (event, arg) => {
+	midiDeviceList.innerText = arg;
+});

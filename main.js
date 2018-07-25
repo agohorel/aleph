@@ -16,3 +16,7 @@ app.on("ready", createWindow);
 ipcMain.on("changeMode", (event, arg) => {
 	displayWindow.webContents.send("modeSelector", arg);
 });
+
+ipcMain.on("listMidi", (event, args) => {
+	editorWindow.webContents.send("displayMidi", args);
+});

@@ -1,7 +1,10 @@
+const electron = require("electron");
+const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
 
 let midiInputs = easymidi.getInputs();
-console.log(midiInputs);
+
+ipc.send("listMidi", midiInputs);
 
 let midiDevice = new easymidi.Input("Launch Control 1");
 let cc1 = 0, cc2 = 0, cc3 = 0, cc4 = 0, cc5 = 0, cc6 = 0, cc7 = 0, cc8 = 0;
