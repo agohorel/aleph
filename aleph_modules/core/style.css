@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono:300,400');
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono:300');
 
 body {
 	background-color: #000;
@@ -21,8 +21,12 @@ button:hover {
 	color: #eee;
 }
 
-.buttons {
-	padding: 10px;
+#modeSelectorDiv {
+	margin-top: 15px;
+}
+
+#midiSelectorDiv {
+	margin-top: 15px;
 }
 
 .textHeaders {
@@ -32,13 +36,6 @@ button:hover {
 	padding-left: 15px;
 }
 
-#modeSelectorDiv {
-	margin-top: 15px;
-}
-
-#midiDeviceList {
-	font-family: Roboto Mono, monospace;
-	font-weight: normal;
-	color: #666;
-	margin: 10px 0px 10px 0px;
+.buttons {
+	padding: 5px 10px 10px 10px;
 }
