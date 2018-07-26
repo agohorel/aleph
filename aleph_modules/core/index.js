@@ -1,23 +1,22 @@
 const electron = require("electron");
 const BrowserWindow = electron.remote.BrowserWindow;
 const ipc = electron.ipcRenderer;
+const fs = require('fs');
 
-const simpleSpectrum = document.querySelector("#simpleSpectrum");
-
-simpleSpectrum.addEventListener("click", () => {
-	ipc.send("changeMode", "simpleSpectrum");
-});
-
-const simpleWaveform = document.querySelector("#simpleWaveform");
-
-simpleWaveform.addEventListener("click", () => {
-	ipc.send("changeMode", "simpleWaveform");
-});
-
-const centroid = document.querySelector("#spectralCentroid");
-
-centroid.addEventListener("click", () => {
-	ipc.send("changeMode", "spectralCentroid");
+fs.readdir("./aleph_modules/modes", (err, files) => {
+  if (err){
+  	console.log(err);
+  } else {
+  	  files.forEach(file => {
+	    let btn = document.createElement("BUTTON");
+	    let text = document.createTextNode(file.substring(0, file.length-3));
+	    btn.appendChild(text);
+	    btn.addEventListener("click", () => {
+	    	ipc.send("changeMode", text.data);
+	    });
+	    document.querySelector(".buttons").appendChild(btn);
+	  });
+  }
 });
 
 const midiDeviceHeader = document.querySelector("#midiDeviceHeader");

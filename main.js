@@ -13,8 +13,8 @@ function createWindow() {
 
 app.on("ready", createWindow);
 
-ipcMain.on("changeMode", (event, arg) => {
-	displayWindow.webContents.send("modeSelector", arg);
+ipcMain.on("changeMode", (event, args) => {
+	displayWindow.webContents.send("modeSelector", args);
 });
 
 ipcMain.on("listMidi", (event, args) => {
