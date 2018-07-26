@@ -20,3 +20,7 @@ ipcMain.on("changeMode", (event, arg) => {
 ipcMain.on("listMidi", (event, args) => {
 	editorWindow.webContents.send("displayMidi", args);
 });
+
+ipcMain.on("selectMidiDevice", (event, args) => {
+	displayWindow.webContents.send("selectMidiDevice", args);
+});

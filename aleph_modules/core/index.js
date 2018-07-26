@@ -24,7 +24,10 @@ ipc.on("displayMidi", (event, arg) => {
 	for (let i = 0; i < arg.length; i++){
 		let btn = document.createElement("BUTTON");
 		let text = document.createTextNode(arg[i]);
-		btn.appendChild(text);                              
+		btn.appendChild(text);
+		btn.addEventListener("click", () => {
+			ipc.send("selectMidiDevice", arg[i]);
+		});                              
 		document.querySelector("#midiDeviceButtons").appendChild(btn);       
 	}
 });
