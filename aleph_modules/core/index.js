@@ -11,7 +11,11 @@ fs.readdir("./aleph_modules/modes", (err, files) => {
 	    let btn = document.createElement("BUTTON");
 	    let text = document.createTextNode(file.substring(0, file.length-3));
 	    btn.appendChild(text);
+	    btn.classList.add("modeSelectButtons");
 	    btn.addEventListener("click", () => {
+	    	let modeSelectButtons = document.getElementsByClassName("modeSelectButtons");
+	    	Array.from(modeSelectButtons).forEach(btn => btn.classList.toggle("active", ""));
+			btn.classList.add("active");
 	    	ipc.send("changeMode", text.data);
 	    });
 	    document.querySelector(".buttons").appendChild(btn);
@@ -29,7 +33,7 @@ ipc.on("displayMidi", (event, arg) => {
 		btn.classList.add("midiDeviceButtons");
 		btn.addEventListener("click", () => {
 			ipc.send("selectMidiDevice", arg[i]);
-			deviceBtns = document.getElementsByClassName("midiDeviceButtons");
+			let deviceBtns = document.getElementsByClassName("midiDeviceButtons");
 			Array.from(deviceBtns).forEach(btn => btn.remove());
 			midiDeviceHeader.remove();
 		});                              

@@ -8,6 +8,7 @@ body {
 button {
 	background-color: #666;
 	border: none;
+	outline: none;
 	color: #fff;
 	font-size: 14px;
 	font-family: Roboto Mono, monospace;
@@ -19,6 +20,11 @@ button:hover {
 	background-color: #555;
 	cursor: pointer;
 	color: #eee;
+}
+
+.active {
+	background-color: #eee;
+	color: #111;
 }
 
 #modeSelectorDiv {
