@@ -99,7 +99,7 @@ function releasedButton() {
 	});
 }
 
-function ccChange(){
+function ccChange() {
 	// type: CC 
 	// channel 8
 	// controller: 21-28, 41-48

@@ -20,13 +20,19 @@ centroid.addEventListener("click", () => {
 	ipc.send("changeMode", "spectralCentroid");
 });
 
+const midiDeviceHeader = document.querySelector("#midiDeviceHeader");
+
 ipc.on("displayMidi", (event, arg) => {
 	for (let i = 0; i < arg.length; i++){
 		let btn = document.createElement("BUTTON");
 		let text = document.createTextNode(arg[i]);
 		btn.appendChild(text);
+		btn.classList.add("midiDeviceButtons");
 		btn.addEventListener("click", () => {
 			ipc.send("selectMidiDevice", arg[i]);
+			deviceBtns = document.getElementsByClassName("midiDeviceButtons");
+			Array.from(deviceBtns).forEach(btn => btn.remove());
+			midiDeviceHeader.remove();
 		});                              
 		document.querySelector("#midiDeviceButtons").appendChild(btn);       
 	}
