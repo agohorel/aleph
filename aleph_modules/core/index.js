@@ -40,3 +40,24 @@ ipc.on("displayMidi", (event, arg) => {
 		document.querySelector("#midiDeviceButtons").appendChild(btn);       
 	}
 });
+
+const addMidiMap = document.querySelector("#addMidiMap");
+let controlCount = 0;
+
+addMidiMap.addEventListener("click", () => {	
+	controlCount++;
+	let btn = document.createElement("BUTTON");
+	let text = document.createTextNode(controlCount);
+	btn.appendChild(text);
+	btn.classList.add("midiMapping");
+	btn.id = controlCount;
+	document.querySelector("#midiMapIcons").appendChild(btn);
+});
+
+const midiMappingButtons = document.querySelector("#midiMapIcons");
+
+midiMappingButtons.addEventListener("click", function(e) {
+	if (e.target.className === "midiMapping"){
+		ipc.send("addMidiMapping", `controller${e.target.id}`);
+	}	
+});

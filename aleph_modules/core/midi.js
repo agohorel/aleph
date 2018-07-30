@@ -19,17 +19,14 @@ ipc.send("listMidi", midiInputs);
 ipc.on("selectMidiDevice", (event, arg) => {
 	selectedMidiDevice = arg;
 	midiDevice = new easymidi.Input(selectedMidiDevice);
-	pressedButton();
-	releasedButton();
-	ccChange();
+	// pressedButton();
+	// releasedButton();
+	// ccChange();
 });
 
 function pressedButton() {
 	midiDevice.on('noteon', (msg) => {
 		console.log(msg);
-		// type: noteon
-		// channel 8
-		// note: 9-12, 25-28
 		switch(msg.note){
 			case 9:
 				btn1 = msg.velocity;
@@ -100,9 +97,6 @@ function releasedButton() {
 }
 
 function ccChange() {
-	// type: CC 
-	// channel 8
-	// controller: 21-28, 41-48
 	midiDevice.on("cc", (msg) => {
 		switch (msg.controller){
 			case 21:
@@ -136,3 +130,15 @@ function ccChange() {
 		};
 	});
 }
+
+let midiMappings = {};
+
+ipc.on("addMidiMapping", (event, arg) => {
+	// listen for midi input
+	midiDevice.on('noteon', (msg) => {	
+		return mapping = msg.note;
+	});
+
+	midiMappings[arg] = mapping;
+	console.log(midiMappings);
+});

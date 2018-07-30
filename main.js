@@ -24,3 +24,7 @@ ipcMain.on("listMidi", (event, args) => {
 ipcMain.on("selectMidiDevice", (event, args) => {
 	displayWindow.webContents.send("selectMidiDevice", args);
 });
+
+ipcMain.on("addMidiMapping", (event, args) => {
+	displayWindow.webContents.send("addMidiMapping", args);
+});
