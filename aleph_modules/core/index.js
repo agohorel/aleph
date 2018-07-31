@@ -20,6 +20,7 @@ fs.readdir("./aleph_modules/modes", (err, files) => {
 
 modeSelectorButtons.addEventListener("click", function(e) {
 	if (e.target.className === "modeSelectButton"){
+		highlightSelectedItem(".modeSelectButton", e.target);
 		ipc.send("changeMode", e.target.id);
 	}
 });
@@ -36,6 +37,7 @@ ipc.on("displayMidi", (event, arg) => {
 
 midiDeviceButtons.addEventListener("click", function(e) {
 	if (e.target.className === "midiDeviceButtons"){
+		highlightSelectedItem(".midiDeviceButtons", e.target);
 		ipc.send("selectMidiDevice", e.target.innerText);
 	}	
 });
@@ -53,16 +55,24 @@ addMidiMap.addEventListener("click", () => {
 
 midiMappingButtons.addEventListener("click", function(e) {
 	if (e.target.className === "midiMapping"){
+		highlightSelectedItem(".midiMapping", e.target);
 		ipc.send("addMidiMapping", `controller${e.target.id}`);
 	}	
 });
 
+// UTILITY FUNCTIONS
 
-function makeDomElement(type, text, className, destParent){
+function makeDomElement(type, text, className, destParent) {
 	let element = document.createElement(type);
 	let displayText = document.createTextNode(text);
 	element.appendChild(displayText);
 	element.classList.add(className);
 	element.id = text;
 	document.querySelector(destParent).appendChild(element);
+}
+
+function highlightSelectedItem(className, target) {
+	let selectedClass = document.querySelectorAll(className);
+	Array.from(selectedClass).forEach(item => item.classList.toggle("active", ""));
+	target.classList.add("active");
 }
