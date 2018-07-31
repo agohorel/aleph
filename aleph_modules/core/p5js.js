@@ -4,7 +4,7 @@ const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const midi = require("./midi.js");
 
-let cnv, fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "simpleSpectrum";
+let cnv, fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "";
 
 // p5.disableFriendlyErrors = true;
 
@@ -21,7 +21,7 @@ function setup() {
 function draw() {	
 	myFFT();
 
-	if (moduleName !== undefined){
+	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
 			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls);
