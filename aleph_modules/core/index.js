@@ -3,61 +3,66 @@ const BrowserWindow = electron.remote.BrowserWindow;
 const ipc = electron.ipcRenderer;
 const fs = require('fs');
 
+
+// MODE SELECTION STUFF
+
+const modeSelectButtons = document.querySelector("#modeSelectorButtons");
+
 fs.readdir("./aleph_modules/modes", (err, files) => {
   if (err){
   	console.log(err);
   } else {
   	  files.forEach(file => {
-	    let btn = document.createElement("BUTTON");
-	    let text = document.createTextNode(file.substring(0, file.length-3));
-	    btn.appendChild(text);
-	    btn.classList.add("modeSelectButtons");
-	    btn.addEventListener("click", () => {
-	    	let modeSelectButtons = document.getElementsByClassName("modeSelectButtons");
-	    	Array.from(modeSelectButtons).forEach(btn => btn.classList.toggle("active", ""));
-			btn.classList.add("active");
-	    	ipc.send("changeMode", text.data);
-	    });
-	    document.querySelector(".buttons").appendChild(btn);
+  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), "modeSelectButton", "#modeSelectorButtons");	  
 	  });
   }
 });
 
-const midiDeviceHeader = document.querySelector("#midiDeviceHeader");
-
-ipc.on("displayMidi", (event, arg) => {
-	for (let i = 0; i < arg.length; i++){
-		let btn = document.createElement("BUTTON");
-		let text = document.createTextNode(arg[i]);
-		btn.appendChild(text);
-		btn.classList.add("midiDeviceButtons");
-		btn.addEventListener("click", () => {
-			ipc.send("selectMidiDevice", arg[i]);
-			let deviceBtns = document.getElementsByClassName("midiDeviceButtons");
-			Array.from(deviceBtns).forEach(btn => btn.remove());
-			midiDeviceHeader.remove();
-		});                              
-		document.querySelector("#midiDeviceButtons").appendChild(btn);       
+modeSelectorButtons.addEventListener("click", function(e) {
+	if (e.target.className === "modeSelectButton"){
+		ipc.send("changeMode", e.target.id);
 	}
 });
 
+// MIDI DEVICE SELECTION STUFF
+
+const midiDeviceButtons = document.querySelector("#midiDeviceButtons");
+
+ipc.on("displayMidi", (event, arg) => {
+	for (let i = 0; i < arg.length; i++){
+		makeDomElement("BUTTON", arg[i], "midiDeviceButtons","#midiDeviceButtons");                                    
+	}
+});
+
+midiDeviceButtons.addEventListener("click", function(e) {
+	if (e.target.className === "midiDeviceButtons"){
+		ipc.send("selectMidiDevice", e.target.innerText);
+	}	
+});
+
+// MIDI MAPPING STUFF
+
 const addMidiMap = document.querySelector("#addMidiMap");
+const midiMappingButtons = document.querySelector("#midiMapIcons");
 let controlCount = 0;
 
 addMidiMap.addEventListener("click", () => {	
 	controlCount++;
-	let btn = document.createElement("BUTTON");
-	let text = document.createTextNode(controlCount);
-	btn.appendChild(text);
-	btn.classList.add("midiMapping");
-	btn.id = controlCount;
-	document.querySelector("#midiMapIcons").appendChild(btn);
+	makeDomElement("BUTTON", controlCount, "midiMapping", "#midiMapIcons");
 });
-
-const midiMappingButtons = document.querySelector("#midiMapIcons");
 
 midiMappingButtons.addEventListener("click", function(e) {
 	if (e.target.className === "midiMapping"){
 		ipc.send("addMidiMapping", `controller${e.target.id}`);
 	}	
 });
+
+
+function makeDomElement(type, text, className, destParent){
+	let element = document.createElement(type);
+	let displayText = document.createTextNode(text);
+	element.appendChild(displayText);
+	element.classList.add(className);
+	element.id = text;
+	document.querySelector(destParent).appendChild(element);
+}
