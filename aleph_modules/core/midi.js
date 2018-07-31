@@ -132,6 +132,7 @@ function ccChange() {
 }
 
 let midiMappings = {};
+let mapping = undefined;
 
 ipc.on("addMidiMapping", (event, arg) => {
 	// listen for midi input
@@ -139,6 +140,9 @@ ipc.on("addMidiMapping", (event, arg) => {
 		return mapping = msg.note;
 	});
 
-	midiMappings[arg] = mapping;
+	if(mapping !== undefined){
+		midiMappings[arg] = mapping;		
+	}
+
 	console.log(midiMappings);
 });
