@@ -5,7 +5,12 @@ const easymidi = require("easymidi");
 let midiInputs = easymidi.getInputs();
 let midiDevice;
 
-let midiMappings = {};
+let midiMappings = {
+    controller: function(n) {
+        return this[Object.keys(this)[n]];
+    }
+};
+
 let controlNum = null;
 let mapModeActive = false;
 
@@ -69,6 +74,6 @@ function ccChange() {
 			updateMidi(midiMappings, msg.controller, msg.value);
 		}
 
-		module.exports.controls = module.exports.controls = midiMappings;
+		module.exports.controls = midiMappings;
 	});
 }

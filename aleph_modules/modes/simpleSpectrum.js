@@ -1,9 +1,9 @@
 exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi) => {
 	let r = bass, g = mid, b = high;
 
-	background(midi.btn1, midi.cc1);
+	background(midi.controller(0).value, midi.controller(1).value);
 	noStroke();
-	fill(r + midi.btn2, g + midi.btn3, b + midi.btn4);
+	fill(r + midi.controller(0).value, g + midi.controller(1).value, b + midi.controller(2).value);
 
 	for (let i = 0; i < spectrum.length; i++){
 		let x = map(i, 0, spectrum.length, 0, width);
