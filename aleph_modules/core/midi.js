@@ -5,144 +5,70 @@ const easymidi = require("easymidi");
 let midiInputs = easymidi.getInputs();
 let midiDevice;
 
-let cc1 = 0, cc2 = 0, cc3 = 0, cc4 = 0, cc5 = 0, cc6 = 0, cc7 = 0, cc8 = 0;
-let btn1 = 0, btn2 = 0, btn3 = 0, btn4 = 0, btn5 = 0, btn6 = 0, btn7 = 0, btn8 = 0;
+let midiMappings = {};
+let controlNum = null;
+let mapModeActive = false;
 
 // initial export of default values
-module.exports.controls = {
-	cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8,
-	btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8
-};
+module.exports.controls = {};
 
 ipc.send("listMidi", midiInputs);
 
 ipc.on("selectMidiDevice", (event, arg) => {
 	selectedMidiDevice = arg;
 	midiDevice = new easymidi.Input(selectedMidiDevice);
-	// pressedButton();
-	// releasedButton();
-	// ccChange();
+	pressedButton();
+	releasedButton();
+	ccChange();
 });
+
+ipc.on("addMidiMapping", (event, arg) => {
+	controlNum = arg;
+	mapModeActive = true;
+});
+
+let setMidiMapping = (object, controlNum, note, param) => {
+	object[note] = {};
+	object[note].name = controlNum;
+	object[note].value = param;
+	mapModeActive = false; 
+}
+
+function updateMidi(object, note, param){
+	// only update if there's a corresponding property to update in the first place
+	if(object.hasOwnProperty(note)){
+		object[note].value = param;
+	}
+}
 
 function pressedButton() {
 	midiDevice.on('noteon', (msg) => {
-		console.log(msg);
-		switch(msg.note){
-			case 9:
-				btn1 = msg.velocity;
-			break;
-			case 10:
-				btn2 = msg.velocity;		
-			break;
-			case 11:
-				btn3 = msg.velocity;
-			break;
-			case 12:
-				btn4 = msg.velocity;
-			break;
-			case 25:
-				btn5 = msg.velocity;
-			break;
-			case 26:
-				btn6 = msg.velocity;
-			break;
-			case 27:
-				btn7 = msg.velocity;
-			break;
-			case 28:
-				btn8 = msg.velocity;
-			break;
+		if (mapModeActive){
+			setMidiMapping(midiMappings, controlNum, msg.note, msg.velocity);
+		} else {
+			updateMidi(midiMappings, msg.note, msg.velocity);
 		}
+
 		// re-export new values on update
-		module.exports.controls = {
-			cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8,
-			btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8
-		};
+		module.exports.controls = midiMappings;
 	});
 }
 
 function releasedButton() {
 	midiDevice.on('noteoff', (msg) => {
-		switch(msg.note){
-			case 9:
-				btn1 = msg.velocity;
-			break;
-			case 10:
-				btn2 = msg.velocity;		
-			break;
-			case 11:
-				btn3 = msg.velocity;
-			break;
-			case 12:
-				btn4 = msg.velocity;
-			break;
-			case 25:
-				btn5 = msg.velocity;
-			break;
-			case 26:
-				btn6 = msg.velocity;
-			break;
-			case 27:
-				btn7 = msg.velocity;
-			break;
-			case 28:
-				btn8 = msg.velocity;
-			break;
-		}
-		module.exports.controls = {
-			cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8,
-			btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8
-		};
+		updateMidi(midiMappings, msg.note, msg.velocity);		
+		module.exports.controls = midiMappings;
 	});
 }
 
 function ccChange() {
-	midiDevice.on("cc", (msg) => {
-		switch (msg.controller){
-			case 21:
-				cc1 = msg.value;
-		    break;
-		    case 22: 
-		    	cc2 = msg.value;
-		    break;
-		    case 23:
-		    	cc3 = msg.value;
-	    	break;
-	    	case 24:
-	    		cc4 = msg.value;
-			break;
-			case 25:
-				cc5 = msg.value;
-			break;
-			case 26:
-				cc6 = msg.value;
-			break;
-			case 27:
-				cc7 = msg.value;
-			break;
-			case 28:
-				cc8 = msg.value;
-			break;
+	midiDevice.on("cc", (msg) => {		
+		if (mapModeActive){
+			setMidiMapping(midiMappings, controlNum, msg.controller, msg.value);
+		} else {
+			updateMidi(midiMappings, msg.controller, msg.value);
 		}
-		module.exports.controls = {
-			cc1, cc2, cc3, cc4, cc5, cc6, cc7, cc8,
-			btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8
-		};
+
+		module.exports.controls = module.exports.controls = midiMappings;
 	});
 }
-
-let midiMappings = {};
-let mapping = undefined;
-
-ipc.on("addMidiMapping", (event, arg) => {
-	// listen for midi input
-	midiDevice.on('noteon', (msg) => {	
-		return mapping = msg.note;
-	});
-
-	if(mapping !== undefined){
-		midiMappings[arg] = mapping;		
-	}
-
-	console.log(midiMappings);
-});

@@ -56,7 +56,7 @@ addMidiMap.addEventListener("click", () => {
 midiMappingButtons.addEventListener("click", function(e) {
 	if (e.target.className === "midiMapping"){
 		highlightSelectedItem(".midiMapping", e.target);
-		ipc.send("addMidiMapping", `controller${e.target.id}`);
+		ipc.send("addMidiMapping", `controller_${e.target.id}`);
 	}	
 });
 
