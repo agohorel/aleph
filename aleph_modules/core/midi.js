@@ -5,20 +5,13 @@ const easymidi = require("easymidi");
 let midiInputs = easymidi.getInputs();
 let midiDevice;
 
-let midiMappings = {
-    controller: function(n) {
-        return this[Object.keys(this)[n]];
-    }
-};
-
-let controlNum = null;
-let mapModeActive = false;
-
 // initial export of default values
 module.exports.controls = {};
 
+// send attached midi inputs to main process
 ipc.send("listMidi", midiInputs);
 
+// receive selected midi device from main process. assign device & listen for input.
 ipc.on("selectMidiDevice", (event, arg) => {
 	selectedMidiDevice = arg;
 	midiDevice = new easymidi.Input(selectedMidiDevice);
@@ -27,30 +20,33 @@ ipc.on("selectMidiDevice", (event, arg) => {
 	ccChange();
 });
 
+// initialise midiMappings object with helper function
+let midiMappings = {
+	// this function emulates array-like index addressing
+	// ex. midiMappings.controller(1) 
+    controller: function(n) {
+        return this[Object.keys(this)[n]];
+    }
+};
+
+let controlNum = null;
+let mapModeActive = false;
+
+// receive trigger from main process to create new properties in the midiMappings object
 ipc.on("addMidiMapping", (event, arg) => {
 	controlNum = arg;
 	mapModeActive = true;
 });
 
-let setMidiMapping = (object, controlNum, note, param) => {
-	object[note] = {};
-	object[note].name = controlNum;
-	object[note].value = param;
-	mapModeActive = false; 
-}
-
-function updateMidi(object, note, param){
-	// only update if there's a corresponding property to update in the first place
-	if(object.hasOwnProperty(note)){
-		object[note].value = param;
-	}
-}
-
 function pressedButton() {
+	// listen for button presses
 	midiDevice.on('noteon', (msg) => {
+		// if mapMode is on, assign the pressed button to midiMappings
 		if (mapModeActive){
 			setMidiMapping(midiMappings, controlNum, msg.note, msg.velocity);
-		} else {
+		} 
+		// otherwise update the matching entry in midiMappings
+		else {
 			updateMidi(midiMappings, msg.note, msg.velocity);
 		}
 
@@ -76,4 +72,18 @@ function ccChange() {
 
 		module.exports.controls = midiMappings;
 	});
+}
+
+function setMidiMapping(object, controlNum, note, param) {
+	object[note] = {};
+	object[note].name = controlNum;
+	object[note].value = param;
+	mapModeActive = false; 
+}
+
+function updateMidi(object, note, param){
+	// only update if there's a corresponding property to update in the first place
+	if(object.hasOwnProperty(note)){
+		object[note].value = param;
+	}
 }
