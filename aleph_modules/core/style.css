@@ -27,11 +27,7 @@ button:hover {
 	color: #111;
 }
 
-#modeSelectorDiv {
-	margin-top: 15px;
-}
-
-#midiSelectorDiv {
+.section {
 	margin-top: 15px;
 }
 
