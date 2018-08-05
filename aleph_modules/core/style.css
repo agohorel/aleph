@@ -5,6 +5,35 @@ body {
 	margin: 0;
 }
 
+label {
+	font-family: Roboto Mono, monospace;
+	color: #fff;
+	padding-left: 15px;
+	margin-top: 10px;
+}
+
+input {
+	width: 100px;
+	background-color: #666;
+	border: none;
+	outline: none;
+	font-family: Roboto Mono, monospace;
+	color: #fff;
+	font-size: 14px;
+}
+
+input:focus {
+	background-color: #999;
+	color: #000;
+}
+
+/*disable number input "spinners" (increment/decrement arrows)*/
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
 button {
 	background-color: #666;
 	border: none;
@@ -33,7 +62,7 @@ button:hover {
 
 .textHeaders {
 	font-family: Roboto, sans-serif;
-	color: #999;
+	color: #eee;
 	margin: 0px;
 	padding-left: 15px;
 }
