@@ -60,6 +60,17 @@ midiMappingButtons.addEventListener("click", function(e) {
 	}	
 });
 
+// DISPLAY SETTINGS STUFF
+
+const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
+const displayWidth = document.querySelector("#displayWindowWidth");
+const displayHeight = document.querySelector("#displayWindowHeight");
+
+applyDisplaySettings.addEventListener("click", function(e){
+	let displayDimensions = [Number(displayWidth.value), Number(displayHeight.value)];
+	ipc.send("applyDisplaySettings", displayDimensions);
+});
+
 // UTILITY FUNCTIONS
 
 function makeDomElement(type, text, className, destParent) {

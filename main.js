@@ -5,20 +5,15 @@ let editorWindow, displayWindow;
 
 function createWindow() {
 	editorWindow = new BrowserWindow({width: 1920, height: 1080});
-	displayWindow = new BrowserWindow({width: 1920, height: 1080, autoHideMenuBar: true});
+	// displayWindow = new BrowserWindow({width: 1920, height: 1080, autoHideMenuBar: true});
 
 	editorWindow.loadFile("./aleph_modules/core/index.html");
-	displayWindow.loadFile("./aleph_modules/core/displayWindow.html");
+	// displayWindow.loadFile("./aleph_modules/core/displayWindow.html");
 
 	// dereference windows on close
 	editorWindow.on("closed", () => {
 	      editorWindow = null;
 	});
-
-	displayWindow.on("closed", () => {
-		displayWindow = null;
-	});
-
 }
 
 app.on("ready", createWindow);
@@ -46,4 +41,14 @@ ipcMain.on("selectMidiDevice", (event, args) => {
 
 ipcMain.on("addMidiMapping", (event, args) => {
 	displayWindow.webContents.send("addMidiMapping", args);
+});
+
+ipcMain.on("applyDisplaySettings", (event, args) => {
+	displayWindow = new BrowserWindow({width: args[0], height: args[1], autoHideMenuBar: true});
+	displayWindow.webContents.send("applyDisplaySettings", args);
+ 	displayWindow.loadFile("./aleph_modules/core/displayWindow.html");
+	
+	displayWindow.on("closed", () => {
+		displayWindow = null;
+	});		
 });

@@ -4,13 +4,17 @@ const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const midi = require("./midi.js");
 
-let cnv, fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "";
+let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "";
 
 // p5.disableFriendlyErrors = true;
 
 function setup() {
-	cnv = createCanvas(1900, 1023);
-	
+	let b = document.querySelector("body");
+	let w = b.offsetWidth; 
+	let h = b.offsetHeight; 
+
+	let cnv = createCanvas(w, h);
+
 	input = new p5.AudioIn();
 	input.start();
 	
