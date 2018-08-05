@@ -10,8 +10,8 @@ let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleNam
 
 function setup() {
 	let b = document.querySelector("body");
-	let w = b.offsetWidth; 
-	let h = b.offsetHeight; 
+	let w = b.clientWidth;
+	let h = b.clientHeight;
 
 	let cnv = createCanvas(w, h);
 

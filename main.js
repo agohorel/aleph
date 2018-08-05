@@ -46,6 +46,7 @@ ipcMain.on("addMidiMapping", (event, args) => {
 ipcMain.on("applyDisplaySettings", (event, args) => {
 	displayWindow = new BrowserWindow({width: args[0], height: args[1], autoHideMenuBar: true});
 	displayWindow.webContents.send("applyDisplaySettings", args);
+	displayWindow.maximize();
  	displayWindow.loadFile("./aleph_modules/core/displayWindow.html");
 	
 	displayWindow.on("closed", () => {
