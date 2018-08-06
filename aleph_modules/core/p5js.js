@@ -9,10 +9,7 @@ let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleNam
 // p5.disableFriendlyErrors = true;
 
 function setup() {
-	let w = window.outerWidth;
-	let h = window.outerHeight;
-
-	let cnv = createCanvas(w, h);
+	let cnv = createCanvas(windowWidth, windowHeight);
 
 	input = new p5.AudioIn();
 	input.start();
@@ -49,3 +46,17 @@ function myFFT(){
 ipc.on("modeSelector", (event, arg) => {
 	moduleName = arg;
 });
+
+// resize canvas if window is resized
+function windowResized() {
+	resizeCanvas(windowWidth, windowHeight);
+	centerCanvas();
+	background(0);
+}
+
+// re-center canvas if the window is resized
+function centerCanvas() {
+	var x = (windowWidth - width) / 2;
+	var y = (windowHeight - height) / 2;
+	canvas.position(x, y);
+}
