@@ -4,9 +4,13 @@ const {app, BrowserWindow, ipcMain} = require("electron");
 let editorWindow, displayWindow;
 
 function createWindow() {
-	editorWindow = new BrowserWindow({width: 1920, height: 1080});
+	editorWindow = new BrowserWindow({width: 1920, height: 1080, show: false});
 	editorWindow.loadFile("./aleph_modules/core/index.html");
-	editorWindow.maximize();
+
+	// show window only when file has loaded to prevent flash
+	editorWindow.once("ready-to-show", () => {
+		editorWindow.maximize();
+	});
 
 	// dereference windows on close
 	editorWindow.on("closed", () => {
