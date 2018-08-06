@@ -2,14 +2,10 @@ const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
 
-let midiInputs = easymidi.getInputs();
 let midiDevice;
 
 // initial export of default values
 module.exports.controls = {};
-
-// send attached midi inputs to main process
-ipc.send("listMidi", midiInputs);
 
 // receive selected midi device from main process. assign device & listen for input.
 ipc.on("selectMidiDevice", (event, arg) => {

@@ -5,10 +5,7 @@ let editorWindow, displayWindow;
 
 function createWindow() {
 	editorWindow = new BrowserWindow({width: 1920, height: 1080});
-	// displayWindow = new BrowserWindow({width: 1920, height: 1080, autoHideMenuBar: true});
-
 	editorWindow.loadFile("./aleph_modules/core/index.html");
-	// displayWindow.loadFile("./aleph_modules/core/displayWindow.html");
 
 	// dereference windows on close
 	editorWindow.on("closed", () => {
