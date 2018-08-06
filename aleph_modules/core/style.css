@@ -54,6 +54,12 @@ button:hover {
 	color: #eee;
 }
 
+button:disabled {
+	background-color: rgba(102, 102, 102, .5);
+	color: #000;
+	cursor: default;
+}
+
 .active {
 	background-color: #eee;
 	color: #111;

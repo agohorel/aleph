@@ -13,7 +13,7 @@ fs.readdir("./aleph_modules/modes", (err, files) => {
   	console.log(err);
   } else {
   	  files.forEach(file => {
-  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), "modeSelectButton", "#modeSelectorButtons");	  
+  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), "modeSelectButton", "#modeSelectorButtons", true);	  
 	  });
   }
 });
@@ -31,7 +31,7 @@ const midiDeviceButtons = document.querySelector("#midiDeviceButtons");
 
 ipc.on("displayMidi", (event, arg) => {
 	for (let i = 0; i < arg.length; i++){
-		makeDomElement("BUTTON", arg[i], "midiDeviceButtons","#midiDeviceButtons");                                    
+		makeDomElement("BUTTON", arg[i], "midiDeviceButtons","#midiDeviceButtons", true);                                    
 	}
 });
 
@@ -50,7 +50,7 @@ let controlCount = 0;
 
 addMidiMap.addEventListener("click", () => {	
 	controlCount++;
-	makeDomElement("BUTTON", controlCount, "midiMapping", "#midiMapIcons");
+	makeDomElement("BUTTON", controlCount, "midiMapping", "#midiMapIcons", false);
 });
 
 midiMappingButtons.addEventListener("click", function(e) {
@@ -68,17 +68,24 @@ const displayHeight = document.querySelector("#displayWindowHeight");
 
 applyDisplaySettings.addEventListener("click", function(e){
 	let displayDimensions = [Number(displayWidth.value), Number(displayHeight.value)];
+	let modeBtns = document.querySelectorAll(".modeSelectButton");
+	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
+
+	modeBtns.forEach((btn) => { btn.disabled = false; });
+	midiBtns.forEach((btn) => { btn.disabled = false; });
+
 	ipc.send("applyDisplaySettings", displayDimensions);
 });
 
 // UTILITY FUNCTIONS
 
-function makeDomElement(type, text, className, destParent) {
+function makeDomElement(type, text, className, destParent, boolean) {
 	let element = document.createElement(type);
 	let displayText = document.createTextNode(text);
 	element.appendChild(displayText);
 	element.classList.add(className);
 	element.id = text;
+	element.disabled = boolean;
 	document.querySelector(destParent).appendChild(element);
 }
 
