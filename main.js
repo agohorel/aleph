@@ -6,6 +6,7 @@ let editorWindow, displayWindow;
 function createWindow() {
 	editorWindow = new BrowserWindow({width: 1920, height: 1080});
 	editorWindow.loadFile("./aleph_modules/core/index.html");
+	editorWindow.maximize();
 
 	// dereference windows on close
 	editorWindow.on("closed", () => {
