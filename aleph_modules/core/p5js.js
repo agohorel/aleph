@@ -9,9 +9,8 @@ let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleNam
 // p5.disableFriendlyErrors = true;
 
 function setup() {
-	let b = document.querySelector("body");
-	let w = b.clientWidth;
-	let h = b.clientHeight;
+	let w = window.outerWidth;
+	let h = window.outerHeight;
 
 	let cnv = createCanvas(w, h);
 
