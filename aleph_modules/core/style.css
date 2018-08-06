@@ -12,6 +12,7 @@ label {
 	color: #fff;
 	padding-left: 15px;
 	margin-top: 10px;
+	font-size: 14px;
 }
 
 input {
@@ -54,6 +55,11 @@ button:hover {
 }
 
 .active {
+	background-color: #eee;
+	color: #111;
+}
+
+.active:hover {
 	background-color: #eee;
 	color: #111;
 }
