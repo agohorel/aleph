@@ -71,6 +71,15 @@ function ccChange() {
 }
 
 function setMidiMapping(object, controlNum, note, param) {
+	// check for matches/overwrites 
+	Object.values(object).forEach((obj) => {
+		Object.keys(obj).forEach(function(key) {
+		  if (obj[key] == controlNum) {
+		    console.log("found a match");
+		  }
+		});
+	});
+	
 	object[note] = {};
 	object[note].name = controlNum;
 	object[note].value = param;
