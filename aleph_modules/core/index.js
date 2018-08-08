@@ -45,6 +45,7 @@ midiDeviceButtons.addEventListener("click", function(e) {
 // MIDI MAPPING STUFF
 
 const addMidiMap = document.querySelector("#addMidiMap");
+const lockMidi = document.querySelector("#lockMidiMap");
 const midiMappingButtons = document.querySelector("#midiMapIcons");
 let controlCount = 0;
 
@@ -58,6 +59,18 @@ midiMappingButtons.addEventListener("click", function(e) {
 		highlightSelectedItem(".midiMapping", e.target);
 		ipc.send("addMidiMapping", `controller_${e.target.id}`);
 	}	
+});
+
+lockMidi.addEventListener("click", () => {
+	document.querySelectorAll(".midiMapping").forEach((btn) => { 
+		if (btn.disabled){
+			btn.disabled = false;
+			lockMidi.innerText = "Lock Midi Assignments";
+		} else {
+			btn.disabled = true;
+			lockMidi.innerText = "Unlock Midi Assignments";
+		}
+	});
 });
 
 // DISPLAY SETTINGS STUFF
