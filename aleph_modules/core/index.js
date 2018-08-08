@@ -67,6 +67,7 @@ lockMidi.addEventListener("click", () => {
 			btn.disabled = false;
 			lockMidi.innerText = "Lock Midi Assignments";
 		} else {
+			btn.classList.remove("active");
 			btn.disabled = true;
 			lockMidi.innerText = "Unlock Midi Assignments";
 		}
