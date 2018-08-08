@@ -72,14 +72,11 @@ function ccChange() {
 
 function setMidiMapping(object, controlNum, note, param) {
 	// check for matches/overwrites 
-	Object.values(object).forEach((obj) => {
-		Object.keys(obj).forEach((key) => {
-		  if (obj[key] === controlNum) {
-		    console.log("found a match", obj);
-		    obj.name = undefined;	    
-		  }		  
-		});
-	});
+	for (let key in object) {
+	    if (object[key].name === controlNum){
+			delete object[key];
+	    }
+	}
 
 	object[note] = {};
 	object[note].name = controlNum;
