@@ -21,7 +21,7 @@ let midiMappings = {
 	// this function emulates array-like index addressing
 	// ex. midiMappings.controller(1) 
     controller: function(n) {
-        return this[Object.keys(this)[n]];
+        return this[Object.keys(this)[n-1]];
     }
 };
 
