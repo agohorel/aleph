@@ -7,6 +7,8 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 	strokeWeight(1);
 	fill(0,255,0); // spectrum is green
 
+	translate(-width/2, -height/2, 0);
+
 	//draw the spectrum
 	for (let i = 0; i< spectrum.length; i++){
 	  let x = map(log(i), 0, log(spectrum.length), 0, width);
@@ -23,10 +25,4 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 	centroidplot = map(log(mean_freq_index), 0, log(spectrum.length), 0, width);
 
 	stroke(255,0,0); // the line showing where the centroid is will be red
-
-	rect(centroidplot, 0, width / spectrum.length, height)
-	noStroke();
-	fill(255);  // text is white
-	textSize(40);
-	text("centroid: "+round(spectralCentroid)+" Hz", 10, 40);
 }

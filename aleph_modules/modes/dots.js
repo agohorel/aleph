@@ -1,14 +1,19 @@
 exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi) => {
-	let r = bass, g = mid, b = high;
+	let r = map(bass, 0, 255, 50, 255), 
+		g = map(mid, 0, 255, 50, 255), 
+		b = map(high, 0, 255, 50, 255);
+	
 	let scaleAmt = 10;
 
+	translate(-width/2, -height/2, 0);
+
 	noStroke();
-	fill(midi.controller(1).value, midi.controller(2).value);
+	fill(0);
 	rect(0, 0, width, height);
 
-	copy(0, 0, width, height, -20, 0, width + 40, height);
+	// copy(0, 0, width, height, -20, 0, width + 40, height);
 
-	fill(r/2, g/4, b * 1.5, map(volume, 0, .5, 20, 255));
+	fill(r, g, b, map(volume, 0, .5, 20, 255));
 	stroke(0);
 	strokeWeight(volume);
 
@@ -22,6 +27,7 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 	    ellipse(width-x, height+h, scale(volume), scale(volume));
 	    ellipse(width+h, height-x, scale(volume), scale(volume));
 	}
+
 }
 
 function scale(value){

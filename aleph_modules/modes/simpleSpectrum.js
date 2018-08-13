@@ -1,9 +1,10 @@
 exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi) => {
 	let r = bass, g = mid, b = high;
 
-	background(midi.controller(0).value, midi.controller(1).value);
+	background(0);
 	noStroke();
-	fill(r + midi.controller(0).value, g + midi.controller(1).value, b + midi.controller(2).value);
+	fill(r, g, b);
+	translate(-width/2, -height/2, 0);
 
 	for (let i = 0; i < spectrum.length; i++){
 		let x = map(i, 0, spectrum.length, 0, width);

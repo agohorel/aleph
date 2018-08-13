@@ -9,7 +9,7 @@ let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleNam
 // p5.disableFriendlyErrors = true;
 
 function setup() {
-	let cnv = createCanvas(windowWidth, windowHeight);
+	let cnv = createCanvas(windowWidth, windowHeight, WEBGL);
 
 	input = new p5.AudioIn();
 	input.start();
