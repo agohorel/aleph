@@ -55,6 +55,10 @@ ipcMain.on("applyDisplaySettings", (event, args) => {
 	});		
 });
 
-ipcMain.on("saveMidi", (event, args) => {
-	displayWindow.webContents.send("saveMidi", args);
+ipcMain.on("saveMidi", (event) => {
+	displayWindow.webContents.send("saveMidi");
+});
+
+ipcMain.on("loadMidi", (event) => {
+	displayWindow.webContents.send("loadMidi");
 });

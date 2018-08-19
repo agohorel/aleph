@@ -51,6 +51,7 @@ const addMidiMap = document.querySelector("#addMidiMap");
 const lockMidi = document.querySelector("#lockMidiMap");
 const midiMappingButtons = document.querySelector("#midiMapIcons");
 const saveMidi = document.querySelector("#saveMidi");
+const loadMidi = document.querySelector("#loadMidi");
 let controlCount = 0;
 
 // create new midi control mappings
@@ -82,9 +83,13 @@ lockMidi.addEventListener("click", () => {
 });
 
 // save midi mappings
-
 saveMidi.addEventListener("click", () => {
-	ipc.send("saveMidi", true);
+	ipc.send("saveMidi");
+});
+
+// load midi mappings
+loadMidi.addEventListener("click", () => {
+	ipc.send("loadMidi");
 });
 
 
@@ -100,10 +105,12 @@ applyDisplaySettings.addEventListener("click", function(e){
 	let modeBtns = document.querySelectorAll(".modeSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
 	let saveBtn = document.querySelector("#saveMidi");
+	let loadBtn = document.querySelector("#loadMidi");
 
 	modeBtns.forEach((btn) => { btn.disabled = false; });
 	midiBtns.forEach((btn) => { btn.disabled = false; });
 	saveBtn.disabled = false;
+	loadBtn.disabled = false;
 
 	ipc.send("applyDisplaySettings", displayDimensions);
 });

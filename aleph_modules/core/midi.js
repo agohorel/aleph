@@ -35,9 +35,19 @@ ipc.on("addMidiMapping", (event, arg) => {
 	mapModeActive = true;
 });
 
-ipc.on("saveMidi", (event, arg) => {
+ipc.on("saveMidi", (event) => {
 	fs.writeFile('midiMappings.json', JSON.stringify(midiMappings, null, 2), (err) => {
 		if (err) throw err;
+	});
+});
+
+ipc.on("loadMidi", (event) => {
+	fs.readFile('midiMappings.json', "utf-8", (err, data) => {
+		if (err) throw err;
+		let obj = JSON.parse(data);
+		Object.keys(obj).forEach((key) => {
+			midiMappings[key] = obj[key];
+		});
 	});
 });
 
