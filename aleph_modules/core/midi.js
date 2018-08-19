@@ -1,3 +1,4 @@
+const fs = require("fs");
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
@@ -32,6 +33,12 @@ let mapModeActive = false;
 ipc.on("addMidiMapping", (event, arg) => {
 	controlNum = arg;
 	mapModeActive = true;
+});
+
+ipc.on("saveMidi", (event, arg) => {
+	fs.writeFile('midiMappings.json', JSON.stringify(midiMappings), (err) => {
+		if (err) throw err;
+	});
 });
 
 function pressedButton() {

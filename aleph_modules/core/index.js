@@ -50,6 +50,7 @@ midiDeviceButtons.addEventListener("click", function(e) {
 const addMidiMap = document.querySelector("#addMidiMap");
 const lockMidi = document.querySelector("#lockMidiMap");
 const midiMappingButtons = document.querySelector("#midiMapIcons");
+const saveMidi = document.querySelector("#saveMidi");
 let controlCount = 0;
 
 // create new midi control mappings
@@ -79,6 +80,13 @@ lockMidi.addEventListener("click", () => {
 		}
 	});
 });
+
+// save midi mappings
+
+saveMidi.addEventListener("click", () => {
+	ipc.send("saveMidi", true);
+});
+
 
 // DISPLAY SETTINGS STUFF
 
