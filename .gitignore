@@ -2,3 +2,4 @@ node_modules/*
 playground/*
 *.mp3
 *.wav
+midiMappings.json
