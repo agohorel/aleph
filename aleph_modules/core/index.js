@@ -99,9 +99,11 @@ applyDisplaySettings.addEventListener("click", function(e){
 	let displayDimensions = [Number(displayWidth.value), Number(displayHeight.value)];
 	let modeBtns = document.querySelectorAll(".modeSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
+	let saveBtn = document.querySelector("#saveMidi");
 
 	modeBtns.forEach((btn) => { btn.disabled = false; });
 	midiBtns.forEach((btn) => { btn.disabled = false; });
+	saveBtn.disabled = false;
 
 	ipc.send("applyDisplaySettings", displayDimensions);
 });
