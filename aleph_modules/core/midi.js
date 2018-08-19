@@ -36,7 +36,7 @@ ipc.on("addMidiMapping", (event, arg) => {
 });
 
 ipc.on("saveMidi", (event, arg) => {
-	fs.writeFile('midiMappings.json', JSON.stringify(midiMappings), (err) => {
+	fs.writeFile('midiMappings.json', JSON.stringify(midiMappings, null, 2), (err) => {
 		if (err) throw err;
 	});
 });
