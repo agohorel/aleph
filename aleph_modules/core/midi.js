@@ -49,6 +49,8 @@ ipc.on("loadMidi", (event) => {
 			midiMappings[key] = obj[key];
 		});
 	});
+	console.log(midiMappings);
+	module.exports.controls = midiMappings;
 });
 
 function pressedButton() {
