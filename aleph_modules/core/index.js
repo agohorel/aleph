@@ -104,11 +104,15 @@ applyDisplaySettings.addEventListener("click", function(e){
 	let displayDimensions = [Number(displayWidth.value), Number(displayHeight.value)];
 	let modeBtns = document.querySelectorAll(".modeSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
+	let addCtrlBtn = document.querySelector("#addMidiMap");
+	let lockMappingBtn = document.querySelector("#lockMidiMap");
 	let saveBtn = document.querySelector("#saveMidi");
 	let loadBtn = document.querySelector("#loadMidi");
 
 	modeBtns.forEach((btn) => { btn.disabled = false; });
 	midiBtns.forEach((btn) => { btn.disabled = false; });
+	addCtrlBtn.disabled = false;
+	lockMappingBtn.disabled = false;
 	saveBtn.disabled = false;
 	loadBtn.disabled = false;
 
