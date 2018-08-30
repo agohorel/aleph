@@ -19,7 +19,17 @@ function setup() {
 }
 
 function draw() {	
-	myFFT();
+	analyzeAudio();
+
+	try {
+		if (midi.controls.controller !== undefined){
+			adjustAudioParams();
+		}	
+	}
+
+	catch (err){
+		console.log(err);
+	}
 
 	if (moduleName !== ""){
 		try {
@@ -33,7 +43,7 @@ function draw() {
 	}
 }
 
-function myFFT(){
+function analyzeAudio(){
 	volume = input.getLevel();
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
@@ -41,6 +51,10 @@ function myFFT(){
 	mid = fft.getEnergy("mid");
 	high = fft.getEnergy("treble");
 	spectralCentroid = fft.getCentroid();
+}
+
+function adjustAudioParams(){
+	volume = volume * map(midi.controls.controller(1).value, 0, 127, 0, 2);
 }
 
 ipc.on("modeSelector", (event, arg) => {
