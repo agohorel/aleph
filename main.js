@@ -62,3 +62,11 @@ ipcMain.on("saveMidi", (event) => {
 ipcMain.on("loadMidi", (event) => {
 	displayWindow.webContents.send("loadMidi");
 });
+
+ipcMain.on("midiLoaded", (event) => {
+	editorWindow.webContents.send("midiLoaded");
+});
+
+ipcMain.on("midiSaved", (event) => {
+	editorWindow.webContents.send("midiSaved");
+});

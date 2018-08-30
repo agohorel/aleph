@@ -39,6 +39,7 @@ ipc.on("saveMidi", (event) => {
 	fs.writeFile('midiMappings.json', JSON.stringify(midiMappings, null, 2), (err) => {
 		if (err) throw err;
 	});
+	ipc.send("midiSaved");
 });
 
 ipc.on("loadMidi", (event) => {
@@ -51,6 +52,7 @@ ipc.on("loadMidi", (event) => {
 	});
 	console.log(midiMappings);
 	module.exports.controls = midiMappings;
+	ipc.send("midiLoaded");
 });
 
 function pressedButton() {

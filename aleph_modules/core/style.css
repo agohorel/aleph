@@ -84,3 +84,8 @@ button:disabled {
 .buttons {
 	padding: 5px 10px 10px 10px;
 }
+
+.doneLoading {
+	background-color: #009920;
+	color: #000;
+}

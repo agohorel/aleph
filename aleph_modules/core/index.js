@@ -87,9 +87,25 @@ saveMidi.addEventListener("click", () => {
 	ipc.send("saveMidi");
 });
 
+ipc.on("midiSaved", (event) => {
+	let saveBtn = document.querySelector("#saveMidi");
+	saveBtn.classList.toggle("doneLoading");
+	setTimeout(() => {
+		saveBtn.classList.toggle("doneLoading");
+	}, 250);
+});
+
 // load midi mappings
 loadMidi.addEventListener("click", () => {
 	ipc.send("loadMidi");
+});
+
+ipc.on("midiLoaded", (event) => {
+	let loadBtn = document.querySelector("#loadMidi");
+	loadBtn.classList.toggle("doneLoading");
+	setTimeout(() => {
+		loadBtn.classList.toggle("doneLoading");
+	}, 250);
 });
 
 
