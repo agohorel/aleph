@@ -55,6 +55,9 @@ function analyzeAudio(){
 
 function adjustAudioParams(){
 	volume = volume * map(midi.controls.controller(1).value, 0, 127, 0, 2);
+	bass = bass * map(midi.controls.controller(2).value, 0, 127, 0, 2);
+	mid = mid * map(midi.controls.controller(3).value, 0, 127, 0, 2);
+	high = high * map(midi.controls.controller(4).value, 0, 127, 0, 2);
 }
 
 ipc.on("modeSelector", (event, arg) => {
