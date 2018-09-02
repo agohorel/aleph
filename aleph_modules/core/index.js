@@ -152,3 +152,12 @@ function highlightSelectedItem(className, target) {
 	Array.from(selectedClass).forEach(item => item.classList.toggle("active", ""));
 	target.classList.add("active");
 }
+
+let duplicatorIndex = 1;
+
+function duplicate(id) {	
+	let original = document.getElementById(id);
+    let clone = original.cloneNode(true);
+    clone.id = original.id + duplicatorIndex++;
+    original.parentNode.appendChild(clone);
+}
