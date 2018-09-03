@@ -21,16 +21,6 @@ function setup() {
 function draw() {	
 	analyzeAudio();
 
-	try {
-		if (midi.controls.controller !== undefined){
-			adjustAudioParams();
-		}	
-	}
-
-	catch (err){
-		console.log(err);
-	}
-
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
@@ -44,6 +34,16 @@ function draw() {
 }
 
 function analyzeAudio(){
+	if (midi.controls.controller == undefined){
+		defaultAudioAnalysis();
+	}
+	else{
+		adjustAudioParams();
+	}
+}
+
+
+function defaultAudioAnalysis(){
 	volume = input.getLevel();
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
@@ -54,10 +54,17 @@ function analyzeAudio(){
 }
 
 function adjustAudioParams(){
-	volume = volume * map(midi.controls.controller(1).value, 0, 127, 0, 2);
-	bass = bass * map(midi.controls.controller(2).value, 0, 127, 0, 2);
-	mid = mid * map(midi.controls.controller(3).value, 0, 127, 0, 2);
-	high = high * map(midi.controls.controller(4).value, 0, 127, 0, 2);
+	fft.smooth(map(midi.controls.controller(5).value, 0, 127, 0, .999));
+	let bins = nearestPow2(map(midi.controls.controller(6).value, 0, 127, 16, 1024));
+	let precision = nearestPow2(map(midi.controls.controller(7).value, 0, 127, 256, 16384)).toString();
+	volume = input.getLevel() * map(midi.controls.controller(1).value, 0, 127, 0, 2);
+	spectrum = fft.analyze(bins);
+	waveform = fft.waveform(bins, precision);
+	bass = fft.getEnergy("bass") * map(midi.controls.controller(2).value, 0, 127, 0, 2);
+	mid = fft.getEnergy("mid") * map(midi.controls.controller(3).value, 0, 127, 0, 2);
+	high = fft.getEnergy("treble") * map(midi.controls.controller(4).value, 0, 127, 0, 2);
+	spectralCentroid = fft.getCentroid();	
+	console.log(waveform.length, spectrum.length);
 }
 
 ipc.on("modeSelector", (event, arg) => {
@@ -76,4 +83,8 @@ function centerCanvas() {
 	var x = (windowWidth - width) / 2;
 	var y = (windowHeight - height) / 2;
 	canvas.position(x, y);
+}
+
+function nearestPow2(value){
+  return Math.pow(2, Math.round(Math.log(value)/Math.log(2))); 
 }
