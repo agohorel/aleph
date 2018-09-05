@@ -44,7 +44,6 @@ function analyzeAudio(){
 	}
 }
 
-
 function defaultAudioAnalysis(){
 	volume = input.getLevel();
 	spectrum = fft.analyze();
@@ -56,17 +55,14 @@ function defaultAudioAnalysis(){
 }
 
 function adjustAudioParams(){
-	fft.smooth(map(midi.controls.controller(5).value, 0, 127, 0, .999));
-	let bins = nearestPow2(map(midi.controls.controller(6).value, 0, 127, 16, 1024));
-	let precision = nearestPow2(map(midi.controls.controller(7).value, 0, 127, 256, 16384)).toString();
 	volume = input.getLevel() * map(midi.controls.controller(1).value, 0, 127, 0, 2);
-	spectrum = fft.analyze(bins);
-	waveform = fft.waveform(bins, precision);
 	bass = fft.getEnergy("bass") * map(midi.controls.controller(2).value, 0, 127, 0, 2);
 	mid = fft.getEnergy("mid") * map(midi.controls.controller(3).value, 0, 127, 0, 2);
 	high = fft.getEnergy("treble") * map(midi.controls.controller(4).value, 0, 127, 0, 2);
+	fft.smooth(map(midi.controls.controller(5).value, 0, 127, 0, .999));
+	spectrum = fft.analyze();
+	waveform = fft.waveform();
 	spectralCentroid = fft.getCentroid();	
-	console.log(waveform.length, spectrum.length);
 }
 
 ipc.on("modeSelector", (event, arg) => {
