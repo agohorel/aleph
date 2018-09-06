@@ -10,8 +10,8 @@ let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleNam
 
 function setup() {
 	let cnv = createCanvas(windowWidth, windowHeight, WEBGL);
-	var gl = document.getElementById('defaultCanvas0').getContext('webgl');
-	gl.disable(gl.DEPTH_TEST);
+	// var gl = document.getElementById('defaultCanvas0').getContext('webgl');
+	// gl.disable(gl.DEPTH_TEST);
 
 	input = new p5.AudioIn();
 	input.start();
