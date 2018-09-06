@@ -4,7 +4,7 @@ const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const midi = require("./midi.js");
 
-let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude;
+let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol;
 
 // p5.disableFriendlyErrors = true;
 
@@ -29,7 +29,7 @@ function draw() {
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
-			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls);
+			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls, leftVol, rightVol);
 		} 
 
 		catch (err){
@@ -49,6 +49,8 @@ function analyzeAudio(){
 
 function defaultAudioAnalysis(){
 	volume = amplitude.getLevel();
+	leftVol = amplitude.getLevel(0);
+	rightVol = amplitude.getLevel(1);
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
 	bass = fft.getEnergy("bass");
@@ -59,6 +61,8 @@ function defaultAudioAnalysis(){
 
 function adjustAudioParams(){
 	volume = amplitude.getLevel() * map(midi.controls.controller(1).value, 0, 127, 0, 2);
+	leftVol = amplitude.getLevel(0);
+	rightVol = amplitude.getLevel(1);
 	bass = fft.getEnergy("bass") * map(midi.controls.controller(2).value, 0, 127, 0, 2);
 	mid = fft.getEnergy("mid") * map(midi.controls.controller(3).value, 0, 127, 0, 2);
 	high = fft.getEnergy("treble") * map(midi.controls.controller(4).value, 0, 127, 0, 2);
