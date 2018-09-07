@@ -3,10 +3,26 @@ const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const midi = require("./midi.js");
+const fs = require("fs");
 
-let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol;
+let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, models={};
 
 // p5.disableFriendlyErrors = true;
+
+function preload() {
+	fs.readdir("./aleph_modules/assets/3d", (err, files) => {
+	  if (err){
+	  	console.log(err);
+	  } else {
+	  	  files.forEach((file, index) => {
+	  	  	// get file name
+	  	  	let name = file.substring(0, file.length-4);
+	  	  	// add entry to models object & load model
+	  	  	models[name] = loadModel(`../assets/3d/${file}`);
+		  });
+	  }
+	});
+}
 
 function setup() {
 	let cnv = createCanvas(windowWidth, windowHeight, WEBGL);
@@ -29,7 +45,7 @@ function draw() {
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
-			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls, leftVol, rightVol);
+			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls, leftVol, rightVol, models);
 		} 
 
 		catch (err){
