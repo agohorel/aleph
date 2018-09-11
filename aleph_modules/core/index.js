@@ -20,7 +20,7 @@ fs.readdir("./aleph_modules/modes", (err, files) => {
 
 // highlight selected mode & send mode to p5 via main process
 modeSelectorButtons.addEventListener("click", function(e) {
-	if (e.target.className === "modeSelectButton"){
+	if (e.target.className.includes("modeSelectButton")){
 		highlightSelectedItem(".modeSelectButton", e.target);
 		ipc.send("changeMode", e.target.id);
 	}
