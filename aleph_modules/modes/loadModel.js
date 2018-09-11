@@ -17,10 +17,9 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 	rotateX(frameCount * leftVolEased * .5);
 	rotateZ(frameCount * rightVolEased * .5);
 	rotateY(frameCount * 0.01);
-	
 
 	stroke(map(volumeEased, 0, .025, 0, 255));
-	fill(bass * .2, mid, high * 2);
-	scale(volumeEased * 100, volumeEased * 100, volumeEased * 100);
+	fill(bass * .1, mid * .5, high * 255);
+	
 	model(models.floppy);
 }

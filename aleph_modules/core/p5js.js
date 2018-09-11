@@ -18,7 +18,7 @@ function preload() {
 	  	  	// get file name
 	  	  	let name = file.substring(0, file.length-4);
 	  	  	// add entry to models object & load model
-	  	  	models[name] = loadModel(`../assets/3d/${file}`);
+	  	  	models[name] = loadModel(`../assets/3d/${file}`, true);
 		  });
 	  }
 	});
