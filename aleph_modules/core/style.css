@@ -37,7 +37,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0; 
 }
 
-button {
+.btn {
 	background-color: #666;
 	border: none;
 	outline: none;
@@ -48,13 +48,13 @@ button {
 	padding: 5px 10px 5px 10px;
 }
 
-button:hover {
+.btn:hover {
 	background-color: #555;
 	cursor: pointer;
 	color: #eee;
 }
 
-button:disabled {
+.btn:disabled {
 	background-color: rgba(102, 102, 102, .5);
 	color: #000;
 	cursor: default;
@@ -85,7 +85,7 @@ button:disabled {
 	padding: 5px 10px 10px 10px;
 }
 
-.doneLoading {
+.buttons .doneLoading {
 	background-color: #009920;
 	color: #000;
 }
