@@ -13,7 +13,7 @@ fs.readdir("./aleph_modules/modes", (err, files) => {
   	console.log(err);
   } else {
   	  files.forEach(file => {
-  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), "modeSelectButton", "#modeSelectorButtons", true);	  
+  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), ["modeSelectButton", "btn"], "#modeSelectorButtons", true);	  
 	  });
   }
 });
@@ -33,7 +33,7 @@ const midiDeviceButtons = document.querySelector("#midiDeviceButtons");
 // display available midi devices once they have been sent from main process
 ipc.on("displayMidi", (event, arg) => {
 	for (let i = 0; i < arg.length; i++){
-		makeDomElement("BUTTON", arg[i], "midiDeviceButtons","#midiDeviceButtons", true);                                    
+		makeDomElement("BUTTON", arg[i], ["midiDeviceButtons", "btn"],"#midiDeviceButtons", true);                                    
 	}
 });
 
@@ -57,7 +57,7 @@ let controlCount = 0;
 // create new midi control mappings
 addMidiMap.addEventListener("click", () => {	
 	controlCount++;
-	makeDomElement("BUTTON", controlCount, "midiMapping", "#midiMapIcons", false);
+	makeDomElement("BUTTON", controlCount, ["midiMapping", "btn"], "#midiMapIcons", false);
 });
 
 // highlight selected midi control mapping slot & send controller id to main process
@@ -141,7 +141,11 @@ function makeDomElement(type, text, className, destParent, boolean) {
 	let element = document.createElement(type);
 	let displayText = document.createTextNode(text);
 	element.appendChild(displayText);
-	element.classList.add(className);
+
+	for (let i = 0; i < className.length; i++){
+		element.classList.add(className[i]);
+	}
+	
 	element.id = text;
 	element.disabled = boolean;
 	document.querySelector(destParent).appendChild(element);
