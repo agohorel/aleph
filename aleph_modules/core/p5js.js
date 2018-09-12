@@ -5,23 +5,14 @@ const p5_audio = require("p5/lib/addons/p5.sound.js");
 const midi = require("./midi.js");
 const fs = require("fs");
 
-let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, models={};
+let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol;
+let assets = {models: {}, textures: {}};
 
 // p5.disableFriendlyErrors = true;
 
 function preload() {
-	fs.readdir("./aleph_modules/assets/3d", (err, files) => {
-	  if (err){
-	  	console.log(err);
-	  } else {
-	  	  files.forEach((file, index) => {
-	  	  	// get file name
-	  	  	let name = file.substring(0, file.length-4);
-	  	  	// add entry to models object & load model
-	  	  	models[name] = loadModel(`../assets/3d/${file}`, true);
-		  });
-	  }
-	});
+	importer("3d");
+	importer("textures");
 }
 
 function setup() {
@@ -45,7 +36,7 @@ function draw() {
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
-			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls, leftVol, rightVol, models);
+			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls, leftVol, rightVol, assets);
 		} 
 
 		catch (err){
@@ -108,4 +99,25 @@ function centerCanvas() {
 
 function nearestPow2(value){
   return Math.pow(2, Math.round(Math.log(value)/Math.log(2))); 
+}
+
+function importer(folder){
+	fs.readdir(`./aleph_modules/assets/${folder}`, (err, files) => {
+		if (err){
+			console.log(err);
+		} else {
+			files.forEach((file, index) => {
+				// get file name
+				let name = file.substring(0, file.length-4);
+				// check which folder we're importing from 
+				if (folder === "3d"){
+					// create entry on assets object & load file
+					assets.models[name] = loadModel(`../assets/3d/${file}`, true);
+				}
+				if (folder === "textures"){
+					assets.textures[name] = loadImage(`../assets/textures/${file}`, true);
+				} 
+			});
+		}
+	});
 }
