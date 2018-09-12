@@ -1,8 +1,8 @@
 let leftVolEased = .001, rightVolEased = .001, easing = 0.025; 
 let scaler = .1;
 
-exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi, leftVol, rightVol, models) => {
-	background(0);
+exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi, leftVol, rightVol, assets) => {
+	background(255);
 
 	let targetL = leftVol * scaler;
 	let distL = targetL - leftVolEased;
@@ -20,6 +20,7 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 
 	stroke(map(volumeEased, 0, .025, 0, 255));
 	fill(bass * .1, mid * .5, high * 255);
-	
-	model(models.floppy);
+
+	texture(assets.textures.warped);
+	model(assets.models.floppy);
 }
