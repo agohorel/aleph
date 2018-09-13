@@ -1,11 +1,7 @@
 exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi) => {
-	noStroke();
-	fill(0, volume * 100);
-	rect(-width/2, -height/2, width, height);
-
+	background(0);
 	strokeWeight(map(volume, 0, 1, 1, 5));	
-	scale(map(volume, 0, 1, .25, 1.25));
-	// scale(map(midi.controller(5).value, 0, 127, .1, 2));
+	scale(.4);
 
 	push();
 	rotateZ(radians(45));
