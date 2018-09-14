@@ -136,6 +136,23 @@ applyDisplaySettings.addEventListener("click", function(e){
 	ipc.send("applyDisplaySettings", displayDimensions);
 });
 
+// ASSET IMPORTER STUFF
+
+const objBtn = document.querySelector("#objBtn");
+const texturesBtn = document.querySelector("#texturesBtn");
+
+objBtn.addEventListener("click", () => {
+	dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
+		console.log(files);
+	});
+});
+
+texturesBtn.addEventListener("click", () => {
+	dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
+		console.log(files);
+	});
+});
+
 // UTILITY FUNCTIONS
 
 function makeDomElement(type, text, className, destParent, boolean) {
@@ -166,7 +183,3 @@ function duplicate(id) {
     clone.id = original.id + duplicatorIndex++;
     original.parentNode.appendChild(clone);
 }
-
-dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
-	console.log(files);
-});
