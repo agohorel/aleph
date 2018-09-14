@@ -60,6 +60,11 @@ input[type=number]::-webkit-outer-spin-button {
 	cursor: default;
 }
 
+.btn:active {
+	background-color: #fff;
+	color: #000;
+}
+
 .active {
 	background-color: #eee;
 	color: #111;
