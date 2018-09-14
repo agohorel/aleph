@@ -1,5 +1,6 @@
 const electron = require("electron");
 const BrowserWindow = electron.remote.BrowserWindow;
+const {dialog} = electron.remote;
 const ipc = electron.ipcRenderer;
 const fs = require('fs');
 
@@ -165,3 +166,7 @@ function duplicate(id) {
     clone.id = original.id + duplicatorIndex++;
     original.parentNode.appendChild(clone);
 }
+
+dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
+	console.log(files);
+});
