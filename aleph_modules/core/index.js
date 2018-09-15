@@ -142,15 +142,11 @@ const objBtn = document.querySelector("#objBtn");
 const texturesBtn = document.querySelector("#texturesBtn");
 
 objBtn.addEventListener("click", () => {
-	dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
-		console.log(files);
-	});
+	importFileDialog();
 });
 
 texturesBtn.addEventListener("click", () => {
-	dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
-		console.log(files);
-	});
+	importFileDialog();
 });
 
 // UTILITY FUNCTIONS
@@ -182,4 +178,10 @@ function duplicate(id) {
     let clone = original.cloneNode(true);
     clone.id = original.id + duplicatorIndex++;
     original.parentNode.appendChild(clone);
+}
+
+function importFileDialog(){
+	dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
+		console.log(files);
+	});
 }
