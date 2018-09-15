@@ -1,6 +1,6 @@
-exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi) => {
+exports.run = (audio, midi, assets) => {
 	background(0);
-	strokeWeight(map(volume, 0, 1, 1, 5));	
+	strokeWeight(map(audio.volume, 0, 1, 1, 5));	
 	scale(.4);
 
 	push();
@@ -68,9 +68,9 @@ exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroi
 
 function renderShape(shapeType, stepSize, offset){
 	beginShape(shapeType);
-	for (let i = 0; i < spectrum.length; i+=stepSize){
-		let x = map(i, 0, spectrum.length, -width/2 + offset, width/2 + offset);
-	    let h = map(spectrum[i], 0, 255, height/2, -height/2);
+	for (let i = 0; i < audio.spectrum.length; i+=stepSize){
+		let x = map(i, 0, audio.spectrum.length, -width/2 + offset, width/2 + offset);
+	    let h = map(audio.spectrum[i], 0, 255, height/2, -height/2);
 		vertex(x, h);
 	}
 	endShape();
@@ -78,15 +78,15 @@ function renderShape(shapeType, stepSize, offset){
 
 function renderShapeInverse(shapeType, stepSize, offset){
 	beginShape(shapeType);
-	for (let i = 0; i < spectrum.length; i+=stepSize){
-		let x = map(i, 0, spectrum.length, -width/2 + offset, width/2 + offset);
-	    let h = map(spectrum[i], 0, 255, height/2, -height/2);
+	for (let i = 0; i < audio.spectrum.length; i+=stepSize){
+		let x = map(i, 0, audio.spectrum.length, -width/2 + offset, width/2 + offset);
+	    let h = map(audio.spectrum[i], 0, 255, height/2, -height/2);
 		vertex(h, x);
 	}
 	endShape();
 }
 
 function colors(min, max){
-	fill(map(volume, 0, .5, min, max), map(volume, 0, .5, 0, 255));
-	stroke(map(volume, 0, .5, max, min));	
+	fill(map(audio.volume, 0, .5, min, max), map(audio.volume, 0, .5, 0, 255));
+	stroke(map(audio.volume, 0, .5, max, min));	
 }

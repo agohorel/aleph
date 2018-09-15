@@ -1,15 +1,15 @@
-exports.run = (fft, volume, bass, mid, high, spectrum, waveform) => {
+exports.run = (audio, midi, assets) => {
 	background(0);
 	noFill();
 	beginShape();
-	stroke(bass, mid, high);
-	strokeWeight(volume * 50);
+	stroke(audio.bass, audio.mid, audio.high);
+	strokeWeight(audio.volume * 50);
 
 	translate(-width/2, -height/2, 0);
 
-	for (let i = 0; i< waveform.length; i++){
-		let x = map(i, 0, waveform.length, 0, width);
-		let y = map(waveform[i], -1, 1, 0, height);
+	for (let i = 0; i< audio.waveform.length; i++){
+		let x = map(i, 0, audio.waveform.length, 0, width);
+		let y = map(audio.waveform[i], -1, 1, 0, height);
 		vertex(x,y);
 	}
 	
