@@ -12,7 +12,7 @@ let audio = {};
 // p5.disableFriendlyErrors = true;
 
 function preload() {
-	importer("3d");
+	importer("models");
 	importer("textures");
 }
 
@@ -123,9 +123,9 @@ function importer(folder){
 				// get file name
 				let name = file.substring(0, file.length-4);
 				// check which folder we're importing from 
-				if (folder === "3d"){
+				if (folder === "models"){
 					// create entry on assets object & load file
-					assets.models[name] = loadModel(`../assets/3d/${file}`, true);
+					assets.models[name] = loadModel(`../assets/models/${file}`, true);
 				}
 				if (folder === "textures"){
 					assets.textures[name] = loadImage(`../assets/textures/${file}`, true);

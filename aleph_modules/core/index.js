@@ -142,7 +142,7 @@ const objBtn = document.querySelector("#objBtn");
 const texturesBtn = document.querySelector("#texturesBtn");
 
 objBtn.addEventListener("click", () => {
-	importFileDialog("3d");
+	importFileDialog("models");
 });
 
 texturesBtn.addEventListener("click", () => {
@@ -191,7 +191,7 @@ function importFileDialog(typeOfImport){
 
 function applyImportFilter(typeOfImport){
 	let filter = {};
-	if (typeOfImport === "3d" || typeOfImport === "obj"){
+	if (typeOfImport === "3d" || typeOfImport === "obj" || typeOfImport === "models"){
 		filter.name = typeOfImport;
 		filter.extensions = ["obj"];
 		return filter;
