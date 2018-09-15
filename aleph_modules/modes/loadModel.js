@@ -2,23 +2,13 @@ let leftVolEased = .001, rightVolEased = .001, easing = 0.025;
 let scaler = .1;
 let textures = [];
 
-exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi, leftVol, rightVol, assets) => {
+exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi, leftVol, rightVol, assets, volEased, leftVolEased, rightVolEased) => {
 	background(255);
- 
-	let targetL = leftVol * scaler;
-	let distL = targetL - leftVolEased;
-	leftVolEased += distL * easing;
-
-	let targetR = rightVol * scaler;
-	let distR = targetR - rightVolEased;
-	rightVolEased += distR * easing;
-
-	let volumeEased = leftVolEased + rightVolEased * .5;
 	
 	rotateY(frameCount * 0.01);
 	scale(2, -2);
 
-	stroke(map(volumeEased, 0, .025, 255, 0));
+	stroke(map(volEased, 0, .025, 255, 0));
 	fill(map(volume, 0, 1, 0, 255));
 
 	// check if we've already packed the array so we don't keep adding to it
