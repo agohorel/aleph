@@ -142,11 +142,11 @@ const objBtn = document.querySelector("#objBtn");
 const texturesBtn = document.querySelector("#texturesBtn");
 
 objBtn.addEventListener("click", () => {
-	importFileDialog();
+	importFileDialog("obj");
 });
 
 texturesBtn.addEventListener("click", () => {
-	importFileDialog();
+	importFileDialog("texture");
 });
 
 // UTILITY FUNCTIONS
@@ -180,8 +180,25 @@ function duplicate(id) {
     original.parentNode.appendChild(clone);
 }
 
-function importFileDialog(){
-	dialog.showOpenDialog({properties: ["openFile", "multiSelections"]}, (files) => {
+function importFileDialog(typeOfImport){
+	dialog.showOpenDialog({
+		filters: [applyImportFilter(typeOfImport)],
+		properties: ["openFile", "multiSelections"]
+	}, (files) => {
 		console.log(files);
 	});
+}
+
+function applyImportFilter(typeOfImport){
+	let filter = {};
+	if (typeOfImport === "3d" || typeOfImport === "obj"){
+		filter.name = typeOfImport;
+		filter.extensions = ["obj"];
+		return filter;
+	}
+	else if (typeOfImport === "texture" || typeOfImport === "image"){
+		filter.name = "Image";
+		filter.extensions = ["jpg", "png", "gif", "tif", "bmp"];
+		return filter;
+	}
 }
