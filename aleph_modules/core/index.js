@@ -142,11 +142,11 @@ const objBtn = document.querySelector("#objBtn");
 const texturesBtn = document.querySelector("#texturesBtn");
 
 objBtn.addEventListener("click", () => {
-	importFileDialog("obj");
+	importFileDialog("3d");
 });
 
 texturesBtn.addEventListener("click", () => {
-	importFileDialog("texture");
+	importFileDialog("textures");
 });
 
 // UTILITY FUNCTIONS
@@ -185,7 +185,7 @@ function importFileDialog(typeOfImport){
 		filters: [applyImportFilter(typeOfImport)],
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
-		console.log(files);
+		copyImportedFiles(files, `./aleph_modules/assets/${typeOfImport}`);
 	});
 }
 
@@ -200,5 +200,16 @@ function applyImportFilter(typeOfImport){
 		filter.name = "Image";
 		filter.extensions = ["jpg", "png", "gif", "tif", "bmp"];
 		return filter;
+	}
+}
+
+function copySelectedFiles(selectedFiles, destination){
+	for (let i = 0; i < selectedFiles.length; i++){
+		// strip filename off path
+		let filename = selectedFiles[i].replace(/^.*[\\\/]/, '');
+		fs.copyFile(selectedFiles[i], `${destination}/${filename}`, (err) => {
+			if (err) throw err;
+			console.log(`${selectedFiles[i]} copied to ${destination}/${filename}`);
+		});
 	}
 }
