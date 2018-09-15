@@ -7,6 +7,7 @@ const fs = require("fs");
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}};
+let audio = {};
 
 // p5.disableFriendlyErrors = true;
 
@@ -36,7 +37,7 @@ function draw() {
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../modes/${moduleName}.js`);
-			moduleFile.run(fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi.controls, leftVol, rightVol, assets, volEased, rightVolEased, leftVolEased);
+			moduleFile.run(audio, midi.controls, assets);
 		} 
 
 		catch (err){
@@ -65,6 +66,11 @@ function defaultAudioAnalysis(){
 	high = fft.getEnergy("treble");
 	spectralCentroid = fft.getCentroid();
 	smoother(volume, leftVol, rightVol, 0.025);
+	audio = {
+		fft, volume, leftVol, rightVol, spectrum, waveform, 
+		bass, mid, high, spectralCentroid, 
+		volEased, leftVolEased, rightVolEased
+	};
 }
 
 function adjustAudioParams(){
@@ -78,7 +84,12 @@ function adjustAudioParams(){
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
 	spectralCentroid = fft.getCentroid();
-	smoother(volume, leftVol, rightVol, map(midi.controls.controller(6).value, 0, 127, .5, .001));	
+	smoother(volume, leftVol, rightVol, map(midi.controls.controller(6).value, 0, 127, .5, .001));
+	audio = {
+		fft, volume, leftVol, rightVol, spectrum, waveform, 
+		bass, mid, high, spectralCentroid, 
+		volEased, leftVolEased, rightVolEased
+	};	
 }
 
 ipc.on("modeSelector", (event, arg) => {
