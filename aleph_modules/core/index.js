@@ -40,7 +40,7 @@ ipc.on("displayMidi", (event, arg) => {
 
 // highlight selected midi device & send to main process
 midiDeviceButtons.addEventListener("click", function(e) {
-	if (e.target.className === "midiDeviceButtons"){
+	if (e.target.className.includes("midiDeviceButtons")){
 		highlightSelectedItem(".midiDeviceButtons", e.target);
 		ipc.send("selectMidiDevice", e.target.innerText);
 	}	
@@ -63,7 +63,7 @@ addMidiMap.addEventListener("click", () => {
 
 // highlight selected midi control mapping slot & send controller id to main process
 midiMappingButtons.addEventListener("click", function(e) {
-	if (e.target.className === "midiMapping"){
+	if (e.target.className.includes("midiMapping")){
 		highlightSelectedItem(".midiMapping", e.target);
 		ipc.send("addMidiMapping", `controller_${e.target.id}`);
 	}	
