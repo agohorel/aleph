@@ -64,7 +64,7 @@ function defaultAudioAnalysis(){
 	mid = fft.getEnergy("mid");
 	high = fft.getEnergy("treble");
 	spectralCentroid = fft.getCentroid();
-	smoother(volume, leftVol, rightVol);
+	smoother(volume, leftVol, rightVol, 0.025);
 }
 
 function adjustAudioParams(){
@@ -78,7 +78,7 @@ function adjustAudioParams(){
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
 	spectralCentroid = fft.getCentroid();
-	smoother(volume, leftVol, rightVol);	
+	smoother(volume, leftVol, rightVol, map(midi.controls.controller(6).value, 0, 127, .5, .001));	
 }
 
 ipc.on("modeSelector", (event, arg) => {
@@ -124,8 +124,7 @@ function importer(folder){
 	});
 }
 
-function smoother(volume, leftVol, rightVol){
-	let easing = 0.025;
+function smoother(volume, leftVol, rightVol, easing){
 	let scaler = 0.1;
 
 	let target = volume * scaler;
