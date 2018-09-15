@@ -196,7 +196,7 @@ function applyImportFilter(typeOfImport){
 		filter.extensions = ["obj"];
 		return filter;
 	}
-	else if (typeOfImport === "texture" || typeOfImport === "image"){
+	else if (typeOfImport === "textures" || typeOfImport === "images"){
 		filter.name = "Image";
 		filter.extensions = ["jpg", "png", "gif", "tif", "bmp"];
 		return filter;
