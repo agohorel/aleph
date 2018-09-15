@@ -1,16 +1,8 @@
 let leftVolEased = .001, rightVolEased = .001, easing = 0.025; 
 let scaler = .1;
 
-exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi, leftVol, rightVol) => {
+exports.run = (fft, volume, bass, mid, high, spectrum, waveform, spectralCentroid, midi, leftVol, rightVol, assets, volEased, leftVolEased, rightVolEased) => {
 	background(0);
-
-	let targetL = leftVol * scaler;
-	let distL = targetL - leftVolEased;
-	leftVolEased += distL * easing;
-
-	let targetR = rightVol * scaler;
-	let distR = targetR - rightVolEased;
-	rightVolEased += distR * easing;
 
 	directionalLight(bass, mid * .5, high, 1.5, .75, 0.25);
 	directionalLight(bass - 50, mid * .5 - 50, high - 50, 0, .4, 0.25);
