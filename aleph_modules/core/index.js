@@ -162,6 +162,7 @@ assetFolders.forEach(folder => {
 	assets.forEach(asset => {
 		assetList += `|__${asset}\n`;
 	});
+	assetList += "\n";
 });
 
 p.innerText = assetList;	
