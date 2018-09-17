@@ -93,6 +93,7 @@ function adjustAudioParams(){
 }
 
 ipc.on("modeSelector", (event, arg) => {
+	resetStyles();
 	moduleName = arg;
 });
 
@@ -149,4 +150,10 @@ function smoother(volume, leftVol, rightVol, easing){
 	let targetR = rightVol * scaler;
 	let diffR = targetR - rightVolEased;
 	rightVolEased += diffR * easing;
+}
+
+function resetStyles(){
+	strokeWeight(1);
+	stroke(255);
+	fill(0);
 }
