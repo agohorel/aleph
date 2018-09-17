@@ -149,6 +149,29 @@ texturesBtn.addEventListener("click", () => {
 	importFileDialog("textures");
 });
 
+// AVAILABLE ASSETS STUFF
+
+const p = document.querySelector("#availableAssets");
+
+fs.readdir("./aleph_modules/assets", (err, folders) => {
+  if (err){
+  	console.log(err);
+  } else {	
+  	  folders.forEach(folder => {
+  	 	fs.readdir(`./aleph_modules/assets/${folder}`, (err, files) => {
+  	 		if (err){
+  	 			console.log(err);
+  	 		} else {
+  	 			let string = "";
+  	 			files.forEach(file => {
+  	 				p.innerText += `${file}\n`;
+  	 			});
+  	 		}
+  	 	});
+	  });
+  }
+});
+
 // UTILITY FUNCTIONS
 
 function makeDomElement(type, text, className, destParent, boolean) {
