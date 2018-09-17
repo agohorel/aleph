@@ -152,25 +152,20 @@ texturesBtn.addEventListener("click", () => {
 // AVAILABLE ASSETS STUFF
 
 const p = document.querySelector("#availableAssets");
+let assetFolders = fs.readdirSync("./aleph_modules/assets");
+let assetList = "";
 
-fs.readdir("./aleph_modules/assets", (err, folders) => {
-  if (err){
-  	console.log(err);
-  } else {	
-  	  folders.forEach(folder => {
-  	 	fs.readdir(`./aleph_modules/assets/${folder}`, (err, files) => {
-  	 		if (err){
-  	 			console.log(err);
-  	 		} else {
-  	 			let string = "";
-  	 			files.forEach(file => {
-  	 				p.innerText += `${file}\n`;
-  	 			});
-  	 		}
-  	 	});
-	  });
-  }
+assetFolders.forEach(folder => {
+	assetList += `${folder}\n`.toUpperCase();
+	let assets = fs.readdirSync(`./aleph_modules/assets/${folder}`);
+
+	assets.forEach(asset => {
+		assetList += `|__${asset}\n`;
+	});
 });
+
+p.innerText = assetList;	
+
 
 // UTILITY FUNCTIONS
 
