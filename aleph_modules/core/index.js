@@ -160,7 +160,7 @@ assetFolders.forEach(folder => {
 	let assets = fs.readdirSync(`./aleph_modules/assets/${folder}`);
 
 	assets.forEach(asset => {
-		assetList += `|__${asset}\n`;
+		assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
 	});
 	assetList += "\n";
 });
