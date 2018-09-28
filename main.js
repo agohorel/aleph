@@ -29,8 +29,8 @@ app.on('window-all-closed', () => {
 	}		
 });
 
-ipcMain.on("changeMode", (event, args) => {
-	displayWindow.webContents.send("modeSelector", args);
+ipcMain.on("changeSketch", (event, args) => {
+	displayWindow.webContents.send("sketchSelector", args);
 });
 
 ipcMain.on("listMidi", (event, args) => {

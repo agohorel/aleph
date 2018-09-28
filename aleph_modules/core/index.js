@@ -4,26 +4,26 @@ const {dialog} = electron.remote;
 const ipc = electron.ipcRenderer;
 const fs = require('fs');
 
-// MODE SELECTION STUFF
+// SKETCH SELECTION STUFF
 
-const modeSelectButtons = document.querySelector("#modeSelectorButtons");
+const sketchSelectButtons = document.querySelector("#sketchSelectorButtons");
 
-//read and display available p5 sketches (modes)
+//read and display available p5 sketches
 fs.readdir("./aleph_modules/modes", (err, files) => {
   if (err){
   	console.log(err);
   } else {
   	  files.forEach(file => {
-  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), ["modeSelectButton", "btn"], "#modeSelectorButtons", true);	  
+  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), ["sketchSelectButton", "btn"], "#sketchSelectorButtons", true);	  
 	  });
   }
 });
 
 // highlight selected mode & send mode to p5 via main process
-modeSelectorButtons.addEventListener("click", function(e) {
-	if (e.target.className.includes("modeSelectButton")){
-		highlightSelectedItem(".modeSelectButton", e.target);
-		ipc.send("changeMode", e.target.id);
+sketchSelectorButtons.addEventListener("click", function(e) {
+	if (e.target.className.includes("sketchSelectButton")){
+		highlightSelectedItem(".sketchSelectButton", e.target);
+		ipc.send("changeSketch", e.target.id);
 	}
 });
 
@@ -119,14 +119,14 @@ const displayHeight = document.querySelector("#displayWindowHeight");
 // send display size params to main process & unlock p5 mode & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e){
 	let displayDimensions = [Number(displayWidth.value), Number(displayHeight.value)];
-	let modeBtns = document.querySelectorAll(".modeSelectButton");
+	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
 	let addCtrlBtn = document.querySelector("#addMidiMap");
 	let lockMappingBtn = document.querySelector("#lockMidiMap");
 	let saveBtn = document.querySelector("#saveMidi");
 	let loadBtn = document.querySelector("#loadMidi");
 
-	modeBtns.forEach((btn) => { btn.disabled = false; });
+	sketchBtns.forEach((btn) => { btn.disabled = false; });
 	midiBtns.forEach((btn) => { btn.disabled = false; });
 	addCtrlBtn.disabled = false;
 	lockMappingBtn.disabled = false;

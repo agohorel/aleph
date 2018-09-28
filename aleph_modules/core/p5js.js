@@ -92,7 +92,7 @@ function adjustAudioParams(){
 	};	
 }
 
-ipc.on("modeSelector", (event, arg) => {
+ipc.on("sketchSelector", (event, arg) => {
 	resetStyles();
 	moduleName = arg;
 });
