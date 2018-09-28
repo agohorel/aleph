@@ -9,6 +9,7 @@ exports.run = (audio, midi, assets) => {
 	pointLight(audio.bass/2, 0, audio.high * 5, -225, -115, 200);
 	pointLight(0, 0, audio.high * 5, 225, height - 115, 200);	
 
+	noStroke();
 	specularMaterial(255);
 
 	rotateX(frameCount * audio.leftVolEased * .5);

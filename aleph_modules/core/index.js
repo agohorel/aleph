@@ -9,7 +9,7 @@ const fs = require('fs');
 const sketchSelectButtons = document.querySelector("#sketchSelectorButtons");
 
 //read and display available p5 sketches
-fs.readdir("./aleph_modules/modes", (err, files) => {
+fs.readdir("./aleph_modules/sketches", (err, files) => {
   if (err){
   	console.log(err);
   } else {
@@ -116,7 +116,7 @@ const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
 const displayWidth = document.querySelector("#displayWindowWidth");
 const displayHeight = document.querySelector("#displayWindowHeight");
 
-// send display size params to main process & unlock p5 mode & midi device select buttons
+// send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e){
 	let displayDimensions = [Number(displayWidth.value), Number(displayHeight.value)];
 	let sketchBtns = document.querySelectorAll(".sketchSelectButton");

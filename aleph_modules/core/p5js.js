@@ -36,7 +36,7 @@ function draw() {
 
 	if (moduleName !== ""){
 		try {
-			let moduleFile = require(`./../modes/${moduleName}.js`);
+			let moduleFile = require(`./../sketches/${moduleName}.js`);
 			moduleFile.run(audio, midi.controls, assets);
 		} 
 
