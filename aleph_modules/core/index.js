@@ -2,7 +2,8 @@ const electron = require("electron");
 const BrowserWindow = electron.remote.BrowserWindow;
 const {dialog} = electron.remote;
 const ipc = electron.ipcRenderer;
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 
 // SKETCH SELECTION STUFF
 
@@ -26,6 +27,13 @@ sketchSelectorButtons.addEventListener("click", function(e) {
 		ipc.send("changeSketch", e.target.id);
 	}
 });
+
+const newSketchBtn = document.querySelector("#newSketchBtn");
+
+newSketchBtn.addEventListener("click", () => {
+	newSketchDialog();
+});
+
 
 // MIDI DEVICE SELECTION STUFF
 
@@ -217,26 +225,31 @@ function duplicate(id) {
     original.parentNode.appendChild(clone);
 }
 
-function importFileDialog(typeOfImport){
+function importFileDialog(filetype){
 	dialog.showOpenDialog({
-		filters: [applyImportFilter(typeOfImport)],
+		filters: [applyFiletypeFilter(filetype)],
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
-		copySelectedFiles(files, `./aleph_modules/assets/${typeOfImport}`);
+		copySelectedFiles(files, `./aleph_modules/assets/${filetype}`);
 		scanAssets();
 	});
 }
 
-function applyImportFilter(typeOfImport){
+function applyFiletypeFilter(filetype){
 	let filter = {};
-	if (typeOfImport === "3d" || typeOfImport === "obj" || typeOfImport === "models"){
-		filter.name = typeOfImport;
+	if (filetype === "3d" || filetype === "obj" || filetype === "models"){
+		filter.name = filetype;
 		filter.extensions = ["obj"];
 		return filter;
 	}
-	else if (typeOfImport === "textures" || typeOfImport === "images"){
+	else if (filetype === "textures" || filetype === "images"){
 		filter.name = "Image";
 		filter.extensions = ["jpg", "png", "gif", "tif", "bmp"];
+		return filter;
+	}
+	else if (filetype === "js"){
+		filter.name = "Javascript";
+		filter.extensions = ["js"];
 		return filter;
 	}
 }
@@ -250,4 +263,24 @@ function copySelectedFiles(selectedFiles, destination){
 			console.log(`${selectedFiles[i]} copied to ${destination}/${filename}`);
 		});
 	}
+}
+
+function newSketchDialog(){
+		let sketchFolder = path.resolve("./", "aleph_modules/sketches");
+		dialog.showSaveDialog({
+		defaultPath: sketchFolder,
+		title: "Save New Sketch As",
+		filters: [applyFiletypeFilter("js")]
+	}, (sketchPath) => {
+		if (sketchPath === undefined) return;
+		let sketchName = sketchPath.replace(/^.*[\\\/]/, '');
+		copySketchTemplate(sketchName);
+	});
+}
+
+function copySketchTemplate(name){
+	fs.copyFile("./aleph_modules/core/sketchTemplate.js", `./aleph_modules/sketches/${name}`, (err) => {
+		if (err) throw err;
+		console.log(`create new sketch "${name}"`);
+	});
 }

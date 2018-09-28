@@ -65,6 +65,11 @@ input[type=number]::-webkit-outer-spin-button {
 	color: #000;
 }
 
+.btnSmall {
+	font-size: 10px;
+	margin-bottom: 0px;
+}
+
 .active {
 	background-color: #eee;
 	color: #111;
@@ -93,11 +98,6 @@ input[type=number]::-webkit-outer-spin-button {
 .buttons .doneLoading {
 	background-color: #009920;
 	color: #000;
-}
-
-#availableAssetsBtn {
-	font-size: 10px;
-	margin-bottom: 0px;
 }
 
 #availableAssets {
