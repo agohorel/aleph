@@ -218,7 +218,7 @@ function importFileDialog(typeOfImport){
 		filters: [applyImportFilter(typeOfImport)],
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
-		copyImportedFiles(files, `./aleph_modules/assets/${typeOfImport}`);
+		copySelectedFiles(files, `./aleph_modules/assets/${typeOfImport}`);
 	});
 }
 
