@@ -153,19 +153,23 @@ texturesBtn.addEventListener("click", () => {
 
 const p = document.querySelector("#availableAssets");
 let assetFolders = fs.readdirSync("./aleph_modules/assets");
-let assetList = "";
 
-assetFolders.forEach(folder => {
-	assetList += `${folder}\n`.toUpperCase();
-	let assets = fs.readdirSync(`./aleph_modules/assets/${folder}`);
+function scanAssets(){
+	let assetList = "";
+	assetFolders.forEach(folder => {
+		assetList += `${folder}\n`.toUpperCase();
+		let assets = fs.readdirSync(`./aleph_modules/assets/${folder}`);
 
-	assets.forEach(asset => {
-		assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
+		assets.forEach(asset => {
+			assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
+		});
+		assetList += "\n";
 	});
-	assetList += "\n";
-});
 
-p.innerText = assetList;	
+	p.innerText = assetList;	
+}
+
+scanAssets();
 
 const listAssetsBtn = document.querySelector("#availableAssetsBtn");
 let listAssetsBool = false;
@@ -219,6 +223,7 @@ function importFileDialog(typeOfImport){
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
 		copySelectedFiles(files, `./aleph_modules/assets/${typeOfImport}`);
+		scanAssets();
 	});
 }
 
