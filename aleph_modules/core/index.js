@@ -172,10 +172,12 @@ let listAssetsBool = false;
 
 listAssetsBtn.addEventListener("click", () => {
 	if (listAssetsBool === false){
-		p.style.display = "none";
+		p.style.display = "block";
+		listAssetsBtn.innerText = "Hide";
 		listAssetsBool = true;	
 	} else {
-		p.style.display = "block";
+		p.style.display = "none";
+		listAssetsBtn.innerText = "Show";
 		listAssetsBool = false;
 	}
 });
