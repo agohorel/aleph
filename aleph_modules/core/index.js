@@ -167,6 +167,18 @@ assetFolders.forEach(folder => {
 
 p.innerText = assetList;	
 
+const listAssetsBtn = document.querySelector("#availableAssetsBtn");
+let listAssetsBool = false;
+
+listAssetsBtn.addEventListener("click", () => {
+	if (listAssetsBool === false){
+		p.style.display = "none";
+		listAssetsBool = true;	
+	} else {
+		p.style.display = "block";
+		listAssetsBool = false;
+	}
+});
 
 // UTILITY FUNCTIONS
 
