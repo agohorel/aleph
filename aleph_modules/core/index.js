@@ -281,6 +281,11 @@ function newSketchDialog(){
 function copySketchTemplate(name){
 	fs.copyFile("./aleph_modules/core/sketchTemplate.js", `./aleph_modules/sketches/${name}`, (err) => {
 		if (err) throw err;
-		console.log(`create new sketch "${name}"`);
+		console.log(`created new sketch "${name}"`);
+		appendNewSketchBtn(name.substring(0, name.length-3));
 	});
+}
+
+function appendNewSketchBtn(newSketch){
+	makeDomElement("BUTTON", newSketch, ["sketchSelectButton", "btn"], "#sketchSelectorButtons", true);	
 }
