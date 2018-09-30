@@ -97,6 +97,10 @@ ipc.on("sketchSelector", (event, arg) => {
 	moduleName = arg;
 });
 
+ipc.on("knobChanged", (event, arg) => {
+	console.log(arg);
+});
+
 // resize canvas if window is resized
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);

@@ -1,3 +1,6 @@
+const uiIpc = electron.ipcRenderer;
+let knobParams = {};
+
 const knobs = [
 	new gsuiSlider(),
 	new gsuiSlider(),
@@ -20,7 +23,12 @@ knobs[ 4 ].options( { type: "circular", min:  0, max: 2, step: 0.001, startFrom:
 // volume smoothing
 knobs[ 5 ].options( { type: "circular", min: .001, max:.5, step: 0.001, startFrom: 0, value: 0.25 } );
 
-knobs.forEach( ( slider, i ) => {
-	document.querySelector( "#knob" + i ).append( slider.rootElement );
-	slider.attached();
+knobs.forEach( ( knob, i ) => {
+	document.querySelector( "#knob" + i ).append( knob.rootElement );
+	knob.attached();
+	knobParams[i] = 0;
+	knob.oninput = (value) => {
+		knobParams[i] = value;
+		uiIpc.send("knobChanged", knobParams);
+	}
 } );

@@ -70,3 +70,7 @@ ipcMain.on("midiLoaded", (event) => {
 ipcMain.on("midiSaved", (event) => {
 	editorWindow.webContents.send("midiSaved");
 });
+
+ipcMain.on("knobChanged", (event, args) => {
+	displayWindow.webContents.send("knobChanged", args);
+});
