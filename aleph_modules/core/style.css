@@ -10,7 +10,6 @@ html, body {
 label {
 	font-family: Roboto Mono, monospace;
 	color: #fff;
-	padding-left: 15px;
 	margin-top: 10px;
 	font-size: 14px;
 }
@@ -44,7 +43,7 @@ input[type=number]::-webkit-outer-spin-button {
 	color: #fff;
 	font-size: 12px;
 	font-family: Roboto Mono, monospace;
-	margin: 3px;
+	margin: 3px 3px 3px 0px;
 	padding: 4px 8px 4px 8px;
 }
 
@@ -81,18 +80,17 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .section {
-	margin-top: 15px;
+	margin: 15px;
 }
 
 .textHeaders {
 	font-family: Roboto, sans-serif;
 	color: #eee;
 	margin: 0px;
-	padding-left: 15px;
 }
 
 .buttons {
-	padding: 5px 10px 10px 10px;
+	padding: 5px 10px 10px 0px;
 }
 
 .buttons .doneLoading {
@@ -104,6 +102,5 @@ input[type=number]::-webkit-outer-spin-button {
 	font-family: Roboto Mono, monospace;
 	font-size: 12px;
 	color: #999;
-	padding-left: 15px;
 	margin: 0;
 }
