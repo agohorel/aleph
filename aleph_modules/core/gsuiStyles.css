@@ -3,6 +3,7 @@
 	width: 360px;
 	--gsuiSlider-lineBgColor: #222;
 }
+
 #wrapper {
 	display: flex;
 	padding: 15px 20px 20px 20px;
@@ -35,6 +36,7 @@
 
 .knobItem {
 	text-align: center;
+	user-select: none;
 }
 
 #knob0 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
