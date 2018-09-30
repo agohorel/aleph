@@ -25,9 +25,9 @@
 	margin-left: 20px;
 }
 
-#sliderWrap0 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
-#sliderWrap1 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
-#sliderWrap2 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
-#sliderWrap3 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
-#sliderWrap4 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
-#sliderWrap5 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
+#knob0 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
+#knob1 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
+#knob2 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
+#knob3 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
+#knob4 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
+#knob5 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
