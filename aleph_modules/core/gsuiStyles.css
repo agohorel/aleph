@@ -25,9 +25,25 @@
 	margin-left: 20px;
 }
 
+.audioSettingsLabels{
+	color: #fff;
+	font-size: 10px;
+	font-family: Roboto Mono, monospace;
+	margin: 0;
+}
+
+.knobItem {
+	display: flex;
+}
+
 #knob0 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
+
 #knob1 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
+
 #knob2 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
+
 #knob3 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
+
 #knob4 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
+
 #knob5 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
