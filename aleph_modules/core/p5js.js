@@ -36,8 +36,6 @@ function setup() {
 function draw() {	
 	analyzeAudio();
 
-	console.log(audioParams);
-
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../sketches/${moduleName}.js`);
@@ -61,7 +59,7 @@ function analyzeAudio(){
 	high = fft.getEnergy("treble") * audioParams[3];
 	fft.smooth(audioParams[4]);
 	spectralCentroid = fft.getCentroid();
-	smoother(volume, leftVol, rightVol, audioParams[5]);
+	smoother(volume, leftVol, rightVol, .5 - audioParams[5]);
 	audio = {
 		fft, volume, leftVol, rightVol, spectrum, waveform, 
 		bass, mid, high, spectralCentroid, 
