@@ -9,7 +9,7 @@ let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleNam
 let assets = {models: {}, textures: {}};
 let audio = {};
 // set up initial values for audioParams object
-let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 0.25};
+let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25};
 
 // p5.disableFriendlyErrors = true;
 
