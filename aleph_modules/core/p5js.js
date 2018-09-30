@@ -8,6 +8,8 @@ const fs = require("fs");
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}};
 let audio = {};
+// set up initial values for audioParams object
+let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 0.25};
 
 // p5.disableFriendlyErrors = true;
 
@@ -34,6 +36,8 @@ function setup() {
 function draw() {	
 	analyzeAudio();
 
+	console.log(audioParams);
+
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(`./../sketches/${moduleName}.js`);
@@ -56,16 +60,17 @@ function analyzeAudio(){
 }
 
 function defaultAudioAnalysis(){
-	volume = amplitude.getLevel();
+	volume = amplitude.getLevel() * audioParams[0];
 	leftVol = amplitude.getLevel(0);
 	rightVol = amplitude.getLevel(1);
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
-	bass = fft.getEnergy("bass");
-	mid = fft.getEnergy("mid");
-	high = fft.getEnergy("treble");
+	bass = fft.getEnergy("bass") * audioParams[1];
+	mid = fft.getEnergy("mid") * audioParams[2];
+	high = fft.getEnergy("treble") * audioParams[3];
+	fft.smooth(audioParams[4]);
 	spectralCentroid = fft.getCentroid();
-	smoother(volume, leftVol, rightVol, 0.025);
+	smoother(volume, leftVol, rightVol, audioParams[5]);
 	audio = {
 		fft, volume, leftVol, rightVol, spectrum, waveform, 
 		bass, mid, high, spectralCentroid, 
@@ -98,7 +103,7 @@ ipc.on("sketchSelector", (event, arg) => {
 });
 
 ipc.on("knobChanged", (event, arg) => {
-	console.log(arg);
+	audioParams = arg;
 });
 
 // resize canvas if window is resized
