@@ -42,10 +42,10 @@ input[type=number]::-webkit-outer-spin-button {
 	border: none;
 	outline: none;
 	color: #fff;
-	font-size: 14px;
+	font-size: 12px;
 	font-family: Roboto Mono, monospace;
-	margin: 5px;
-	padding: 5px 10px 5px 10px;
+	margin: 3px;
+	padding: 4px 8px 4px 8px;
 }
 
 .btn:hover {
