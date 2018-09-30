@@ -51,15 +51,6 @@ function draw() {
 }
 
 function analyzeAudio(){
-	if (midi.controls.controller == undefined){
-		defaultAudioAnalysis();
-	}
-	else{
-		adjustAudioParams();
-	}
-}
-
-function defaultAudioAnalysis(){
 	volume = amplitude.getLevel() * audioParams[0];
 	leftVol = amplitude.getLevel(0);
 	rightVol = amplitude.getLevel(1);
@@ -76,25 +67,6 @@ function defaultAudioAnalysis(){
 		bass, mid, high, spectralCentroid, 
 		volEased, leftVolEased, rightVolEased
 	};
-}
-
-function adjustAudioParams(){
-	volume = amplitude.getLevel() * map(midi.controls.controller(1).value, 0, 127, 0, 2);
-	leftVol = amplitude.getLevel(0);
-	rightVol = amplitude.getLevel(1);
-	bass = fft.getEnergy("bass") * map(midi.controls.controller(2).value, 0, 127, 0, 2);
-	mid = fft.getEnergy("mid") * map(midi.controls.controller(3).value, 0, 127, 0, 2);
-	high = fft.getEnergy("treble") * map(midi.controls.controller(4).value, 0, 127, 0, 2);
-	fft.smooth(map(midi.controls.controller(5).value, 0, 127, 0, .999));
-	spectrum = fft.analyze();
-	waveform = fft.waveform();
-	spectralCentroid = fft.getCentroid();
-	smoother(volume, leftVol, rightVol, map(midi.controls.controller(6).value, 0, 127, .5, .001));
-	audio = {
-		fft, volume, leftVol, rightVol, spectrum, waveform, 
-		bass, mid, high, spectralCentroid, 
-		volEased, leftVolEased, rightVolEased
-	};	
 }
 
 ipc.on("sketchSelector", (event, arg) => {
