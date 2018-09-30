@@ -133,6 +133,7 @@ applyDisplaySettings.addEventListener("click", function(e){
 	let lockMappingBtn = document.querySelector("#lockMidiMap");
 	let saveBtn = document.querySelector("#saveMidi");
 	let loadBtn = document.querySelector("#loadMidi");
+	let audioParamWrapper = document.querySelector("#wrapper");
 
 	sketchBtns.forEach((btn) => { btn.disabled = false; });
 	midiBtns.forEach((btn) => { btn.disabled = false; });
@@ -140,6 +141,7 @@ applyDisplaySettings.addEventListener("click", function(e){
 	lockMappingBtn.disabled = false;
 	saveBtn.disabled = false;
 	loadBtn.disabled = false;
+	audioParamWrapper.style.pointerEvents = "all";
 
 	ipc.send("applyDisplaySettings", displayDimensions);
 });
