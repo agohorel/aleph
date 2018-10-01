@@ -17,7 +17,7 @@
 	display: flex;
 	padding: 15px 0px 20px 0px;
 	margin-top: 5px;
-	background-color: #222;
+	background-color: #2e3233;
 	pointer-events: none;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .audioSettingsLabels{
-	color: #fff;
+	color: #d4e1e6;
 	font-size: 10px;
 	font-family: Roboto Mono, monospace;
 	margin: 0;
@@ -48,14 +48,14 @@
 	text-align: center;
 }
 
-#knob0 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
+#knob0 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #12e4a6; }
 
-#knob1 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
+#knob1 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00b4f6; }
 
-#knob2 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
+#knob2 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #d4e1e6; }
 
-#knob3 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00ffc3; }
+#knob3 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #12e4a6; }
 
-#knob4 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00bbff; }
+#knob4 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #00b4f6; }
 
-#knob5 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #e3ecef; }
+#knob5 .gsuiSlider { width:  60px; height:  60px; --gsuiSlider-lineColor: #d4e1e6; }
