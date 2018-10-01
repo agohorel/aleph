@@ -48,13 +48,13 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .btn:hover {
-	background-color: #555;
+	background-color: #505759;
 	cursor: pointer;
 	color: #eee;
 }
 
 .btn:disabled {
-	background-color: rgba(102, 102, 102, .5);
+	background-color: #17191a;
 	color: #000;
 	cursor: default;
 }
@@ -71,12 +71,12 @@ input[type=number]::-webkit-outer-spin-button {
 
 .active {
 	background-color: #757d80;
-	color: #111;
+	color: #737d80;
 }
 
 .active:hover {
 	background-color: #757d80;
-	color: #111;
+	color: #737d80;
 }
 
 .section {
@@ -85,7 +85,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .textHeaders {
 	font-family: Roboto, sans-serif;
-	color: #eee;
+	color: #d4e1e6;
 	margin: 0px;
 }
 
