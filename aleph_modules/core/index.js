@@ -5,12 +5,15 @@ const ipc = electron.ipcRenderer;
 const path = require("path");
 const fs = require("fs");
 
+let sketchesPath = `${__dirname.substring(0, __dirname.length-5)}\\sketches`;
+let assetsPath = `${__dirname.substring(0, __dirname.length-5)}\\assets`;
+
 // SKETCH SELECTION STUFF
 
 const sketchSelectButtons = document.querySelector("#sketchSelectorButtons");
 
 //read and display available p5 sketches
-fs.readdir("./aleph_modules/sketches", (err, files) => {
+fs.readdir(sketchesPath, (err, files) => {
   if (err){
   	console.log(err);
   } else {
@@ -162,13 +165,13 @@ texturesBtn.addEventListener("click", () => {
 // AVAILABLE ASSETS STUFF
 
 const p = document.querySelector("#availableAssets");
-let assetFolders = fs.readdirSync("./aleph_modules/assets");
+let assetFolders = fs.readdirSync(assetsPath);
 
 function scanAssets(){
 	let assetList = "";
 	assetFolders.forEach(folder => {
 		assetList += `${folder}\n`.toUpperCase();
-		let assets = fs.readdirSync(`./aleph_modules/assets/${folder}`);
+		let assets = fs.readdirSync(`${assetsPath}\\${folder}`);
 
 		assets.forEach(asset => {
 			assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
@@ -260,7 +263,7 @@ function copySelectedFiles(selectedFiles, destination){
 	for (let i = 0; i < selectedFiles.length; i++){
 		// strip filename off path
 		let filename = selectedFiles[i].replace(/^.*[\\\/]/, '');
-		fs.copyFile(selectedFiles[i], `${destination}/${filename}`, (err) => {
+		fs.copyFile(selectedFiles[i], `${destination}\\${filename}`, (err) => {
 			if (err) throw err;
 			console.log(`${selectedFiles[i]} copied to ${destination}/${filename}`);
 		});
@@ -281,7 +284,7 @@ function newSketchDialog(){
 }
 
 function copySketchTemplate(name){
-	fs.copyFile("./aleph_modules/core/sketchTemplate.js", `./aleph_modules/sketches/${name}`, (err) => {
+	fs.copyFile(`${__dirname}/sketchTemplate.js`, `sketchesPath\\${name}`, (err) => {
 		if (err) throw err;
 		console.log(`created new sketch "${name}"`);
 		appendNewSketchBtn(name.substring(0, name.length-3));
