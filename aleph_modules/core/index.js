@@ -271,9 +271,8 @@ function copySelectedFiles(selectedFiles, destination){
 }
 
 function newSketchDialog(){
-		let sketchFolder = path.resolve("./", "aleph_modules/sketches");
 		dialog.showSaveDialog({
-		defaultPath: sketchFolder,
+		defaultPath: sketchesPath,
 		title: "Save New Sketch As",
 		filters: [applyFiletypeFilter("js")]
 	}, (sketchPath) => {
