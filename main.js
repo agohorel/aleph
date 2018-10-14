@@ -4,18 +4,27 @@ const {app, BrowserWindow, ipcMain} = require("electron");
 let editorWindow, displayWindow;
 
 function createWindow() {
-	editorWindow = new BrowserWindow({width: 1920, height: 1080, show: false});
-	editorWindow.loadFile("./aleph_modules/core/index.html");
+	splash = new BrowserWindow({width: 990, height: 990, transparent: true, frame: false});
+	splash.loadFile("./aleph_modules/core/splash.html");
 
-	// show window only when file has loaded to prevent flash
-	editorWindow.once("ready-to-show", () => {
-		editorWindow.maximize();
-	});
+	// artificial timeout to show splash screen 
+	setTimeout(() => {
+		editorWindow = new BrowserWindow({width: 1920, height: 1080, show: false});
+		editorWindow.loadFile("./aleph_modules/core/index.html");
 
-	// dereference windows on close
-	editorWindow.on("closed", () => {
-	      editorWindow = null;
-	});
+		// show window only when file has loaded to prevent flash
+		editorWindow.once("ready-to-show", () => {
+			splash.destroy();
+			editorWindow.maximize();
+		});
+
+		// dereference windows on close
+		editorWindow.on("closed", () => {
+		      editorWindow = null;
+		});
+
+	}, 1500);
+
 }
 
 app.on("ready", createWindow);
