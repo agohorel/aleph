@@ -1,5 +1,13 @@
 const {app, BrowserWindow, ipcMain} = require("electron");
 
+const electronDebug = require('electron-debug');
+
+electronDebug({
+	enabled: true,
+	showDevTools: false,
+	devToolsMode: "bottom"
+});
+
 // global reference to windows to prevent closing on js garbage collection
 let editorWindow, displayWindow;
 
