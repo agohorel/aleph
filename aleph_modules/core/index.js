@@ -236,7 +236,6 @@ function importFileDialog(filetype){
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
 		copySelectedFiles(files, `${assetsPath}/${filetype}`);
-		scanAssets();
 	});
 }
 
@@ -266,6 +265,7 @@ function copySelectedFiles(selectedFiles, destination){
 		fs.copyFile(selectedFiles[i], `${destination}\\${filename}`, (err) => {
 			if (err) throw err;
 			console.log(`${selectedFiles[i]} copied to ${destination}/${filename}`);
+			scanAssets();
 		});
 	}
 }
