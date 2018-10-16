@@ -4,15 +4,6 @@
 	--gsuiSlider-lineBgColor: #222;
 }
 
-#overlay {
-    position: fixed;
-    display: block;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.8);
-    z-index: 2;
-}
-
 #wrapper {
 	display: flex;
 	padding: 15px 0px 20px 0px;
