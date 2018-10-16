@@ -5,6 +5,8 @@ const p5_audio = require("p5/lib/addons/p5.sound.js");
 const midi = require("./midi.js");
 const fs = require("fs");
 
+let assetsPath = `${__dirname.substring(0, __dirname.length-5)}\\assets`;
+
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}};
 let audio = {};
@@ -95,7 +97,7 @@ function nearestPow2(value){
 }
 
 function importer(folder){
-	fs.readdir(`./aleph_modules/assets/${folder}`, (err, files) => {
+	fs.readdir(`${assetsPath}/${folder}`, (err, files) => {
 		if (err){
 			console.log(err);
 		} else {

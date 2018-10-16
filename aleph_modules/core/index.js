@@ -235,7 +235,7 @@ function importFileDialog(filetype){
 		filters: [applyFiletypeFilter(filetype)],
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
-		copySelectedFiles(files, `./aleph_modules/assets/${filetype}`);
+		copySelectedFiles(files, `${assetsPath}/${filetype}`);
 		scanAssets();
 	});
 }
