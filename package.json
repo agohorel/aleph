@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-packager ."
+    "build_all": "electron-packager . --platform=all --arch=x64",
+    "build_win": "electron-packager . --platform=win32 --arch=x64",
+    "build_linux": "electron-packager . --platform=linux --arch=x64",
+    "build_mac": "electron-packager . --platform=darwin --arch=x64"
   },
   "author": "",
   "license": "ISC",
