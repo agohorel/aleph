@@ -291,5 +291,14 @@ function copySketchTemplate(name){
 }
 
 function appendNewSketchBtn(newSketch){
-	makeDomElement("BUTTON", newSketch, ["sketchSelectButton", "btn"], "#sketchSelectorButtons", true);	
+	let bool = true;
+	let sketchBtn = document.querySelector(".sketchSelectButton");
+	// if existing buttons are disabled, bool = true (btn is created in disabled state)
+	if (sketchBtn.disabled === true){
+		bool = true; 
+	} 
+	else {
+		bool = false;
+	}
+	makeDomElement("BUTTON", newSketch, ["sketchSelectButton", "btn"], "#sketchSelectorButtons", bool);	
 }
