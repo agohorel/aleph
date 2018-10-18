@@ -170,13 +170,16 @@ let assetFolders = fs.readdirSync(assetsPath);
 function scanAssets(){
 	let assetList = "";
 	assetFolders.forEach(folder => {
-		assetList += `${folder}\n`.toUpperCase();
-		let assets = fs.readdirSync(`${assetsPath}\\${folder}`);
+		if (folder !== "fonts"){
+			assetList += `${folder}\n`.toUpperCase();
+			let assets = fs.readdirSync(`${assetsPath}\\${folder}`);
 
-		assets.forEach(asset => {
-			assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
-		});
-		assetList += "\n";
+			assets.forEach(asset => {
+				assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
+			});
+			assetList += "\n";
+		} 
+
 	});
 
 	p.innerText = assetList;	
