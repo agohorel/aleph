@@ -17,7 +17,11 @@ function createWindow() {
 
 	// artificial timeout to show splash screen 
 	setTimeout(() => {
-		editorWindow = new BrowserWindow({width: 1920, height: 1080, show: false});
+		editorWindow = new BrowserWindow({
+			width: 1920, 
+			height: 1080, 
+			show: false, 
+			icon: "./aleph_modules/assets/icons/win/logo.ico"});
 		editorWindow.loadFile("./aleph_modules/core/index.html");
 
 		// show window only when file has loaded to prevent flash
