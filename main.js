@@ -12,7 +12,7 @@ electronDebug({
 let editorWindow, displayWindow;
 
 function createWindow() {
-	splash = new BrowserWindow({width: 990, height: 990, transparent: true, frame: false});
+	splash = new BrowserWindow({width: 512, height: 512, transparent: true, frame: false});
 	splash.loadFile("./aleph_modules/core/splash.html");
 
 	// artificial timeout to show splash screen 
