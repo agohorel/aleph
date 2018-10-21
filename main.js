@@ -13,7 +13,7 @@ let editorWindow, displayWindow;
 
 function createWindow() {
 	splash = new BrowserWindow({width: 512, height: 512, transparent: true, frame: false});
-	splash.loadFile("./aleph_modules/core/splash.html");
+	splash.loadFile("./aleph_modules/core/html/splash.html");
 
 	// artificial timeout to show splash screen 
 	setTimeout(() => {
@@ -22,7 +22,7 @@ function createWindow() {
 			height: 1080, 
 			show: false, 
 			icon: "./aleph_modules/assets/icons/win/logo.ico"});
-		editorWindow.loadFile("./aleph_modules/core/index.html");
+		editorWindow.loadFile("./aleph_modules/core/html/index.html");
 
 		// show window only when file has loaded to prevent flash
 		editorWindow.once("ready-to-show", () => {
@@ -72,7 +72,7 @@ ipcMain.on("applyDisplaySettings", (event, args) => {
 									   autoHideMenuBar: true,
 									   icon: "./aleph_modules/assets/icons/win/logo.ico"});
 	displayWindow.webContents.send("applyDisplaySettings", args);
- 	displayWindow.loadFile("./aleph_modules/core/displayWindow.html");
+ 	displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
 	
 	displayWindow.on("closed", () => {
 		displayWindow = null;

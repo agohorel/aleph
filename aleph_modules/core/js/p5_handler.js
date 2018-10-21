@@ -2,10 +2,11 @@ const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
-const midi = require("./midi.js");
+const midi = require(`${__dirname.substring(0, __dirname.length-10)}\\core\\js\\midi.js`);
 const fs = require("fs");
 
-let assetsPath = `${__dirname.substring(0, __dirname.length-5)}\\assets`;
+let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
+console.log(assetsPath);
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}};
@@ -40,7 +41,7 @@ function draw() {
 
 	if (moduleName !== ""){
 		try {
-			let moduleFile = require(`./../sketches/${moduleName}.js`);
+			let moduleFile = require(`../../sketches/${moduleName}.js`);
 			moduleFile.run(audio, midi.controls, assets);
 		} 
 
@@ -107,10 +108,10 @@ function importer(folder){
 				// check which folder we're importing from 
 				if (folder === "models"){
 					// create entry on assets object & load file
-					assets.models[name] = loadModel(`../assets/models/${file}`, true);
+					assets.models[name] = loadModel(`../../assets/models/${file}`, true);
 				}
 				if (folder === "textures"){
-					assets.textures[name] = loadImage(`../assets/textures/${file}`, true);
+					assets.textures[name] = loadImage(`../../assets/textures/${file}`, true);
 				} 
 			});
 		}

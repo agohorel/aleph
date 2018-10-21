@@ -5,8 +5,8 @@ const ipc = electron.ipcRenderer;
 const path = require("path");
 const fs = require("fs");
 
-let sketchesPath = `${__dirname.substring(0, __dirname.length-5)}\\sketches`;
-let assetsPath = `${__dirname.substring(0, __dirname.length-5)}\\assets`;
+let sketchesPath = `${__dirname.substring(0, __dirname.length-10)}\\sketches`;
+let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
 
 // SKETCH SELECTION STUFF
 
