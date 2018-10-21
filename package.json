@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build_all": "electron-packager . --platform=all --arch=x64",
-    "build_win": "electron-packager . --platform=win32 --arch=x64",
-    "build_linux": "electron-packager . --platform=linux --arch=x64",
-    "build_mac": "electron-packager . --platform=darwin --arch=x64"
+    "build_all": "npm run build_win & npm run build_linux & npm run build_mac",
+    "build_win": "electron-packager . --platform=win32 --arch=x64 --icon=aleph_modules/assets/icons/win/logo.ico",
+    "build_linux": "electron-packager . --platform=linux --arch=x64 --icon=aleph_modules/assets/icons/png/512x512.png",
+    "build_mac": "electron-packager . --platform=darwin --arch=x64 --icon=aleph_modules/assets/icons/mac/logo.icns"
   },
   "author": "",
   "license": "ISC",
