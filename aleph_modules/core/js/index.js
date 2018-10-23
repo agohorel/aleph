@@ -286,7 +286,7 @@ function newSketchDialog(){
 }
 
 function copySketchTemplate(name){
-	fs.copyFile(`${__dirname}/sketchTemplate.js`, `${sketchesPath}\\${name}`, (err) => {
+	fs.copyFile(`${__dirname.substring(0, __dirname.length-5)}/js/sketchTemplate.js`, `${sketchesPath}\\${name}`, (err) => {
 		if (err) throw err;
 		console.log(`created new sketch "${name}"`);
 		appendNewSketchBtn(name.substring(0, name.length-3));
