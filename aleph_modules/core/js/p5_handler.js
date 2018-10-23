@@ -52,14 +52,14 @@ function draw() {
 }
 
 function analyzeAudio(){
-	volume = amplitude.getLevel() * audioParams[0];
-	leftVol = amplitude.getLevel(0);
-	rightVol = amplitude.getLevel(1);
+	volume = clamp(amplitude.getLevel() * audioParams[0], 0, 1);
+	leftVol = clamp(amplitude.getLevel(0), 0, 1);
+	rightVol = clamp(amplitude.getLevel(1), 0, 1);
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
-	bass = fft.getEnergy("bass") * audioParams[1];
-	mid = fft.getEnergy("mid") * audioParams[2];
-	high = fft.getEnergy("treble") * audioParams[3];
+	bass = clamp(fft.getEnergy("bass") * audioParams[1], 0, 255);
+	mid = clamp(fft.getEnergy("mid") * audioParams[2], 0, 255);
+	high = clamp(fft.getEnergy("treble") * audioParams[3], 0, 255);
 	fft.smooth(audioParams[4]);
 	spectralCentroid = fft.getCentroid();
 	smoother(volume, leftVol, rightVol, .5 - audioParams[5]);
@@ -138,4 +138,8 @@ function resetStyles(){
 	strokeWeight(1);
 	stroke(255);
 	fill(0);
+}
+
+function clamp(val, min, max){
+	return Math.max(min, Math.min(val, max));
 }
