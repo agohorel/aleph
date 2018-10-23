@@ -53,8 +53,8 @@ function draw() {
 
 function analyzeAudio(){
 	volume = clamp(amplitude.getLevel() * audioParams[0], 0, 1);
-	leftVol = clamp(amplitude.getLevel(0), 0, 1);
-	rightVol = clamp(amplitude.getLevel(1), 0, 1);
+	leftVol = clamp(amplitude.getLevel(0) * audioParams[0], 0, 1);
+	rightVol = clamp(amplitude.getLevel(1) * audioParams[0], 0, 1);
 	spectrum = fft.analyze();
 	waveform = fft.waveform();
 	bass = clamp(fft.getEnergy("bass") * audioParams[1], 0, 255);
