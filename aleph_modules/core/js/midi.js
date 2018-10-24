@@ -4,6 +4,7 @@ const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
 
 let midiDevice;
+let appPath = process.cwd();
 
 // initial export of default values
 module.exports.controls = {};
@@ -43,7 +44,7 @@ ipc.on("saveMidi", (event) => {
 });
 
 ipc.on("loadMidi", (event) => {
-	fs.readFile('midiMappings.json', "utf-8", (err, data) => {
+	fs.readFile(`${appPath}/midiMappings.json`, "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
 		Object.keys(obj).forEach((key) => {
