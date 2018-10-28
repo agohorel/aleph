@@ -18,15 +18,6 @@ ipc.on("selectMidiDevice", (event, arg) => {
 	ccChange();
 });
 
-// initialise midiMap object with helper function
-// let midiMap = {
-// 	// this function emulates array-like index addressing
-// 	// ex. midiMap.controller(1) 
-//     controller: function(n) {
-//         return this[Object.keys(this)[n-1]];
-//     }
-// };
-
 let midiMap = {};
 let midiMappings = [];
 
@@ -50,17 +41,12 @@ ipc.on("loadMidi", (event) => {
 	fs.readFile(`${appPath}/midiMappings.json`, "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
-		console.log(obj);
 	
 		for (let i = 0; i < obj.length; i++){
 			midiMappings.push(obj[i]);
 		}
-
-		// Object.keys(obj).forEach((key) => {
-		// 	midiMap[key] = obj[key];
-		// });
-	
 	});
+	
 	module.exports.controls = midiMappings;
 	console.log(midiMappings);
 	ipc.send("midiLoaded");
@@ -103,13 +89,6 @@ function ccChange() {
 }
 
 function setMidiMapping(object, array, controlNum, note, param) {
-	// check for matches/overwrites 
-	// for (let key in object) {
-	//     if (object[key].name === controlNum){
-	// 		delete object[key];
-	//     }
-	// }
-
 	// loop through controls array
 	for (let i = 0; i < array.length; i++){
 		// look for matching controlNum/name property
@@ -127,8 +106,8 @@ function setMidiMapping(object, array, controlNum, note, param) {
 	mapModeActive = false; 
 
 	array.push(object[note]);
-	console.log(array);
 
+	// sort array by controlNum to ensure correct order
 	array.sort((a, b) => {
 		let textA = a.name.toUpperCase();
 		let textB = b.name.toUpperCase();
@@ -137,14 +116,10 @@ function setMidiMapping(object, array, controlNum, note, param) {
 	console.log(array);
 }
 
-function updateMidi(object, array, note, param){
-	// only update if there's a corresponding property to update in the first place
+function updateMidi(object, array, note, param){ 
 	for (let i = 0; i < array.length; i++){
+		// only update if there's a corresponding property to update
 		if (array[i].note === note)
 			array[i].value = param;
 		}
-
-	// if(object.hasOwnProperty(note)){
-	// 	object[note].value = param;
-	// }
 }
