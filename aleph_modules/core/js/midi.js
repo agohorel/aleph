@@ -40,22 +40,29 @@ ipc.on("addMidiMapping", (event, arg) => {
 });
 
 ipc.on("saveMidi", (event) => {
-	fs.writeFile('midiMappings.json', JSON.stringify(midiMap, null, 2), (err) => {
+	fs.writeFile('midiMappings.json', JSON.stringify(midiMappings, null, 2), (err) => {
 		if (err) throw err;
 	});
 	ipc.send("midiSaved");
 });
 
 ipc.on("loadMidi", (event) => {
-	fs.readFile(`${appPath}/midiMap.json`, "utf-8", (err, data) => {
+	fs.readFile(`${appPath}/midiMappings.json`, "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
-		Object.keys(obj).forEach((key) => {
-			midiMap[key] = obj[key];
-		});
+		console.log(obj);
+	
+		for (let i = 0; i < obj.length; i++){
+			midiMappings.push(obj[i]);
+		}
+
+		// Object.keys(obj).forEach((key) => {
+		// 	midiMap[key] = obj[key];
+		// });
+	
 	});
-	console.log(midiMap);
 	module.exports.controls = midiMappings;
+	console.log(midiMappings);
 	ipc.send("midiLoaded");
 });
 
@@ -121,6 +128,13 @@ function setMidiMapping(object, array, controlNum, note, param) {
 
 	array.push(object[note]);
 	console.log(array);
+
+	array.sort((a, b) => {
+		let textA = a.name.toUpperCase();
+		let textB = b.name.toUpperCase();
+		return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+	});
+	console.log(array);
 }
 
 function updateMidi(object, array, note, param){
@@ -128,7 +142,6 @@ function updateMidi(object, array, note, param){
 	for (let i = 0; i < array.length; i++){
 		if (array[i].note === note)
 			array[i].value = param;
-			console.log(array[i]);
 		}
 
 	// if(object.hasOwnProperty(note)){
