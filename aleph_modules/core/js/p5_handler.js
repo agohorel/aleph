@@ -6,7 +6,6 @@ const midi = require(`${__dirname.substring(0, __dirname.length-10)}\\core\\js\\
 const fs = require("fs");
 
 let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
-console.log(assetsPath);
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}};
@@ -23,8 +22,6 @@ function preload() {
 
 function setup() {
 	let cnv = createCanvas(windowWidth, windowHeight, WEBGL);
-	// var gl = document.getElementById('defaultCanvas0').getContext('webgl');
-	// gl.disable(gl.DEPTH_TEST);
 
 	input = new p5.AudioIn();
 	input.start();

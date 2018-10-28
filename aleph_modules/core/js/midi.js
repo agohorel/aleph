@@ -18,19 +18,13 @@ ipc.on("selectMidiDevice", (event, arg) => {
 	ccChange();
 });
 
-// initialise midiMappings object with helper function
-let midiMappings = {
-	// this function emulates array-like index addressing
-	// ex. midiMappings.controller(1) 
-    controller: function(n) {
-        return this[Object.keys(this)[n-1]];
-    }
-};
+let midiMap = {};
+let midiMappings = [];
 
 let controlNum = null;
 let mapModeActive = false;
 
-// receive trigger from main process to create new properties in the midiMappings object
+// receive trigger from main process to create new properties in the midiMap object
 ipc.on("addMidiMapping", (event, arg) => {
 	controlNum = arg;
 	mapModeActive = true;
@@ -47,25 +41,27 @@ ipc.on("loadMidi", (event) => {
 	fs.readFile(`${appPath}/midiMappings.json`, "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
-		Object.keys(obj).forEach((key) => {
-			midiMappings[key] = obj[key];
-		});
+	
+		for (let i = 0; i < obj.length; i++){
+			midiMappings.push(obj[i]);
+		}
 	});
-	console.log(midiMappings);
+	
 	module.exports.controls = midiMappings;
+	console.log(midiMappings);
 	ipc.send("midiLoaded");
 });
 
 function pressedButton() {
 	// listen for button presses
 	midiDevice.on('noteon', (msg) => {
-		// if mapMode is on, assign the pressed button to midiMappings
+		// if mapMode is on, assign the pressed button to midiMap
 		if (mapModeActive){
-			setMidiMapping(midiMappings, controlNum, msg.note, msg.velocity);
+			setMidiMapping(midiMap, midiMappings, controlNum, msg.note, msg.velocity);
 		} 
-		// otherwise update the matching entry in midiMappings
+		// otherwise update the matching entry in midiMap
 		else {
-			updateMidi(midiMappings, msg.note, msg.velocity);
+			updateMidi(midiMap, midiMappings, msg.note, msg.velocity);
 		}
 
 		// re-export new values on update
@@ -75,7 +71,7 @@ function pressedButton() {
 
 function releasedButton() {
 	midiDevice.on('noteoff', (msg) => {
-		updateMidi(midiMappings, msg.note, msg.velocity);		
+		updateMidi(midiMap, midiMappings, msg.note, msg.velocity);		
 		module.exports.controls = midiMappings;
 	});
 }
@@ -83,34 +79,47 @@ function releasedButton() {
 function ccChange() {
 	midiDevice.on("cc", (msg) => {		
 		if (mapModeActive){
-			setMidiMapping(midiMappings, controlNum, msg.controller, msg.value);
+			setMidiMapping(midiMap, midiMappings, controlNum, msg.controller, msg.value);
 		} else {
-			updateMidi(midiMappings, msg.controller, msg.value);
+			updateMidi(midiMap, midiMappings, msg.controller, msg.value);
 		}
 
 		module.exports.controls = midiMappings;
 	});
 }
 
-function setMidiMapping(object, controlNum, note, param) {
-	// check for matches/overwrites 
-	for (let key in object) {
-	    if (object[key].name === controlNum){
-			delete object[key];
-	    }
+function setMidiMapping(object, array, controlNum, note, param) {
+	// loop through controls array
+	for (let i = 0; i < array.length; i++){
+		// look for matching controlNum/name property
+		if (array[i].name === controlNum){
+			console.log(`${controlNum} found a match at index ${i}: ${array[i].name}`);
+			// remove matching item (duplicate)
+			array.splice(i, 1);
+		}
 	}
 
 	object[note] = {};
+	object[note].note = note;
 	object[note].name = controlNum;
 	object[note].value = param;
 	mapModeActive = false; 
 
-	console.log(midiMappings);
+	array.push(object[note]);
+
+	// sort array by controlNum to ensure correct order
+	array.sort((a, b) => {
+		let textA = a.name.toUpperCase();
+		let textB = b.name.toUpperCase();
+		return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+	});
+	console.log(array);
 }
 
-function updateMidi(object, note, param){
-	// only update if there's a corresponding property to update in the first place
-	if(object.hasOwnProperty(note)){
-		object[note].value = param;
-	}
+function updateMidi(object, array, note, param){ 
+	for (let i = 0; i < array.length; i++){
+		// only update if there's a corresponding property to update
+		if (array[i].note === note)
+			array[i].value = param;
+		}
 }
