@@ -64,7 +64,7 @@ const lockMidi = document.querySelector("#lockMidiMap");
 const midiMappingButtons = document.querySelector("#midiMapIcons");
 const saveMidi = document.querySelector("#saveMidi");
 const loadMidi = document.querySelector("#loadMidi");
-let controlCount = 0;
+let controlCount = -1;
 
 // create new midi control mappings
 addMidiMap.addEventListener("click", () => {	
