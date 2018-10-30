@@ -9,7 +9,8 @@
     "build_all": "npm run build_win & npm run build_linux & npm run build_mac",
     "build_win": "electron-packager . --platform=win32 --arch=x64 --icon=aleph_modules/assets/icons/win/logo.ico",
     "build_linux": "electron-packager . --platform=linux --arch=x64 --icon=aleph_modules/assets/icons/png/512x512.png",
-    "build_mac": "electron-packager . --platform=darwin --arch=x64 --icon=aleph_modules/assets/icons/mac/logo.icns"
+    "build_mac": "electron-packager . --platform=darwin --arch=x64 --icon=aleph_modules/assets/icons/mac/logo.icns",
+    "electron_rebuild": ".\\node_modules\\.bin\\electron-rebuild.cmd"
   },
   "author": "",
   "license": "ISC",
