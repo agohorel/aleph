@@ -2,7 +2,6 @@ let centroidplot = 0.0;
 let spectralCentroid = 0;
 
 exports.run = (audio, midi, assets) => {
-	console.log(frameRate());
 	background(0);
 	stroke(0,255,0);
 	strokeWeight(1);
