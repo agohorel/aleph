@@ -1,21 +1,50 @@
-let leftVolEased = .001, rightVolEased = .001, easing = 0.025; 
-let scaler = .1;
-
 exports.run = (audio, midi, assets) => {
+	// set black background
 	background(0);
+	
+	// 
+	let rotator = frameCount * .005;	
 
-	directionalLight(audio.bass, audio.mid * .5, audio.high, 1.5, .75, 0.25);
-	directionalLight(audio.bass - 50, audio.mid * .5 - 50, audio.high - 50, 0, .4, 0.25);
-	pointLight(audio.bass/2, 0, audio.high * 5, -225, -115, 200);
-	pointLight(0, 0, audio.high * 5, 225, height - 115, 200);	
+	rotateX(rotator);
+	rotateY(rotator);	
+	rotateZ(rotator);
 
-	noStroke();
-	specularMaterial(255);
+	let size = map(audio.volEased, 0, 1, 50, 1000);
+	let detailX = int(map(audio.leftVol, 0, 1, 1, 24));
+	let detailY = int(map(audio.rightVol, 0, 1, 1, 16));
+	let cube_detailX = int(map(detailX, 1, 24, 1, 4));
+	let cube_detailY = int(map(detailY, 1, 16, 1, 4));
+	let col = map(audio.volume, 0, 1, 50, 255);
 
-	rotateX(frameCount * audio.leftVolEased * .5);
-	rotateY(frameCount * audio.rightVolEased * .5);	
-	rotateZ(frameCount * .01);	
+	normalMaterial();
+	box(size, size, size, cube_detailX, cube_detailY);
 
-	let size = audio.leftVolEased + audio.rightVolEased * 20000;
-	box(size);
+	push();
+	applyStyles(col);
+	translate(-width/3, 0);
+	torus(size, size/4, detailX, detailY);
+	pop();
+	
+	push();
+	applyStyles(col);
+	translate(width/3, 0);
+	sphere(size, detailX, detailY);
+	pop();
+
+	push();
+	applyStyles(col);
+	translate(0, -height/3);
+	cylinder(size, size, detailX, detailY);
+	pop();
+
+	push();
+	applyStyles(col);
+	translate(0, height/3);
+	cone(size, size, detailX, detailY);
+	pop();
+}
+
+function applyStyles(color){
+	stroke(color);
+	noFill();
 }
