@@ -2,6 +2,7 @@
 // it also makes use of p5's transformation functions scale() and rotateZ().
 
 exports.run = (audio, midi, assets) => {
+	console.log(frameRate());
 	// set background to black
 	background(0);
 	// link strokeWeight to volume
@@ -16,13 +17,13 @@ exports.run = (audio, midi, assets) => {
 	rotateZ(radians(135));
 	// loops typically start at 0 but we have to start at 1 because we're 
 	// passing the i variable into functions that require non-zero values.  
-	for (let i = 1; i < 513; i+=16){
+	for (let i = 2; i < 34; i+=4){
 		// call renderShape function, passing in new values each loop (i)
-		renderShape(TRIANGLE_STRIP, i, i*4);
+		renderShape(TRIANGLE_STRIP, i, i*16);
 		// invert coords each loop
 		scale(-1);
 		// call renderShapeInverse, passing in the same i values as before to produce mirrored copy of shape
-		renderShapeInverse(TRIANGLE_STRIP, i, i*4);
+		renderShapeInverse(TRIANGLE_STRIP, i, i*16);
 	}
 
 }
