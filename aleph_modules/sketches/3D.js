@@ -1,3 +1,6 @@
+// this sketch illustrates p5's built-in 3D primitives box(), torus(), sphere(), cylinder(), and cone().
+// it also makes use of p5's push/pop functions to apply transforms and styling to shapes individually.
+
 exports.run = (audio, midi, assets) => {
 	// set black background
 	background(0);

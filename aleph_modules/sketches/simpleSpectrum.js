@@ -1,3 +1,7 @@
+// this sketch illustrates how we can loop through the audio spectrum (frequency domain) data  
+// to construct our own custom spectrums using p5's 2D primitives, in this case rect(). 
+// try swapping rect() out for a different shape (arc, ellipse, line, point, quad, or triangle).
+
 exports.run = (audio, midi, assets) => {
 	// create color variables based on frequency content 
 	let r = audio.bass, g = audio.mid, b = audio.high;

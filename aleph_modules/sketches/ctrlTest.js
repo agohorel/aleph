@@ -1,3 +1,7 @@
+// this sketch illustrates how you can use MIDI controls to adjust parameters within your 
+// sketches. try adding addition controls to adjust other parameters! the location and/or  
+// size of the rect() could be a good place to start, but go nuts!
+
 exports.run = (audio, midi, assets) => {
 	// link RGB variables to first 3 midi controls & remap from 0-127 to 0-255
 	let r = map(midi[0].value, 0, 127, 0, 255);

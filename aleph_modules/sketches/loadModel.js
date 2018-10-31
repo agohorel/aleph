@@ -1,3 +1,5 @@
+// this sketch illustrates how to load/display an existing 3D model and apply textures to it.
+
 // initialize empty textures array
 let textures = [];
 

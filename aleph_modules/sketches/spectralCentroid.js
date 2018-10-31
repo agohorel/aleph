@@ -1,3 +1,7 @@
+// this sketch illustrates a signal's spectral centroid, which indicates where the 
+// "center of mass" of the spectrum is located. perceptually, it has a connection  
+// with the impression of "brightness" of a sound.
+
 let centroidplot = 0.0;
 let spectralCentroid = 0;
 

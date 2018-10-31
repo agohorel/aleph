@@ -1,5 +1,5 @@
-// this sketch layers waveforms at varying levels of detail using p5's beginShape function.
-// it also makes use of p5's transformation functions scale and rotateZ.
+// this sketch layers waveforms at varying levels of detail using p5's beginShape() function.
+// it also makes use of p5's transformation functions scale() and rotateZ().
 
 exports.run = (audio, midi, assets) => {
 	// set background to black

@@ -1,3 +1,7 @@
+// this sketch illustrates how we can loop through the audio waveform (time domain) data  
+// to construct our own custom waveforms using p5's custom shape functions 
+// beginShape(), vertex(), and endShape().
+
 exports.run = (audio, midi, assets) => {
 	// set black background
 	background(0);
