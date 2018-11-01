@@ -134,6 +134,7 @@ function smoother(volume, leftVol, rightVol, easing){
 }
 
 function resetStyles(){
+	clear();
 	strokeWeight(1);
 	stroke(255);
 	fill(0);
