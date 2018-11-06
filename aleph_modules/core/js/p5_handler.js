@@ -2,11 +2,12 @@ const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
+const p5_dom = require("p5/lib/addons/p5.dom.js");
 const midi = require(`${__dirname.substring(0, __dirname.length-10)}\\core\\js\\midi.js`);
 const fs = require("fs");
 
 let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
-let _2D;
+let cnv, _2D;
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}};
@@ -22,7 +23,7 @@ function preload() {
 }
 
 function setup() {
-	let cnv = createCanvas(windowWidth, windowHeight, WEBGL);
+	cnv = createCanvas(windowWidth, windowHeight, WEBGL);
 	_2D = createGraphics(windowWidth, windowHeight, P2D);
 
 	input = new p5.AudioIn();
@@ -89,7 +90,7 @@ function windowResized() {
 function centerCanvas() {
 	var x = (windowWidth - width) / 2;
 	var y = (windowHeight - height) / 2;
-	canvas.position(x, y);
+	cnv.position(x, y);
 }
 
 function nearestPow2(value){
