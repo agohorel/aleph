@@ -3,10 +3,10 @@ const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
-const midi = require(`${__dirname.substring(0, __dirname.length-10)}\\core\\js\\midi.js`);
+const midi = require(`${process.cwd()}\\aleph_modules\\core\\js\\midi.js`);
 const fs = require("fs");
 
-let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
+let assetsPath = `${process.cwd()}\\aleph_modules\\assets`;
 let cnv, _2D;
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
