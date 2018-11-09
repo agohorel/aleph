@@ -10,7 +10,7 @@ let assetsPath = `${process.cwd()}\\aleph_modules\\assets`;
 let cnv, _2D;
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
-let assets = {models: {}, textures: {}};
+let assets = {models: {}, textures: {}, fonts: {}};
 let audio = {};
 // set up initial values for audioParams object
 let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25};
@@ -20,6 +20,7 @@ let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25};
 function preload() {
 	importer("models");
 	importer("textures");
+	importer("fonts");
 }
 
 function setup() {
@@ -113,6 +114,14 @@ function importer(folder){
 				}
 				if (folder === "textures"){
 					assets.textures[name] = loadImage(`../../assets/textures/${file}`, true);
+				}
+				if (folder === "fonts"){
+					// grab file names
+					let fontName = file.substring(0, file.length-4).replace("-", "_");
+					// filter out font license txt files
+					if (file.substring(file.length-4, file.length) !== ".txt"){
+						assets.fonts[fontName] = loadFont(`../../assets/fonts/${file}`);
+					}
 				} 
 			});
 		}
