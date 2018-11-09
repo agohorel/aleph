@@ -82,6 +82,7 @@ ipc.on("knobChanged", (event, arg) => {
 // resize canvas if window is resized
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
+	_2D.resizeCanvas(windowWidth, windowHeight);
 	centerCanvas();
 	background(0);
 }
