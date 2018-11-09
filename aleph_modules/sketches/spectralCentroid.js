@@ -33,4 +33,11 @@ exports.run = (audio, midi, assets) => {
 
 	stroke(255,0,0); // the line showing where the centroid is will be red
 	rect(centroidplot, 0, width / spectrum.length, height);
+
+	noStroke();
+	fill(255);  
+	textSize(32);
+	textAlign(LEFT);
+  	textFont(assets.fonts.RobotoMono_Medium);
+	text(`centroid: ${round(spectralCentroid)} Hz`, 10, 40);
 }
