@@ -175,7 +175,7 @@ let assetFolders = fs.readdirSync(assetsPath);
 function scanAssets(){
 	let assetList = "";
 	assetFolders.forEach(folder => {
-		if (folder !== "fonts" && folder !== "icons"){
+		if (folder !== "icons"){
 			assetList += `${folder}\n`.toUpperCase();
 			let assets = fs.readdirSync(`${assetsPath}\\${folder}`);
 
