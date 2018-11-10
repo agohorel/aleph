@@ -183,7 +183,7 @@ function scanAssets(){
 			assets.forEach(asset => {
 				// filter out font licenses
 				if (!asset.toUpperCase().includes("LICENSE")){
-					assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
+					assetList += `|__assets.${folder}.${asset.substring(0, asset.lastIndexOf(".") || asset)}\n`;
 				}
 			});
 			assetList += "\n";

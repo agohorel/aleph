@@ -99,6 +99,8 @@ function nearestPow2(value){
   return Math.pow(2, Math.round(Math.log(value)/Math.log(2))); 
 }
 
+
+// note to self: break checking folders into separate function
 function importer(folder){
 	fs.readdir(`${assetsPath}/${folder}`, (err, files) => {
 		if (err){
@@ -106,15 +108,18 @@ function importer(folder){
 		} else {
 			files.forEach((file, index) => {
 				// get file name
-				let name = file.substring(0, file.length-4);
+				let name = file.substring(0, file.lastIndexOf(".") || file);
+
 				// check which folder we're importing from 
 				if (folder === "models"){
 					// create entry on assets object & load file
 					assets.models[name] = loadModel(`../../assets/models/${file}`, true);
 				}
+				
 				if (folder === "textures"){
 					assets.textures[name] = loadImage(`../../assets/textures/${file}`, true);
 				}
+				
 				if (folder === "fonts"){
 					// grab file names and replace hyphens with underscores
 					let fontName = file.substring(0, file.length-4).replace("-", "_");
@@ -122,7 +127,8 @@ function importer(folder){
 					if (file.substring(file.length-4, file.length) !== ".txt"){
 						assets.fonts[fontName] = loadFont(`../../assets/fonts/${file}`);
 					}
-				} 
+				}
+				
 			});
 		}
 	});
