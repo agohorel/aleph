@@ -175,16 +175,19 @@ let assetFolders = fs.readdirSync(assetsPath);
 function scanAssets(){
 	let assetList = "";
 	assetFolders.forEach(folder => {
+		// filter out aleph system icons
 		if (folder !== "icons"){
 			assetList += `${folder}\n`.toUpperCase();
 			let assets = fs.readdirSync(`${assetsPath}\\${folder}`);
 
 			assets.forEach(asset => {
-				assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
+				// filter out font licenses
+				if (!asset.toUpperCase().includes("LICENSE")){
+					assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
+				}
 			});
 			assetList += "\n";
 		} 
-
 	});
 
 	p.innerText = assetList;	
