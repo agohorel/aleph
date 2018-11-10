@@ -153,6 +153,7 @@ applyDisplaySettings.addEventListener("click", function(e){
 
 const objBtn = document.querySelector("#objBtn");
 const texturesBtn = document.querySelector("#texturesBtn");
+const fontsBtn = document.querySelector("#fontsBtn");
 
 objBtn.addEventListener("click", () => {
 	importFileDialog("models");
@@ -160,6 +161,10 @@ objBtn.addEventListener("click", () => {
 
 texturesBtn.addEventListener("click", () => {
 	importFileDialog("textures");
+});
+
+fontsBtn.addEventListener("click", () => {
+	importFileDialog("fonts");
 });
 
 // AVAILABLE ASSETS STUFF
@@ -257,6 +262,11 @@ function applyFiletypeFilter(filetype){
 	else if (filetype === "js"){
 		filter.name = "Javascript";
 		filter.extensions = ["js"];
+		return filter;
+	}
+	else if (filetype === "fonts"){
+		filter.name = "Fonts";
+		filter.extensions = ["ttf", "otf"];
 		return filter;
 	}
 }
