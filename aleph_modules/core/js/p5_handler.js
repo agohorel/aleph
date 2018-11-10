@@ -116,7 +116,7 @@ function importer(folder){
 					assets.textures[name] = loadImage(`../../assets/textures/${file}`, true);
 				}
 				if (folder === "fonts"){
-					// grab file names
+					// grab file names and replace hyphens with underscores
 					let fontName = file.substring(0, file.length-4).replace("-", "_");
 					// filter out font license txt files
 					if (file.substring(file.length-4, file.length) !== ".txt"){
