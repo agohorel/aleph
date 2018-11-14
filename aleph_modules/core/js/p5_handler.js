@@ -10,7 +10,7 @@ let assetsPath = `${process.cwd()}\\aleph_modules\\assets`;
 let cnv, _2D;
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
-let assets = {models: {}, textures: {}, fonts: {}};
+let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
 let audio = {};
 // set up initial values for audioParams object
 let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25};
@@ -21,6 +21,7 @@ function preload() {
 	importer("models");
 	importer("textures");
 	importer("fonts");
+	importer("shaders");
 }
 
 function setup() {
@@ -99,16 +100,20 @@ function nearestPow2(value){
   return Math.pow(2, Math.round(Math.log(value)/Math.log(2))); 
 }
 
-
 // note to self: break checking folders into separate function
 function importer(folder){
+	let count = 0;
 	fs.readdir(`${assetsPath}/${folder}`, (err, files) => {
-		if (err){
-			console.log(err);
-		} else {
+		if (err){ console.log(err); } 
+		else {
+
+			if (folder === "shaders"){
+					scanShaders();									
+			} 
+
 			files.forEach((file, index) => {
 				// get file name
-				let name = file.substring(0, file.lastIndexOf(".") || file);
+				let name = file.substring(0, file.lastIndexOf(".")) || file;
 
 				// check which folder we're importing from 
 				if (folder === "models"){
@@ -129,7 +134,7 @@ function importer(folder){
 					}
 				}
 				
-			});
+			});			
 		}
 	});
 }
@@ -162,4 +167,18 @@ function resetStyles(){
 
 function clamp(val, min, max){
 	return Math.max(min, Math.min(val, max));
+}
+
+function scanShaders(){
+	let shaders = fs.readdirSync(`${assetsPath}/shaders`);
+	importShaders(shaders);
+}
+
+function importShaders(array){
+	for (let i = 0; i < array.length; i++){
+		let name = array[i].substring(0, array[i].lastIndexOf(".")) || array[i];
+		console.log(name);
+		assets.shaders[name] = loadShader(`${assetsPath}/shaders/${name}.vert`, `${assetsPath}/shaders/${name}.frag`);
+	}
+	console.log(assets.shaders);	
 }
