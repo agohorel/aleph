@@ -177,8 +177,6 @@ function scanShaders(){
 function importShaders(array){
 	for (let i = 0; i < array.length; i++){
 		let name = array[i].substring(0, array[i].lastIndexOf(".")) || array[i];
-		console.log(name);
 		assets.shaders[name] = loadShader(`${assetsPath}/shaders/${name}.vert`, `${assetsPath}/shaders/${name}.frag`);
-	}
-	console.log(assets.shaders);	
+	}	
 }
