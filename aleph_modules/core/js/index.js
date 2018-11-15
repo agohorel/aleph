@@ -279,7 +279,7 @@ function applyFiletypeFilter(filetype){
 function copySelectedFiles(selectedFiles, destination){
 	for (let i = 0; i < selectedFiles.length; i++){
 		// strip filename off path
-		let filename = path.parse(selectedFiles[i]).base.replace(/ /g, "_");
+		let filename = path.parse(selectedFiles[i]).base.replace(/[- ]/g, "_");
 		fs.copyFile(selectedFiles[i], path.join(destination, filename), (err) => {
 			if (err) throw err;
 			console.log(`${selectedFiles[i]} copied to ${path.join(destination, filename)}`);
