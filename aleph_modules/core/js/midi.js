@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
@@ -38,7 +39,7 @@ ipc.on("saveMidi", (event) => {
 });
 
 ipc.on("loadMidi", (event) => {
-	fs.readFile(`${appPath}/midiMappings.json`, "utf-8", (err, data) => {
+	fs.readFile(path.join(appPath, "midiMappings.json"), "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
 	
