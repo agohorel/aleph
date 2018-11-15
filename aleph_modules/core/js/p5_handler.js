@@ -1,12 +1,14 @@
+// p5.disableFriendlyErrors = true;
+
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
-const midi = require(`${process.cwd()}\\aleph_modules\\core\\js\\midi.js`);
 const fs = require("fs");
 const path = require("path");
 const appPath = process.cwd();
+const midi = require(path.join(appPath, "aleph_modules/core/js/midi.js"));
 const assetsPath = path.resolve(appPath, "aleph_modules/assets");
 const sketchesPath = path.resolve(appPath, "aleph_modules/sketches");
 
@@ -15,8 +17,6 @@ let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
 let audio = {};
 let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25}; // set up initial values for audioParams object
 let cnv, _2D;
-
-// p5.disableFriendlyErrors = true;
 
 function preload() {
 	importer("models");
@@ -101,7 +101,6 @@ function nearestPow2(value){
   return Math.pow(2, Math.round(Math.log(value)/Math.log(2))); 
 }
 
-// note to self: break checking folders into separate function
 function importer(folder){
 	let count = 0;
 	fs.readdir(path.join(assetsPath, folder), (err, files) => {
