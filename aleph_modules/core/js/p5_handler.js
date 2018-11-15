@@ -5,15 +5,16 @@ const p5_audio = require("p5/lib/addons/p5.sound.js");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
 const midi = require(`${process.cwd()}\\aleph_modules\\core\\js\\midi.js`);
 const fs = require("fs");
-
-let assetsPath = `${process.cwd()}\\aleph_modules\\assets`;
-let cnv, _2D;
+const path = require("path");
+const appPath = process.cwd();
+const assetsPath = path.resolve(appPath, "aleph_modules/assets");
+const sketchesPath = path.resolve(appPath, "aleph_modules/sketches");
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
 let audio = {};
-// set up initial values for audioParams object
-let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25};
+let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25}; // set up initial values for audioParams object
+let cnv, _2D;
 
 // p5.disableFriendlyErrors = true;
 
@@ -43,7 +44,7 @@ function draw() {
 
 	if (moduleName !== ""){
 		try {
-			let moduleFile = require(`../../sketches/${moduleName}.js`);
+			let moduleFile = require(path.join(appPath, "aleph_modules/sketches/", moduleName));
 			moduleFile.run(audio, midi.controls, assets);
 		} 
 
@@ -103,12 +104,12 @@ function nearestPow2(value){
 // note to self: break checking folders into separate function
 function importer(folder){
 	let count = 0;
-	fs.readdir(`${assetsPath}/${folder}`, (err, files) => {
+	fs.readdir(path.join(assetsPath, folder), (err, files) => {
 		if (err){ console.log(err); } 
 		else {
 
 			if (folder === "shaders"){
-					scanShaders();									
+				scanShaders();									
 			} 
 
 			files.forEach((file, index) => {
@@ -118,19 +119,19 @@ function importer(folder){
 				// check which folder we're importing from 
 				if (folder === "models"){
 					// create entry on assets object & load file
-					assets.models[name] = loadModel(`../../assets/models/${file}`, true);
+					assets.models[name] = loadModel(path.join(assetsPath, "models", file), true);
 				}
 				
 				if (folder === "textures"){
-					assets.textures[name] = loadImage(`../../assets/textures/${file}`, true);
+					assets.textures[name] = loadImage(path.join(assetsPath, "textures", file), true);
 				}
 				
 				if (folder === "fonts"){
 					// grab file names and replace hyphens with underscores
-					let fontName = file.substring(0, file.length-4).replace("-", "_");
+					let fontName = file.substring(0, file.lastIndexOf(".")).replace(/[- ]/g, "_");
 					// filter out font license txt files
 					if (file.substring(file.length-4, file.length) !== ".txt"){
-						assets.fonts[fontName] = loadFont(`../../assets/fonts/${file}`);
+						assets.fonts[fontName] = loadFont(path.join(assetsPath, "fonts", file));;
 					}
 				}
 				
@@ -170,13 +171,15 @@ function clamp(val, min, max){
 }
 
 function scanShaders(){
-	let shaders = fs.readdirSync(`${assetsPath}/shaders`);
+	let shaders = fs.readdirSync(path.join(assetsPath, "shaders"));
 	importShaders(shaders);
 }
 
 function importShaders(array){
 	for (let i = 0; i < array.length; i++){
 		let name = array[i].substring(0, array[i].lastIndexOf(".")) || array[i];
-		assets.shaders[name] = loadShader(`${assetsPath}/shaders/${name}.vert`, `${assetsPath}/shaders/${name}.frag`);
+		let vert = path.join(assetsPath, "shaders", `${name}.vert`);
+		let frag = path.join(assetsPath, "shaders", `${name}.frag`);
+		assets.shaders[name] = loadShader(vert, frag);
 	}	
 }
