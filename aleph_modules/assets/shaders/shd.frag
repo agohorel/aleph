@@ -7,6 +7,7 @@
 precision highp float; varying vec2 vPos;
 uniform vec2 p;
 uniform float r;
+uniform float s;
 const int I = 500;
 void main() {
   vec2 c = p + vPos * r, z = c;
@@ -16,7 +17,7 @@ void main() {
       n = float(i)/float(I);
       break;
     }
-    z = vec2(z.x*z.x-z.y*z.y, 2.0*z.x*z.y) + c;
+    z = vec2(z.x*z.x-z.y*z.y, s*z.x*z.y) + c;
   }
   gl_FragColor = vec4(0.5-cos(n*15.0)/2.0,0.5-cos(n*15.0)/2.0,0.5-cos(n*15.0)/2.0,1.0);
 }
