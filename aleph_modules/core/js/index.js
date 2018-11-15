@@ -5,8 +5,9 @@ const ipc = electron.ipcRenderer;
 const path = require("path");
 const fs = require("fs");
 
-let sketchesPath = `${__dirname.substring(0, __dirname.length-10)}\\sketches`;
-let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
+const appPath = process.cwd();
+const sketchesPath = path.resolve(appPath, "aleph_modules/sketches");
+const assetsPath = path.resolve(appPath, "aleph_modules/assets");
 
 // SKETCH SELECTION STUFF
 
@@ -18,7 +19,7 @@ fs.readdir(sketchesPath, (err, files) => {
   	console.log(err);
   } else {
   	  files.forEach(file => {
-  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), ["sketchSelectButton", "btn"], "#sketchSelectorButtons", true);	  
+  	  	makeDomElement("BUTTON", file.substring(0, file.lastIndexOf(".")), ["sketchSelectButton", "btn"], "#sketchSelectorButtons", true);	  
 	  });
   }
 });
@@ -178,7 +179,7 @@ function scanAssets(){
 		// filter out aleph system icons
 		if (folder !== "icons"){
 			assetList += `${folder}\n`.toUpperCase();
-			let assets = fs.readdirSync(`${assetsPath}\\${folder}`);
+			let assets = fs.readdirSync(path.join(assetsPath, folder)); 
 
 			assets.forEach(asset => {
 				// filter out font licenses
@@ -246,7 +247,8 @@ function importFileDialog(filetype){
 		filters: [applyFiletypeFilter(filetype)],
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
-		copySelectedFiles(files, `${assetsPath}/${filetype}`);
+		if (files === undefined) return;
+		copySelectedFiles(files, path.join(assetsPath, filetype));
 	});
 }
 
@@ -277,10 +279,10 @@ function applyFiletypeFilter(filetype){
 function copySelectedFiles(selectedFiles, destination){
 	for (let i = 0; i < selectedFiles.length; i++){
 		// strip filename off path
-		let filename = selectedFiles[i].replace(/^.*[\\\/]/, '');
-		fs.copyFile(selectedFiles[i], `${destination}\\${filename}`, (err) => {
+		let filename = path.parse(selectedFiles[i]).base;
+		fs.copyFile(selectedFiles[i], path.join(destination, filename), (err) => {
 			if (err) throw err;
-			console.log(`${selectedFiles[i]} copied to ${destination}/${filename}`);
+			console.log(`${selectedFiles[i]} copied to ${path.join(destination, filename)}`);
 			scanAssets();
 		});
 	}
@@ -293,16 +295,16 @@ function newSketchDialog(){
 		filters: [applyFiletypeFilter("js")]
 	}, (sketchPath) => {
 		if (sketchPath === undefined) return;
-		let sketchName = sketchPath.replace(/^.*[\\\/]/, '');
+		let sketchName = path.parse(sketchPath).base;
 		copySketchTemplate(sketchName);
 	});
 }
 
 function copySketchTemplate(name){
-	fs.copyFile(`${__dirname.substring(0, __dirname.length-5)}/js/sketchTemplate.js`, `${sketchesPath}\\${name}`, (err) => {
+	fs.copyFile(path.join(appPath, "aleph_modules/core/js/sketchTemplate.js"), path.join(sketchesPath, name), (err) => {
 		if (err) throw err;
 		console.log(`created new sketch "${name}"`);
-		appendNewSketchBtn(name.substring(0, name.length-3));
+		appendNewSketchBtn(name.substring(0, name.lastIndexOf(".")));
 	});
 }
 
