@@ -1,6 +1,5 @@
-const {app, BrowserWindow, ipcMain} = require("electron");
-
-const electronDebug = require('electron-debug');
+const {app, BrowserWindow, ipcMain, globalShortcut} = require("electron");
+const electronDebug = require("electron-debug");
 
 electronDebug({
 	enabled: true,
@@ -39,7 +38,16 @@ function createWindow() {
 
 }
 
-app.on("ready", createWindow);
+app.on('ready', () => {
+	createWindow();
+
+	let fullscreened = false;
+	// toggle fullscreen hotkey
+	globalShortcut.register('CommandOrControl+F', () => {
+		fullscreened = !fullscreened;
+		displayWindow.setFullScreen(fullscreened);
+	});
+});
 
 // quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -69,6 +77,7 @@ ipcMain.on("addMidiMapping", (event, args) => {
 ipcMain.on("applyDisplaySettings", (event, args) => {
 	displayWindow = new BrowserWindow({width: args[0], 
 									   height: args[1],
+									   // autoHideMenuBar: true,
 									   icon: "./aleph_modules/assets/icons/win/logo.ico"});
 	displayWindow.setMenu(null);
 	displayWindow.webContents.send("applyDisplaySettings", args);
