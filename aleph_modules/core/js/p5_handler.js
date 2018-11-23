@@ -165,6 +165,7 @@ function resetStyles(){
 	ellipseMode(CENTER);
 	rectMode(CORNER);
 	textAlign(LEFT, BOTTOM);
+	resetMatrix();
 }
 
 function clamp(val, min, max){
