@@ -13,7 +13,7 @@ const assetsPath = path.resolve(appPath, "aleph_modules/assets");
 const sketchesPath = path.resolve(appPath, "aleph_modules/sketches");
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
-let assets = {models: {}, textures: {}, fonts: {}, shaders: {}, videos: {}};
+let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
 let audio = {};
 let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25}; // set up initial values for audioParams object
 let cnv, _2D;
@@ -23,7 +23,6 @@ function preload() {
 	importer("textures");
 	importer("fonts");
 	importer("shaders");
-	importer("videos");
 }
 
 function setup() {
@@ -134,11 +133,6 @@ function importer(folder){
 						assets.fonts[fontName] = loadFont(path.join(assetsPath, "fonts", file));;
 					}
 				}
-
-				if (folder === "videos"){
-					assets.videos[name] = createVideo(path.join(assetsPath, "videos", file));
-					assets.videos[name].hide();
-				}
 				
 			});			
 		}
@@ -161,6 +155,7 @@ function smoother(volume, leftVol, rightVol, easing){
 	rightVolEased += diffR * easing;
 }
 
+// reset basic p5 visual params when changing sketch to prevent "leaking" styles
 function resetStyles(){
 	clear();
 	strokeWeight(1);
