@@ -20,6 +20,6 @@ exports.run = (audio, midi, assets) => {
 		noStroke();
 		box(200);
 	} else {
-		plane(width, height);	
+		rect(-width/2, -height/2, width, height);	
 	}	
 }

@@ -11,7 +11,7 @@ exports.run = (audio, midi, assets) => {
 	assets.shaders.shd.setUniform('s', map(yEased, 0, height, 2, 6));
 	// this controls the zoom level, set by mouseY
 	assets.shaders.shd.setUniform('r', map(yEased, 0, height, 0.00001, 25));
-	// draw a plane to apply the shader to
+	// draw a shape to apply the shader to
 	plane(width, height);
 }
 
