@@ -2,7 +2,6 @@
 // it also makes use of p5's transformation functions scale() and rotateZ().
 
 exports.run = (audio, midi, assets) => {
-	console.log(frameRate());
 	// set background to black
 	background(0);
 	// link strokeWeight to volume
