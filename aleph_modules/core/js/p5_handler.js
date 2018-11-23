@@ -158,12 +158,11 @@ function smoother(volume, leftVol, rightVol, easing){
 // reset basic p5 visual params when changing sketch to prevent "leaking" styles
 function resetStyles(){
 	clear();
-	strokeWeight(1);
-	stroke(255);
-	fill(0);
-	ellipseMode(CENTER);
-	rectMode(CORNER);
-	textAlign(LEFT, BOTTOM);
+	_2D.clear();
+	push();
+	pop();
+	_2D.push();
+	_2D.pop();
 }
 
 function clamp(val, min, max){
