@@ -122,7 +122,7 @@ function importer(folder){
 				}
 				
 				if (folder === "textures"){
-					assets.textures[name] = loadImage(path.join(assetsPath, "textures", file), true);
+					assets.textures[name] = loadImage(path.join(assetsPath, "textures", file));
 				}
 				
 				if (folder === "fonts"){
