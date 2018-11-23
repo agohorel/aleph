@@ -6,8 +6,7 @@ exports.run = (audio, midi, assets) => {
 	smoother(mouseY, 0.1);
 	assets.shaders.shd.setUniform('s', map(yEased, 0, height, 2, 6));
 	assets.shaders.shd.setUniform('r', map(yEased, 0, height, 0.00001, 25));
-	// plane(width, height);
-	box(256);
+	plane(width, height);
 }
 
 function smoother(val, easing){
