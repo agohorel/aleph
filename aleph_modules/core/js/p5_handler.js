@@ -159,10 +159,12 @@ function smoother(volume, leftVol, rightVol, easing){
 function resetStyles(){
 	clear();
 	_2D.clear();
-	push();
-	pop();
-	_2D.push();
-	_2D.pop();
+	strokeWeight(1);
+	stroke(255);
+	fill(0);
+	ellipseMode(CENTER);
+	rectMode(CORNER);
+	textAlign(LEFT, BOTTOM);
 }
 
 function clamp(val, min, max){
