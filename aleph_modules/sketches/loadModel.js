@@ -2,19 +2,29 @@
 
 // initialize empty textures array
 let textures = [];
+let hasRun = false;
+let dirX, dirY;
+let r;
 
 exports.run = (audio, midi, assets) => {
+	if (!hasRun){
+		r = renderers.loadModel;
+		r.scale(2, -2);	
+		hasRun = true;
+	}
+	
+	r.push();
+
 	// set white background
-	background(255);
+	r.background(255);
 	
 	// constantly rotate along Y axis
-	rotateY(frameCount * 0.01);
+	r.rotateY(frameCount * .01);
+	r.rotateX(frameCount * .005);
 	// double the size of the model, flipping it along the Y axis (note the negative number)
-	scale(2, -2);
+	
 	// set stroke color to the smoothed volume parameter
-	stroke(map(audio.volEased, 0, .025, 255, 0));
-	// set fill color to the volume
-	fill(map(audio.volume, 0, 1, 0, 255));
+	r.stroke(map(audio.volEased, 0, .025, 255, 0));
 
 	// check if we've already packed the array so we don't keep adding to it
 	if (textures.length < Object.keys(assets.textures).length){
@@ -27,8 +37,24 @@ exports.run = (audio, midi, assets) => {
 
 	// randomly change the texture when the volume hits a certain threshold
 	if (audio.volume > .2){ 
-		texture(textures[Math.floor(Math.random() * textures.length)]);
+		r.texture(textures[Math.floor(Math.random() * textures.length)]);
 	}
+
+    dirX = (mouseX / width - 0.5) * 2;
+    dirY = (mouseY / height - 0.5) * 2;
+    let red = map(dirX, 0, 1, 0, 255);
+    let green = map(dirY, 0, 1, 0, 255);
+    let blue = map(dirX + dirY, 0, 2, 0, 255);
+    col = color(red, green, blue);
+
+    r.specularMaterial(200);
+    r.directionalLight(col, -dirX, -dirY, 0.25);
+    r.pointLight(255, 255, 255, dirX, dirY, 100);
+
 	// display the 3D model
-	model(assets.models.floppy);
+	r.model(assets.models.floppy);
+	image(r, 0, 0, width, height);
+
+	r._renderer._update();
+	r.pop();
 }
