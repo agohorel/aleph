@@ -43,7 +43,7 @@ app.on('ready', () => {
 
 	let fullscreened = false;
 	// toggle fullscreen hotkey
-	globalShortcut.register('CommandOrControl+F', () => {
+	globalShortcut.register('CommandOrControl+Shift+F', () => {
 		fullscreened = !fullscreened;
 		displayWindow.setFullScreen(fullscreened);
 	});
