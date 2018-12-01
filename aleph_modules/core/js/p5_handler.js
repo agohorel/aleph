@@ -23,11 +23,13 @@ function preload() {
 	importer("textures");
 	importer("fonts");
 	importer("shaders");
+
+	scanSketches(assignRenderers);
 }
 
 function setup() {
-	cnv = createCanvas(windowWidth, windowHeight, WEBGL);
-	_2D = createGraphics(windowWidth, windowHeight, P2D);
+	cnv = createCanvas(windowWidth, windowHeight);
+	_2D = createGraphics(windowWidth, windowHeight);
 
 	input = new p5.AudioIn();
 	input.start();
@@ -86,6 +88,7 @@ ipc.on("knobChanged", (event, arg) => {
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 	_2D.resizeCanvas(windowWidth, windowHeight);
+	scanSketches(resizeOffscreenRenderers);
 	centerCanvas();
 	background(0);
 }
@@ -184,4 +187,29 @@ function importShaders(array){
 		let frag = path.join(assetsPath, "shaders", `${name}.frag`);
 		assets.shaders[name] = loadShader(vert, frag);
 	}	
+}
+
+let renderers = {};
+
+function scanSketches(callback){
+	fs.readdir(sketchesPath, (err, sketches) => {
+		if (err) { console.log(err) }
+		else { callback(sketches); }
+	});
+}
+
+function assignRenderers(sketches){
+	for (let i = 0; i < sketches.length; i++){
+		let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
+		renderers[sketch] = createGraphics(width, height, WEBGL);
+	}
+	// console.log(renderers);
+}
+
+function resizeOffscreenRenderers(sketches){
+	for (let i = 0; i < sketches.length; i++){
+		let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
+		renderers[sketch].resizeCanvas(windowWidth, windowHeight);
+	}
+	// print(renderers);
 }
