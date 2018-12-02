@@ -11,6 +11,7 @@ const appPath = process.cwd();
 const midi = require(path.join(appPath, "aleph_modules/core/js/midi.js"));
 const assetsPath = path.resolve(appPath, "aleph_modules/assets");
 const sketchesPath = path.resolve(appPath, "aleph_modules/sketches");
+const utils = require(path.join(appPath, "aleph_modules/core/js/utils.js"));
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
@@ -47,7 +48,7 @@ function draw() {
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(path.join(appPath, "aleph_modules/sketches/", moduleName));
-			moduleFile.run(audio, midi.controls, assets);
+			moduleFile.run(audio, midi.controls, assets, utils);
 		} 
 
 		catch (err){
