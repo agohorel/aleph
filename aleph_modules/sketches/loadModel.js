@@ -1,18 +1,20 @@
 // this sketch illustrates how to load/display an existing 3D model and apply textures to it.
 
 // initialize empty textures array
-let textures = [];
 let hasRun = false;
+let textures = [];
 let dirX, dirY;
 let r;
 
-exports.run = (audio, midi, assets) => {
-	if (!hasRun){
-		r = renderers.loadModel;
-		r.scale(2, -2);	
-		hasRun = true;
-	}
-	
+function runOnce(){
+	r = renderers.loadModel;
+	r.scale(2, -2);
+	hasRun = true;
+}
+
+exports.run = (audio, midi, assets, utils) => {
+	utils.runOnce(hasRun, runOnce);
+
 	r.push();
 
 	// set white background
