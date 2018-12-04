@@ -1,10 +1,9 @@
-let hasRun = false;
+let hasRun = {state: false};
 let r;
 
 function runOnce(){
 	let sketch = utils.getSketchName(__filename);
 	r = renderers[sketch];
-
 	// put code you only want to run once here. think of it like a second setup(). kinda. 
 }
 

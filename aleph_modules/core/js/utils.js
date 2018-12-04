@@ -1,6 +1,7 @@
 exports.runOnce = (hasRun, codeToRun) => {
-	if (hasRun === false){
+	if (hasRun.state === false){
 		codeToRun();
+		hasRun.state = true;
 	}
 };
 
