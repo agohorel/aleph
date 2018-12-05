@@ -1,3 +1,3 @@
-exports.run = (audio, midi, assets) => {
+exports.run = (audio, midi, assets, utils) => {
 	// your code here
 }
