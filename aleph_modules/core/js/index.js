@@ -32,10 +32,15 @@ sketchSelectorButtons.addEventListener("click", function(e) {
 	}
 });
 
-const newSketchBtn = document.querySelector("#newSketchBtn");
+const new2DSketch = document.querySelector("#new2DSketch");
+const new3DSketch = document.querySelector("#new3DSketch");
 
-newSketchBtn.addEventListener("click", () => {
-	newSketchDialog();
+new2DSketch.addEventListener("click", () => {
+	newSketchDialog("2D");
+});
+
+new3DSketch.addEventListener("click", () => {
+	newSketchDialog("3D");
 });
 
 
@@ -316,7 +321,7 @@ function copySelectedFiles(selectedFiles, destination){
 	}
 }
 
-function newSketchDialog(){
+function newSketchDialog(type){
 		dialog.showSaveDialog({
 		defaultPath: sketchesPath,
 		title: "Save New Sketch As",
@@ -324,12 +329,21 @@ function newSketchDialog(){
 	}, (sketchPath) => {
 		if (sketchPath === undefined) return;
 		let sketchName = path.parse(sketchPath).base;
-		copySketchTemplate(sketchName);
+		copySketchTemplate(sketchName, type);
 	});
 }
 
-function copySketchTemplate(name){
-	fs.copyFile(path.join(appPath, "aleph_modules/core/js/2D_template.js"), path.join(sketchesPath, name), (err) => {
+function copySketchTemplate(name, type){
+	let srcPath;
+	if (type === "2D"){
+		srcPath = path.join(appPath, "aleph_modules/core/js/2D_template.js");
+	}
+
+	if (type === "3D"){
+		srcPath = path.join(appPath, "aleph_modules/core/js/3D_template.js");;
+	}
+
+	fs.copyFile(srcPath, path.join(sketchesPath, name), (err) => {
 		if (err) throw err;
 		console.log(`created new sketch "${name}"`);
 		appendNewSketchBtn(name.substring(0, name.lastIndexOf(".")));
@@ -340,11 +354,6 @@ function appendNewSketchBtn(newSketch){
 	let bool = true;
 	let sketchBtn = document.querySelector(".sketchSelectButton");
 	// if existing buttons are disabled, bool = true (btn is created in disabled state)
-	if (sketchBtn.disabled === true){
-		bool = true; 
-	} 
-	else {
-		bool = false;
-	}
+	if (sketchBtn.disabled === true) {bool = true;} else {bool = false;}
 	makeDomElement("BUTTON", newSketch, ["sketchSelectButton", "btn"], "#sketchSelectorButtons", bool);	
 }
