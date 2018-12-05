@@ -314,7 +314,7 @@ function newSketchDialog(){
 }
 
 function copySketchTemplate(name){
-	fs.copyFile(path.join(appPath, "aleph_modules/core/js/sketchTemplate.js"), path.join(sketchesPath, name), (err) => {
+	fs.copyFile(path.join(appPath, "aleph_modules/core/js/2D_template.js"), path.join(sketchesPath, name), (err) => {
 		if (err) throw err;
 		console.log(`created new sketch "${name}"`);
 		appendNewSketchBtn(name.substring(0, name.lastIndexOf(".")));

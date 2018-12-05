@@ -8,7 +8,7 @@ electronDebug({
 });
 
 // global reference to windows to prevent closing on js garbage collection
-let editorWindow, displayWindow;
+let editorWindow, displayWindow, splash;
 
 function createWindow() {
 	splash = new BrowserWindow({width: 512, height: 512, transparent: true, frame: false});
@@ -21,7 +21,7 @@ function createWindow() {
 			height: 1080, 
 			show: false, 
 			icon: "./aleph_modules/assets/icons/win/logo.ico"});
-		editorWindow.loadFile("./aleph_modules/core/html/index.html");
+		editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
 
 		// show window only when file has loaded to prevent flash
 		editorWindow.once("ready-to-show", () => {
@@ -41,11 +41,11 @@ function createWindow() {
 app.on('ready', () => {
 	createWindow();
 
-	let fullscreened = false;
+	let isFullScreen = false;
 	// toggle fullscreen hotkey
 	globalShortcut.register('CommandOrControl+Shift+F', () => {
-		fullscreened = !fullscreened;
-		displayWindow.setFullScreen(fullscreened);
+		isFullScreen = !isFullScreen;
+		displayWindow.setFullScreen(isFullScreen);
 	});
 });
 
