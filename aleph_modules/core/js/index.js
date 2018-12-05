@@ -132,7 +132,13 @@ const antiAliasing = document.querySelector("#antiAliasing");
 
 // send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e){
-	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), pixelDensity.value, antiAliasing.value];
+	// validate display settings
+	validateInputRanges(displayWidth);
+	validateInputRanges(displayHeight);	
+	validateInputRanges(pixelDensity);
+	validateInputRanges(antiAliasing);
+
+	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), Number(pixelDensity.value), Number(antiAliasing.value)];
 	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
 	let addCtrlBtn = document.querySelector("#addMidiMap");
@@ -151,6 +157,15 @@ applyDisplaySettings.addEventListener("click", function(e){
 
 	ipc.send("applyDisplaySettings", displayParams);
 });
+
+function validateInputRanges(elt){
+	if (Number(elt.value) > Number(elt.max)){
+		elt.value = elt.max;
+	}
+	if (Number(elt.value) < Number(elt.min)) {
+		elt.value = elt.min;
+	}
+}
 
 // ASSET IMPORTER STUFF
 

@@ -12,13 +12,13 @@
 		<h3 class="textHeaders">Display Settings:</h3>
 
 		<label for="displayWindowWidth">Width:</label>
-		<input id="displayWindowWidth" type="number" name="displayWindowWidth">
+		<input id="displayWindowWidth" type="number" name="displayWindowWidth" value="500" min="200" max="3840">
 		<label for="displayWindowHeight">Height:</label>
-		<input id="displayWindowHeight" type="number" name="displayWindowHeight">
+		<input id="displayWindowHeight" type="number" name="displayWindowHeight" value="500" min="200" max="2160">
 		<label for="pixelDensity">Pixel Density:</label>
-		<input id="pixelDensity" type="number" name="pixelDensity">
+		<input id="pixelDensity" type="number" name="pixelDensity" value="1" min="0.1" max="8">
 		<label for="antiAliasing">Anti-Aliasing:</label>
-		<input id="antiAliasing" type="number" name="antiAliasing">
+		<input id="antiAliasing" type="number" name="antiAliasing" value="1" min="0" max="1">
 
 		<button class="btn" id="applyDisplaySettings">Create Display</button>
 	</div>
