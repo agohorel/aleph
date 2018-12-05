@@ -127,11 +127,12 @@ ipc.on("midiLoaded", (event) => {
 const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
 const displayWidth = document.querySelector("#displayWindowWidth");
 const displayHeight = document.querySelector("#displayWindowHeight");
-const pxlDensity = document.querySelector("#pixelDensity");
+const pixelDensity = document.querySelector("#pixelDensity");
+const antiAliasing = document.querySelector("#antiAliasing");
 
 // send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e){
-	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), pxlDensity.value];
+	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), pixelDensity.value, antiAliasing.value];
 	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
 	let addCtrlBtn = document.querySelector("#addMidiMap");

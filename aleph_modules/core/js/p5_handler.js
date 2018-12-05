@@ -19,7 +19,8 @@ let audio = {};
 let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25}; // set up initial values for audioParams object
 let cnv, _2D;
 let renderers = {};
-let pxlDensity;;
+let pxlDensity;
+let aa;
 
 function preload() {
 	importer("models");
@@ -31,7 +32,13 @@ function preload() {
 	ipc.on("applyDisplaySettings", (event, arg) => {
 		pxlDensity = Number(arg[2]);
 		pixelDensity(pxlDensity);
+		aa = Number(arg[3]);
+		setAA(aa);
 	});
+}
+
+function setAA(aa){
+	if (aa > 0) {smooth();} else {noSmooth()}
 }
 
 function setup() {
@@ -174,8 +181,8 @@ function resetStyles(){
 	fill(0);
 	ellipseMode(CENTER);
 	rectMode(CORNER);
-	textAlign(LEFT, BOTTOM);
 	resetMatrix();
+	setAA(aa);
 }
 
 function clamp(val, min, max){
