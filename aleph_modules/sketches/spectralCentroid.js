@@ -35,6 +35,7 @@ exports.run = (audio, midi, assets, utils) => {
 	noStroke();
 	fill(255);  
 	textSize(32);
+	textAlign(LEFT, BOTTOM);
   	textFont(assets.fonts.RobotoMono_Light);
 	text(`centroid: ${round(spectralCentroid)} Hz`, 10, 40);
 }
