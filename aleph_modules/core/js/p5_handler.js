@@ -18,14 +18,20 @@ let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
 let audio = {};
 let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25}; // set up initial values for audioParams object
 let cnv, _2D;
+let renderers = {};
+let pxlDensity;;
 
 function preload() {
 	importer("models");
 	importer("textures");
 	importer("fonts");
 	importer("shaders");
-
 	scanSketches(assignRenderers);
+
+	ipc.on("applyDisplaySettings", (event, arg) => {
+		pxlDensity = Number(arg[2]);
+		pixelDensity(pxlDensity);
+	});
 }
 
 function setup() {
@@ -190,8 +196,6 @@ function importShaders(array){
 	}	
 }
 
-let renderers = {};
-
 function scanSketches(callback){
 	fs.readdir(sketchesPath, (err, sketches) => {
 		if (err) { console.log(err) }
@@ -204,7 +208,6 @@ function assignRenderers(sketches){
 		let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
 		renderers[sketch] = createGraphics(width, height, WEBGL);
 	}
-	// console.log(renderers);
 }
 
 function resizeOffscreenRenderers(sketches){
@@ -212,5 +215,4 @@ function resizeOffscreenRenderers(sketches){
 		let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
 		renderers[sketch].resizeCanvas(windowWidth, windowHeight);
 	}
-	// print(renderers);
 }

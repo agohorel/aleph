@@ -77,10 +77,13 @@ ipcMain.on("addMidiMapping", (event, args) => {
 ipcMain.on("applyDisplaySettings", (event, args) => {
 	displayWindow = new BrowserWindow({width: args[0], 
 									   height: args[1],
-									   // autoHideMenuBar: true,
 									   icon: "./aleph_modules/assets/icons/win/logo.ico"});
 	displayWindow.setMenu(null);
-	displayWindow.webContents.send("applyDisplaySettings", args);
+	
+	// TODO: make this a promise 
+	// delay is there just to wait for the window to exist before trying to ipc to it 
+	setTimeout(() => displayWindow.webContents.send("applyDisplaySettings", args), 1000);
+
  	displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
 	
 	displayWindow.on("closed", () => {
