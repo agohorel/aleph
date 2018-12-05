@@ -2,28 +2,28 @@
 // it also makes use of p5's push/pop functions to apply transforms and styling to shapes individually.
 
 let hasRun = {state: false};
-let r;
+let _3D;
 
 exports.run = (audio, midi, assets, utils) => {
-	utils.renderLoop(hasRun, setup, r, draw);
+	utils.renderLoop(hasRun, setup, _3D, draw);
 }
 
 function setup(){
 	let sketch = utils.getSketchName(__filename);
-	r = renderers[sketch];
+	_3D = renderers[sketch];
 }
 
 function draw() {
 	// set black background
-	r.background(0);
+	_3D.background(0);
 	
 	// create a variable for constant rotation
 	let rotator = frameCount * .005;	
 
 	// rotate on all 3 axes 
-	r.rotateX(rotator);
-	r.rotateY(rotator);	
-	r.rotateZ(rotator);
+	_3D.rotateX(rotator);
+	_3D.rotateY(rotator);	
+	_3D.rotateZ(rotator);
 
 	// link size to eased (smoothed) volume
 	let size = map(audio.volEased, 0, 1, 50, 1000);
@@ -38,42 +38,42 @@ function draw() {
 	let col = map(audio.volume, 0, 1, 50, 255);
 
 	// set a normal material to the box
-	r.normalMaterial();
+	_3D.normalMaterial();
 	// draw a box
-	r.box(size, size, size, box_detailX, box_detailY);
+	_3D.box(size, size, size, box_detailX, box_detailY);
 
 	// start new transform matrix
-	r.push();
+	_3D.push();
 	// apply the desired styles to the objects within this push/pop
 	applyStyles(col);
 	// move the origin of the shape
-	r.translate(-width/3, 0);
+	_3D.translate(-width/3, 0);
 	// draw the shape
-	r.torus(size, size/4, detailX, detailY);
+	_3D.torus(size, size/4, detailX, detailY);
 	// close/reset transform matrix
-	r.pop();
+	_3D.pop();
 	
-	r.push();
+	_3D.push();
 	applyStyles(col);
-	r.translate(width/3, 0);
-	r.sphere(size, detailX, detailY);
-	r.pop();
+	_3D.translate(width/3, 0);
+	_3D.sphere(size, detailX, detailY);
+	_3D.pop();
 
-	r.push();
+	_3D.push();
 	applyStyles(col);
-	r.translate(0, -height/3);
-	r.cylinder(size, size, detailX, detailY);
-	r.pop();
+	_3D.translate(0, -height/3);
+	_3D.cylinder(size, size, detailX, detailY);
+	_3D.pop();
 
-	r.push();
+	_3D.push();
 	applyStyles(col);
-	r.translate(0, height/3);
-	r.cone(size, size, detailX, detailY);
-	r.pop();
+	_3D.translate(0, height/3);
+	_3D.cone(size, size, detailX, detailY);
+	_3D.pop();
 }
 
 // reusable function to reset styles in each push/pop
 function applyStyles(color){
-	r.stroke(color);
-	r.noFill();
+	_3D.stroke(color);
+	_3D.noFill();
 }

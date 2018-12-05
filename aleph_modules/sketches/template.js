@@ -1,20 +1,20 @@
 let hasRun = {state: false};
-let r;
+let _3D;
 
 exports.run = (audio, midi, assets, utils) => {
-	utils.renderLoop(hasRun, setup, r, draw);
+	utils.renderLoop(hasRun, setup, _3D, draw);
 }
 
 function setup(){
 	let sketch = utils.getSketchName(__filename);
-	r = renderers[sketch];
+	_3D = renderers[sketch];
 	// put code you only want to run once here.
 }
 
 function draw(){
-	r.background(200);
-	r.normalMaterial();
-	r.rotateX(frameCount * 0.01);
-	r.rotateY(frameCount * 0.01);
-	r.box(200);
+	_3D.background(200);
+	_3D.normalMaterial();
+	_3D.rotateX(frameCount * 0.01);
+	_3D.rotateY(frameCount * 0.01);
+	_3D.box(200);
 }

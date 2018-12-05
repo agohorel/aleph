@@ -2,7 +2,7 @@
 // to construct our own custom spectrums using p5's 2D primitives, in this case rect(). 
 // try swapping rect() out for a different shape (arc, ellipse, line, point, quad, or triangle).
 
-exports.run = (audio, midi, assets) => {
+exports.run = (audio, midi, assets, utils) => {
 	// create color variables based on frequency content 
 	let r = audio.bass, g = audio.mid, b = audio.high;
 
@@ -12,8 +12,6 @@ exports.run = (audio, midi, assets) => {
 	noStroke();
 	// set fill color to our color-coded variables from above
 	fill(r, g, b);
-	// transate 0, 0 point (origin) to top left corner of screen
-	translate(-width/2, -height/2, 0);
 
 	// loop through the audio.spectrum array one slice at a time 
 	for (let i = 0; i < audio.spectrum.length; i++){

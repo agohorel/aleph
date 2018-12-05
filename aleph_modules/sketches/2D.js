@@ -1,6 +1,18 @@
-exports.run = (audio, midi, assets) => {
+let hasRun = {state: false};
+let _3D;
+
+exports.run = (audio, midi, assets, utils) => {
+	utils.renderLoop(hasRun, setup, _3D, draw);
+}
+
+function setup(){
+	let sketch = utils.getSketchName(__filename);
+	_3D = renderers[sketch];
+}
+
+function draw() {
 	let r = audio.bass, g = audio.mid, b = audio.high;
-	background(255);
+	_3D.background(255);
 	_2D.background(255 - volume * 255);
 	_2D.noStroke();
 	_2D.fill(r, g, b);
@@ -11,15 +23,15 @@ exports.run = (audio, midi, assets) => {
 	    _2D.rect(x, height, width / audio.spectrum.length, h);
 	}
 
-	texture(_2D);
+	_3D.texture(_2D);
 	
 	if (second() % 2 === 0){
-		rotateX(frameCount * 0.01);
-		rotateY(frameCount * 0.01);
-		rotateZ(frameCount * 0.01);
-		noStroke();
-		box(200);
+		_3D.rotateX(frameCount * 0.01);
+		_3D.rotateY(frameCount * 0.01);
+		_3D.rotateZ(frameCount * 0.01);
+		_3D.noStroke();
+		_3D.box(200);
 	} else {
-		rect(-width/2, -height/2, width, height);	
+		_3D.rect(-width/2, -height/2, width, height);	
 	}	
 }
