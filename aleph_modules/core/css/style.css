@@ -24,7 +24,8 @@ label {
 }
 
 input {
-	width: 100px;
+	width: 60px;
+	margin-right: 10px;
 	background-color: #2e3233;
 	border: none;
 	outline: none;
