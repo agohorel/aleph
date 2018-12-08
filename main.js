@@ -26,7 +26,13 @@ function createWindow() {
 		// show window only when file has loaded to prevent flash
 		editorWindow.once("ready-to-show", () => {
 			splash.destroy();
-			editorWindow.maximize();
+
+			// check OS and use maximize or show
+			if (process.platform === "darwin"){
+				editorWindow.show();
+			}
+
+			else {editorWindow.maximize();}
 		});
 
 		// dereference windows on close
