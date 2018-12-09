@@ -5,9 +5,8 @@ const ipc = electron.ipcRenderer;
 const path = require("path");
 const fs = require("fs");
 
-const appPath = process.cwd();
-const sketchesPath = path.resolve(appPath, "aleph_modules/sketches");
-const assetsPath = path.resolve(appPath, "aleph_modules/assets");
+const assetsPath = path.resolve(__dirname, "../../assets/");
+const sketchesPath = path.resolve(__dirname, "../../sketches/");
 
 // SKETCH SELECTION STUFF
 
@@ -276,7 +275,7 @@ function importFileDialog(filetype){
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
 		if (files === undefined) return;
-		copySelectedFiles(files, path.join(assetsPath, filetype));
+		copySelectedFiles(files, path.resolve(assetsPath, filetype));
 	});
 }
 
@@ -336,11 +335,11 @@ function newSketchDialog(type){
 function copySketchTemplate(name, type){
 	let srcPath;
 	if (type === "2D"){
-		srcPath = path.join(appPath, "aleph_modules/core/js/2D_template.js");
+		srcPath = path.resolve(__dirname, "../js/2D_template.js");
 	}
 
 	if (type === "3D"){
-		srcPath = path.join(appPath, "aleph_modules/core/js/3D_template.js");;
+		srcPath = path.resolve(__dirname, "../js/3D_template.js");;
 	}
 
 	fs.copyFile(srcPath, path.join(sketchesPath, name), (err) => {

@@ -7,11 +7,11 @@ const p5_audio = require("p5/lib/addons/p5.sound.js");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
 const fs = require("fs");
 const path = require("path");
-const appPath = process.cwd();
-const midi = require(path.join(appPath, "aleph_modules/core/js/midi.js"));
-const assetsPath = path.resolve(appPath, "aleph_modules/assets");
-const sketchesPath = path.resolve(appPath, "aleph_modules/sketches");
-const utils = require(path.join(appPath, "aleph_modules/core/js/utils.js"));
+
+const midi = require(path.resolve(__dirname, "../js/midi.js"));
+const assetsPath = path.resolve(__dirname, "../../assets/");
+const sketchesPath = path.resolve(__dirname, "../../sketches/");
+const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
 let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
@@ -60,7 +60,7 @@ function draw() {
 
 	if (moduleName !== ""){
 		try {
-			let moduleFile = require(path.join(appPath, "aleph_modules/sketches/", moduleName));
+			let moduleFile = require(path.resolve(__dirname, "../../sketches/", moduleName));
 			moduleFile.run(audio, midi.controls, assets, utils);
 		} 
 
