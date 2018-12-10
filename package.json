@@ -13,8 +13,8 @@
     "electron_rebuild": ".\\node_modules\\.bin\\electron-rebuild.cmd",
     "electron_rebuild_nix": "$(npm bin)/electron-rebuild",
     "pull_submodules": "git submodule update --init",
-    "init": "npm install & npm run pull_submodules & npm run electron_rebuild",
-    "init_nix": "npm install & npm run pull_submodules & npm run electron_rebuild"
+    "init": "npm install && npm run pull_submodules && npm run electron_rebuild",
+    "init_nix": "npm install && npm run pull_submodules && npm run electron_rebuild"
   },
   "author": "",
   "license": "ISC",
