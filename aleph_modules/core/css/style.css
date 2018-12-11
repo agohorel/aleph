@@ -20,7 +20,7 @@ label {
 	font-family: Roboto-Mono, monospace;
 	color: #d4e1e6;
 	margin-top: 10px;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 input {
@@ -31,7 +31,7 @@ input {
 	outline: none;
 	font-family: Roboto-Mono, monospace;
 	color: #d4e1e6;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 input:focus {
