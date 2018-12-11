@@ -23,7 +23,7 @@ function createWindow() {
 			width, 
 			height, 
 			show: false, 
-			icon: "./aleph_modules/assets/icons/win/logo.ico"});
+			icon: "./aleph_modules/assets/icons/png/64x64.png"});
 		editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
 
 		// show window only when file has loaded to prevent flash
