@@ -1,4 +1,5 @@
-const {app, BrowserWindow, ipcMain, globalShortcut} = require("electron");
+const electron = require("electron");
+const {app, BrowserWindow, ipcMain, globalShortcut} = electron;
 const electronDebug = require("electron-debug");
 
 electronDebug({
@@ -16,9 +17,11 @@ function createWindow() {
 
 	// artificial timeout to show splash screen 
 	setTimeout(() => {
+		// get system resolution
+	 	const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
 		editorWindow = new BrowserWindow({
-			width: 1920, 
-			height: 1080, 
+			width, 
+			height, 
 			show: false, 
 			icon: "./aleph_modules/assets/icons/win/logo.ico"});
 		editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
