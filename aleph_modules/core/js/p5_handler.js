@@ -1,27 +1,49 @@
+// p5.disableFriendlyErrors = true;
+
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
-const midi = require(`${__dirname.substring(0, __dirname.length-10)}\\core\\js\\midi.js`);
+const p5_dom = require("p5/lib/addons/p5.dom.js");
 const fs = require("fs");
+const path = require("path");
 
-let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
+const midi = require(path.resolve(__dirname, "../js/midi.js"));
+const assetsPath = path.resolve(__dirname, "../../assets/");
+const sketchesPath = path.resolve(__dirname, "../../sketches/");
+const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
-let assets = {models: {}, textures: {}};
+let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
 let audio = {};
-// set up initial values for audioParams object
-let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25};
-
-// p5.disableFriendlyErrors = true;
+let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25}; // set up initial values for audioParams object
+let cnv, _2D;
+let renderers = {};
+let pxlDensity;
+let aa;
 
 function preload() {
 	importer("models");
 	importer("textures");
+	importer("fonts");
+	importer("shaders");
+	scanSketches(assignRenderers);
+
+	ipc.on("applyDisplaySettings", (event, arg) => {
+		pxlDensity = Number(arg[2]);
+		pixelDensity(pxlDensity);
+		aa = Number(arg[3]);
+		setAA(aa);
+	});
+}
+
+function setAA(aa){
+	if (aa > 0) {smooth();} else {noSmooth()}
 }
 
 function setup() {
-	let cnv = createCanvas(windowWidth, windowHeight, WEBGL);
+	cnv = createCanvas(windowWidth, windowHeight);
+	_2D = createGraphics(windowWidth, windowHeight);
 
 	input = new p5.AudioIn();
 	input.start();
@@ -38,8 +60,8 @@ function draw() {
 
 	if (moduleName !== ""){
 		try {
-			let moduleFile = require(`../../sketches/${moduleName}.js`);
-			moduleFile.run(audio, midi.controls, assets);
+			let moduleFile = require(path.resolve(__dirname, "../../sketches/", moduleName));
+			moduleFile.run(audio, midi.controls, assets, utils);
 		} 
 
 		catch (err){
@@ -79,6 +101,8 @@ ipc.on("knobChanged", (event, arg) => {
 // resize canvas if window is resized
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
+	_2D.resizeCanvas(windowWidth, windowHeight);
+	scanSketches(resizeOffscreenRenderers);
 	centerCanvas();
 	background(0);
 }
@@ -87,7 +111,7 @@ function windowResized() {
 function centerCanvas() {
 	var x = (windowWidth - width) / 2;
 	var y = (windowHeight - height) / 2;
-	canvas.position(x, y);
+	cnv.position(x, y);
 }
 
 function nearestPow2(value){
@@ -95,22 +119,39 @@ function nearestPow2(value){
 }
 
 function importer(folder){
-	fs.readdir(`${assetsPath}/${folder}`, (err, files) => {
-		if (err){
-			console.log(err);
-		} else {
+	let count = 0;
+	fs.readdir(path.join(assetsPath, folder), (err, files) => {
+		if (err){ console.log(err); } 
+		else {
+
+			if (folder === "shaders"){
+				scanShaders();									
+			} 
+
 			files.forEach((file, index) => {
 				// get file name
-				let name = file.substring(0, file.length-4);
+				let name = file.substring(0, file.lastIndexOf(".")).replace(/[- ]/g, "_") || file;
+
 				// check which folder we're importing from 
 				if (folder === "models"){
 					// create entry on assets object & load file
-					assets.models[name] = loadModel(`../../assets/models/${file}`, true);
+					assets.models[name] = loadModel(path.join(assetsPath, "models", file), true);
 				}
+				
 				if (folder === "textures"){
-					assets.textures[name] = loadImage(`../../assets/textures/${file}`, true);
-				} 
-			});
+					assets.textures[name] = loadImage(path.join(assetsPath, "textures", file));
+				}
+				
+				if (folder === "fonts"){
+					// grab file names and replace hyphens with underscores
+					let fontName = file.substring(0, file.lastIndexOf(".")).replace(/[- ]/g, "_");
+					// filter out font license txt files
+					if (file.substring(file.length-4, file.length) !== ".txt"){
+						assets.fonts[fontName] = loadFont(path.join(assetsPath, "fonts", file));;
+					}
+				}
+				
+			});			
 		}
 	});
 }
@@ -131,12 +172,54 @@ function smoother(volume, leftVol, rightVol, easing){
 	rightVolEased += diffR * easing;
 }
 
+// reset basic p5 visual params when changing sketch to prevent "leaking" styles
 function resetStyles(){
+	clear();
+	_2D.clear();
 	strokeWeight(1);
 	stroke(255);
 	fill(0);
+	ellipseMode(CENTER);
+	rectMode(CORNER);
+	resetMatrix();
+	setAA(aa);
 }
 
 function clamp(val, min, max){
 	return Math.max(min, Math.min(val, max));
+}
+
+function scanShaders(){
+	let shaders = fs.readdirSync(path.join(assetsPath, "shaders"));
+	importShaders(shaders);
+}
+
+function importShaders(array){
+	for (let i = 0; i < array.length; i++){
+		let name = array[i].substring(0, array[i].lastIndexOf(".")) || array[i];
+		let vert = path.join(assetsPath, "shaders", `${name}.vert`);
+		let frag = path.join(assetsPath, "shaders", `${name}.frag`);
+		assets.shaders[name] = loadShader(vert, frag);
+	}	
+}
+
+function scanSketches(callback){
+	fs.readdir(sketchesPath, (err, sketches) => {
+		if (err) { console.log(err) }
+		else { callback(sketches); }
+	});
+}
+
+function assignRenderers(sketches){
+	for (let i = 0; i < sketches.length; i++){
+		let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
+		renderers[sketch] = createGraphics(width, height, WEBGL);
+	}
+}
+
+function resizeOffscreenRenderers(sketches){
+	for (let i = 0; i < sketches.length; i++){
+		let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
+		renderers[sketch].resizeCanvas(windowWidth, windowHeight);
+	}
 }

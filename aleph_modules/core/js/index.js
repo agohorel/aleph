@@ -5,8 +5,8 @@ const ipc = electron.ipcRenderer;
 const path = require("path");
 const fs = require("fs");
 
-let sketchesPath = `${__dirname.substring(0, __dirname.length-10)}\\sketches`;
-let assetsPath = `${__dirname.substring(0, __dirname.length-10)}\\assets`;
+const assetsPath = path.resolve(__dirname, "../../assets/");
+const sketchesPath = path.resolve(__dirname, "../../sketches/");
 
 // SKETCH SELECTION STUFF
 
@@ -18,7 +18,7 @@ fs.readdir(sketchesPath, (err, files) => {
   	console.log(err);
   } else {
   	  files.forEach(file => {
-  	  	makeDomElement("BUTTON", file.substring(0, file.length-3), ["sketchSelectButton", "btn"], "#sketchSelectorButtons", true);	  
+  	  	makeDomElement("BUTTON", file.substring(0, file.lastIndexOf(".")), ["sketchSelectButton", "btn"], "#sketchSelectorButtons", true);	  
 	  });
   }
 });
@@ -31,10 +31,15 @@ sketchSelectorButtons.addEventListener("click", function(e) {
 	}
 });
 
-const newSketchBtn = document.querySelector("#newSketchBtn");
+const new2DSketch = document.querySelector("#new2DSketch");
+const new3DSketch = document.querySelector("#new3DSketch");
 
-newSketchBtn.addEventListener("click", () => {
-	newSketchDialog();
+new2DSketch.addEventListener("click", () => {
+	newSketchDialog("2D");
+});
+
+new3DSketch.addEventListener("click", () => {
+	newSketchDialog("3D");
 });
 
 
@@ -126,10 +131,18 @@ ipc.on("midiLoaded", (event) => {
 const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
 const displayWidth = document.querySelector("#displayWindowWidth");
 const displayHeight = document.querySelector("#displayWindowHeight");
+const pixelDensity = document.querySelector("#pixelDensity");
+const antiAliasing = document.querySelector("#antiAliasing");
 
 // send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e){
-	let displayDimensions = [Number(displayWidth.value), Number(displayHeight.value)];
+	// validate display settings
+	validateInputRanges(displayWidth);
+	validateInputRanges(displayHeight);	
+	validateInputRanges(pixelDensity);
+	validateInputRanges(antiAliasing);
+
+	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), Number(pixelDensity.value), Number(antiAliasing.value)];
 	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
 	let addCtrlBtn = document.querySelector("#addMidiMap");
@@ -146,13 +159,24 @@ applyDisplaySettings.addEventListener("click", function(e){
 	loadBtn.disabled = false;
 	audioParamWrapper.style.pointerEvents = "all";
 
-	ipc.send("applyDisplaySettings", displayDimensions);
+	ipc.send("applyDisplaySettings", displayParams);
 });
+
+function validateInputRanges(elt){
+	if (Number(elt.value) > Number(elt.max)){
+		elt.value = elt.max;
+	}
+	if (Number(elt.value) < Number(elt.min)) {
+		elt.value = elt.min;
+	}
+}
 
 // ASSET IMPORTER STUFF
 
 const objBtn = document.querySelector("#objBtn");
 const texturesBtn = document.querySelector("#texturesBtn");
+const fontsBtn = document.querySelector("#fontsBtn");
+const shadersBtn = document.querySelector("#shadersBtn");
 
 objBtn.addEventListener("click", () => {
 	importFileDialog("models");
@@ -162,6 +186,15 @@ texturesBtn.addEventListener("click", () => {
 	importFileDialog("textures");
 });
 
+fontsBtn.addEventListener("click", () => {
+	importFileDialog("fonts");
+});
+
+shadersBtn.addEventListener("click", () => {
+	importFileDialog("shaders");
+});
+
+
 // AVAILABLE ASSETS STUFF
 
 const p = document.querySelector("#availableAssets");
@@ -170,16 +203,19 @@ let assetFolders = fs.readdirSync(assetsPath);
 function scanAssets(){
 	let assetList = "";
 	assetFolders.forEach(folder => {
-		if (folder !== "fonts" && folder !== "icons"){
+		// filter out aleph system icons
+		if (folder !== "icons"){
 			assetList += `${folder}\n`.toUpperCase();
-			let assets = fs.readdirSync(`${assetsPath}\\${folder}`);
+			let assets = fs.readdirSync(path.join(assetsPath, folder)); 
 
 			assets.forEach(asset => {
-				assetList += `|__assets.${folder}.${asset.substring(0, asset.length-4)}\n`;
+				// filter out font licenses
+				if (!asset.toUpperCase().includes("LICENSE")){
+					assetList += `|__assets.${folder}.${asset.substring(0, asset.lastIndexOf(".")) || asset}\n`;
+				}
 			});
 			assetList += "\n";
 		} 
-
 	});
 
 	p.innerText = assetList;	
@@ -238,7 +274,8 @@ function importFileDialog(filetype){
 		filters: [applyFiletypeFilter(filetype)],
 		properties: ["openFile", "multiSelections"]
 	}, (files) => {
-		copySelectedFiles(files, `${assetsPath}/${filetype}`);
+		if (files === undefined) return;
+		copySelectedFiles(files, path.resolve(assetsPath, filetype));
 	});
 }
 
@@ -259,37 +296,56 @@ function applyFiletypeFilter(filetype){
 		filter.extensions = ["js"];
 		return filter;
 	}
+	else if (filetype === "fonts"){
+		filter.name = "Fonts";
+		filter.extensions = ["ttf", "otf"];
+		return filter;
+	}
+	else if (filetype === "shaders"){
+		filter.name = "Shaders";
+		filter.extensions = ["frag", "vert"];
+		return filter;
+	}
 }
 
 function copySelectedFiles(selectedFiles, destination){
 	for (let i = 0; i < selectedFiles.length; i++){
 		// strip filename off path
-		let filename = selectedFiles[i].replace(/^.*[\\\/]/, '');
-		fs.copyFile(selectedFiles[i], `${destination}\\${filename}`, (err) => {
+		let filename = path.parse(selectedFiles[i]).base.replace(/[- ]/g, "_");
+		fs.copyFile(selectedFiles[i], path.join(destination, filename), (err) => {
 			if (err) throw err;
-			console.log(`${selectedFiles[i]} copied to ${destination}/${filename}`);
+			console.log(`${selectedFiles[i]} copied to ${path.join(destination, filename)}`);
 			scanAssets();
 		});
 	}
 }
 
-function newSketchDialog(){
+function newSketchDialog(type){
 		dialog.showSaveDialog({
 		defaultPath: sketchesPath,
 		title: "Save New Sketch As",
 		filters: [applyFiletypeFilter("js")]
 	}, (sketchPath) => {
 		if (sketchPath === undefined) return;
-		let sketchName = sketchPath.replace(/^.*[\\\/]/, '');
-		copySketchTemplate(sketchName);
+		let sketchName = path.parse(sketchPath).base;
+		copySketchTemplate(sketchName, type);
 	});
 }
 
-function copySketchTemplate(name){
-	fs.copyFile(`${__dirname.substring(0, __dirname.length-5)}/js/sketchTemplate.js`, `${sketchesPath}\\${name}`, (err) => {
+function copySketchTemplate(name, type){
+	let srcPath;
+	if (type === "2D"){
+		srcPath = path.resolve(__dirname, "../js/2D_template.js");
+	}
+
+	if (type === "3D"){
+		srcPath = path.resolve(__dirname, "../js/3D_template.js");;
+	}
+
+	fs.copyFile(srcPath, path.join(sketchesPath, name), (err) => {
 		if (err) throw err;
 		console.log(`created new sketch "${name}"`);
-		appendNewSketchBtn(name.substring(0, name.length-3));
+		appendNewSketchBtn(name.substring(0, name.lastIndexOf(".")));
 	});
 }
 
@@ -297,11 +353,6 @@ function appendNewSketchBtn(newSketch){
 	let bool = true;
 	let sketchBtn = document.querySelector(".sketchSelectButton");
 	// if existing buttons are disabled, bool = true (btn is created in disabled state)
-	if (sketchBtn.disabled === true){
-		bool = true; 
-	} 
-	else {
-		bool = false;
-	}
+	if (sketchBtn.disabled === true) {bool = true;} else {bool = false;}
 	makeDomElement("BUTTON", newSketch, ["sketchSelectButton", "btn"], "#sketchSelectorButtons", bool);	
 }

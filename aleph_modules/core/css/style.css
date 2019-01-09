@@ -1,11 +1,11 @@
 @font-face {
   font-family: Roboto;
-  src: url(../../assets/fonts/Roboto/Roboto-Light.ttf);
+  src: url(../../assets/fonts/Roboto_Light.ttf);
 }
 
 @font-face {
   font-family: Roboto-Mono;
-  src: url(../../assets/fonts/Roboto_Mono/RobotoMono-Light.ttf);
+  src: url(../../assets/fonts/RobotoMono_Light.ttf);
 }
 
 html, body {
@@ -20,17 +20,18 @@ label {
 	font-family: Roboto-Mono, monospace;
 	color: #d4e1e6;
 	margin-top: 10px;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 input {
-	width: 100px;
+	width: 60px;
+	margin-right: 10px;
 	background-color: #2e3233;
 	border: none;
 	outline: none;
 	font-family: Roboto-Mono, monospace;
 	color: #d4e1e6;
-	font-size: 14px;
+	font-size: 12px;
 }
 
 input:focus {

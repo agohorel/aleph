@@ -2,7 +2,7 @@
 // to construct our own custom waveforms using p5's custom shape functions 
 // beginShape(), vertex(), and endShape().
 
-exports.run = (audio, midi, assets) => {
+exports.run = (audio, midi, assets, utils) => {
 	// set black background
 	background(0);
 	// remove color fills from shapes
@@ -13,9 +13,6 @@ exports.run = (audio, midi, assets) => {
 	stroke(audio.bass, audio.mid, audio.high);
 	// set outline thickness (strokeWeight) based on volume
 	strokeWeight(audio.volume * 50);
-
-	// translate 0,0 point (origin) to top left of screen
-	translate(-width/2, -height/2, 0);
 
 	// loop through audio waveform array one slice at a time
 	for (let i = 0; i< audio.waveform.length; i++){

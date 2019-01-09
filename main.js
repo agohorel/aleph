@@ -1,6 +1,6 @@
-const {app, BrowserWindow, ipcMain} = require("electron");
-
-const electronDebug = require('electron-debug');
+const electron = require("electron");
+const {app, BrowserWindow, ipcMain, globalShortcut} = electron;
+const electronDebug = require("electron-debug");
 
 electronDebug({
 	enabled: true,
@@ -9,7 +9,7 @@ electronDebug({
 });
 
 // global reference to windows to prevent closing on js garbage collection
-let editorWindow, displayWindow;
+let editorWindow, displayWindow, splash;
 
 function createWindow() {
 	splash = new BrowserWindow({width: 512, height: 512, transparent: true, frame: false});
@@ -17,17 +17,25 @@ function createWindow() {
 
 	// artificial timeout to show splash screen 
 	setTimeout(() => {
+		// get system resolution
+	 	const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
 		editorWindow = new BrowserWindow({
-			width: 1920, 
-			height: 1080, 
+			width, 
+			height, 
 			show: false, 
-			icon: "./aleph_modules/assets/icons/win/logo.ico"});
-		editorWindow.loadFile("./aleph_modules/core/html/index.html");
+			icon: "./aleph_modules/assets/icons/png/64x64.png"});
+		editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
 
 		// show window only when file has loaded to prevent flash
 		editorWindow.once("ready-to-show", () => {
 			splash.destroy();
-			editorWindow.maximize();
+
+			// check OS and use maximize or show
+			if (process.platform === "darwin"){
+				editorWindow.show();
+			}
+
+			else {editorWindow.maximize();}
 		});
 
 		// dereference windows on close
@@ -39,7 +47,16 @@ function createWindow() {
 
 }
 
-app.on("ready", createWindow);
+app.on('ready', () => {
+	createWindow();
+
+	let isFullScreen = false;
+	// toggle fullscreen hotkey
+	globalShortcut.register('CommandOrControl+Shift+F', () => {
+		isFullScreen = !isFullScreen;
+		displayWindow.setFullScreen(isFullScreen);
+	});
+});
 
 // quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -68,10 +85,14 @@ ipcMain.on("addMidiMapping", (event, args) => {
 
 ipcMain.on("applyDisplaySettings", (event, args) => {
 	displayWindow = new BrowserWindow({width: args[0], 
-									   height: args[1], 
-									   autoHideMenuBar: true,
+									   height: args[1],
 									   icon: "./aleph_modules/assets/icons/win/logo.ico"});
-	displayWindow.webContents.send("applyDisplaySettings", args);
+	displayWindow.setMenu(null);
+	
+	// TODO: make this a promise 
+	// delay is there just to wait for the window to exist before trying to ipc to it 
+	setTimeout(() => displayWindow.webContents.send("applyDisplaySettings", args), 1000);
+
  	displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
 	
 	displayWindow.on("closed", () => {

@@ -1,10 +1,11 @@
 const fs = require("fs");
+const path = require("path");
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
 
 let midiDevice;
-let appPath = process.cwd();
+let mappingsPath = path.resolve(__dirname, "../../mappings");
 
 // initial export of default values
 module.exports.controls = {};
@@ -31,14 +32,14 @@ ipc.on("addMidiMapping", (event, arg) => {
 });
 
 ipc.on("saveMidi", (event) => {
-	fs.writeFile('midiMappings.json', JSON.stringify(midiMappings, null, 2), (err) => {
+	fs.writeFile(path.join(mappingsPath, "midiMappings.json"), JSON.stringify(midiMappings, null, 2), (err) => {
 		if (err) throw err;
 	});
 	ipc.send("midiSaved");
 });
 
 ipc.on("loadMidi", (event) => {
-	fs.readFile(`${appPath}/midiMappings.json`, "utf-8", (err, data) => {
+	fs.readFile(path.join(mappingsPath, "midiMappings.json"), "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
 	

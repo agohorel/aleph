@@ -11,8 +11,10 @@
     "build_linux": "electron-packager . --platform=linux --arch=x64 --icon=aleph_modules/assets/icons/png/512x512.png",
     "build_mac": "electron-packager . --platform=darwin --arch=x64 --icon=aleph_modules/assets/icons/mac/logo.icns",
     "electron_rebuild": ".\\node_modules\\.bin\\electron-rebuild.cmd",
+    "electron_rebuild_nix": "$(npm bin)/electron-rebuild",
     "pull_submodules": "git submodule update --init",
-    "init": "npm install & npm run pull_submodules & npm run electron_rebuild"
+    "init": "npm install && npm run pull_submodules && npm run electron_rebuild",
+    "init_nix": "npm install && npm run pull_submodules && npm run electron_rebuild_nix"
   },
   "author": "",
   "license": "ISC",

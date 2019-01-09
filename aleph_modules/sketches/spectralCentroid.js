@@ -5,13 +5,11 @@
 let centroidplot = 0.0;
 let spectralCentroid = 0;
 
-exports.run = (audio, midi, assets) => {
+exports.run = (audio, midi, assets, utils) => {
 	background(0);
 	stroke(0,255,0);
 	strokeWeight(1);
 	fill(0,255,0); // spectrum is green
-
-	translate(-width/2, -height/2, 0);
 
 	//draw the spectrum
 	for (let i = 0; i < audio.spectrum.length; i+=2){
@@ -33,4 +31,11 @@ exports.run = (audio, midi, assets) => {
 
 	stroke(255,0,0); // the line showing where the centroid is will be red
 	rect(centroidplot, 0, width / spectrum.length, height);
+
+	noStroke();
+	fill(255);  
+	textSize(32);
+	textAlign(LEFT, BOTTOM);
+  	textFont(assets.fonts.RobotoMono_Light);
+	text(`centroid: ${round(spectralCentroid)} Hz`, 10, 40);
 }
