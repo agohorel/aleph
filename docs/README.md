@@ -1,4 +1,4 @@
-# a l e p h ![aleph logo](../assets/icons/png/32x32.png)
+# a l e p h ![aleph logo](../aleph_modules/assets/icons/png/32x32.png)
 
 Aleph is a cross-platform, open source framework for developing and performing audio reactive visualizations. It is a desktop client built on [Electron](https://electronjs.org/) that uses [P5.js](https://p5js.org/) for graphics and audio analysis. Aleph exposes all of p5’s 2D *and* 3D functionality inside every user created sketch with some friendly wrappers for common boring things thrown in for good measure. In addition, Aleph provides MIDI control support which is sadly not offered by vanilla p5. Think of it as an enhanced environment for developing and performing audio-reactive p5 sketches.
 
