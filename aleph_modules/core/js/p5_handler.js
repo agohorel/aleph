@@ -46,6 +46,10 @@ function setup() {
 	_2D = createGraphics(windowWidth, windowHeight);
 
 	input = new p5.AudioIn();
+	// input.getSources((devices) => {
+	// 	console.log(devices);
+	// });
+	// input.setSource(5);
 	input.start();
 	
 	amplitude = new p5.Amplitude();
@@ -157,7 +161,7 @@ function importer(folder){
 }
 
 function smoother(volume, leftVol, rightVol, easing){
-	let scaler = 0.1;
+	let scaler = 0.1; // investigate this black magic
 
 	let target = volume * scaler;
 	let diff = target - volEased;

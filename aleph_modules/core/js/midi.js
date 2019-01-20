@@ -31,6 +31,10 @@ ipc.on("addMidiMapping", (event, arg) => {
 	mapModeActive = true;
 });
 
+ipc.on("removeMidiMapping", (event, arg) => {
+	midiMappings.pop();
+});
+
 ipc.on("saveMidi", (event) => {
 	fs.writeFile(path.join(mappingsPath, "midiMappings.json"), JSON.stringify(midiMappings, null, 2), (err) => {
 		if (err) throw err;
@@ -59,7 +63,7 @@ function pressedButton() {
 		// if mapMode is on, assign the pressed button to midiMap
 		if (mapModeActive){
 			setMidiMapping(midiMap, midiMappings, controlNum, msg.note, msg.velocity);
-		} 
+		}
 		// otherwise update the matching entry in midiMap
 		else {
 			updateMidi(midiMap, midiMappings, msg.note, msg.velocity);

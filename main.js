@@ -83,6 +83,10 @@ ipcMain.on("addMidiMapping", (event, args) => {
 	displayWindow.webContents.send("addMidiMapping", args);
 });
 
+ipcMain.on("removeMidiMapping", (event, args) => {
+	displayWindow.webContents.send("removeMidiMapping", args);
+});
+
 ipcMain.on("applyDisplaySettings", (event, args) => {
 	displayWindow = new BrowserWindow({width: args[0], 
 									   height: args[1],

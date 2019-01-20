@@ -65,6 +65,7 @@ midiDeviceButtons.addEventListener("click", function(e) {
 // MIDI MAPPING STUFF
 
 const addMidiMap = document.querySelector("#addMidiMap");
+const removeMidiMap = document.querySelector("#removeMidiMap");
 const lockMidi = document.querySelector("#lockMidiMap");
 const midiMappingButtons = document.querySelector("#midiMapIcons");
 const saveMidi = document.querySelector("#saveMidi");
@@ -75,6 +76,17 @@ let controlCount = -1;
 addMidiMap.addEventListener("click", () => {	
 	controlCount++;
 	makeDomElement("BUTTON", controlCount, ["midiMapping", "btn"], "#midiMapIcons", false);
+});
+
+removeMidiMap.addEventListener("click", () => {
+	// send button id to main to pass off to midi.js
+	ipc.send("removeMidiMapping", controlCount);
+	// decrement controlCount to account for entry we're deleting
+	controlCount--;
+	// find the midi entry DOM elements
+	let midiEntries = document.querySelectorAll(".midiMapping");
+	// remove the last midi entry button
+	midiEntries[midiEntries.length-1].parentNode.removeChild(midiEntries[midiEntries.length-1]);
 });
 
 // highlight selected midi control mapping slot & send controller id to main process
@@ -146,6 +158,7 @@ applyDisplaySettings.addEventListener("click", function(e){
 	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
 	let addCtrlBtn = document.querySelector("#addMidiMap");
+	let removeCtrlBtn = document.querySelector("#removeMidiMap");
 	let lockMappingBtn = document.querySelector("#lockMidiMap");
 	let saveBtn = document.querySelector("#saveMidi");
 	let loadBtn = document.querySelector("#loadMidi");
@@ -154,6 +167,7 @@ applyDisplaySettings.addEventListener("click", function(e){
 	sketchBtns.forEach((btn) => { btn.disabled = false; });
 	midiBtns.forEach((btn) => { btn.disabled = false; });
 	addCtrlBtn.disabled = false;
+	removeCtrlBtn.disabled = false;
 	lockMappingBtn.disabled = false;
 	saveBtn.disabled = false;
 	loadBtn.disabled = false;
