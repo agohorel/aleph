@@ -127,3 +127,7 @@ ipcMain.on("knobChanged", (event, args) => {
 ipcMain.on("audioCtrlMapBtnPressed", (event, args) => {
 	displayWindow.webContents.send("audioCtrlMapBtnPressed", args);
 });
+
+ipcMain.on("audioCtrlChanged", (event, args) => {
+	editorWindow.webContents.send("audioCtrlChanged", args);
+});

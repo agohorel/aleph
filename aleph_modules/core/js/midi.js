@@ -102,8 +102,9 @@ function ccChange() {
 		} 
 		else {
 			updateMidi(midiMap, midiMappings, msg.controller, msg.value);
+			// @TODO only update and ipc send audioCtrlMappings when necessary
 			updateMidi(audioCtrlMap, audioCtrlMappings, msg.controller, msg.value);
-			// ipc.send("audioCtrlChanged", msg);
+			ipc.send("audioCtrlChanged", audioCtrlMappings);
 		}
 
 		module.exports.controls = midiMappings;
