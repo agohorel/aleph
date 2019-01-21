@@ -123,3 +123,7 @@ ipcMain.on("midiSaved", (event) => {
 ipcMain.on("knobChanged", (event, args) => {
 	displayWindow.webContents.send("knobChanged", args);
 });
+
+ipcMain.on("audioCtrlMapBtnPressed", (event, args) => {
+	displayWindow.webContents.send("audioCtrlMapBtnPressed", args);
+});

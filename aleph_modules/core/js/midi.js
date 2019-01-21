@@ -21,14 +21,19 @@ ipc.on("selectMidiDevice", (event, arg) => {
 
 let midiMap = {};
 let midiMappings = [];
-
+let audioCtrlMap = {};
+let audioCtrlMappings = [];
 let controlNum = null;
-let mapModeActive = false;
+let audioCtrlNum = null;
+let mapModeStatuses = {
+	default: false,
+	audioCtrls: false
+};
 
 // receive trigger from main process to create new properties in the midiMap object
 ipc.on("addMidiMapping", (event, arg) => {
 	controlNum = arg;
-	mapModeActive = true;
+	mapModeStatuses.default = true;
 });
 
 ipc.on("removeMidiMapping", (event, arg) => {
@@ -57,12 +62,17 @@ ipc.on("loadMidi", (event) => {
 	ipc.send("midiLoaded");
 });
 
+ipc.on("audioCtrlMapBtnPressed", (event, args) => {
+	audioCtrlNum = args;
+	mapModeStatuses.audioCtrls = true;
+});
+
 function pressedButton() {
 	// listen for button presses
 	midiDevice.on('noteon', (msg) => {
 		// if mapMode is on, assign the pressed button to midiMap
-		if (mapModeActive){
-			setMidiMapping(midiMap, midiMappings, controlNum, msg.note, msg.velocity);
+		if (mapModeStatuses.default){
+			setMidiMapping(midiMap, midiMappings, controlNum, msg.note, msg.velocity, "default");
 		}
 		// otherwise update the matching entry in midiMap
 		else {
@@ -83,17 +93,24 @@ function releasedButton() {
 
 function ccChange() {
 	midiDevice.on("cc", (msg) => {		
-		if (mapModeActive){
-			setMidiMapping(midiMap, midiMappings, controlNum, msg.controller, msg.value);
-		} else {
+		if (mapModeStatuses.default === true && mapModeStatuses.audioCtrls === false){
+			setMidiMapping(midiMap, midiMappings, controlNum, msg.controller, msg.value, "default");
+		}
+		// if audioCtrlMapMode is on, send the pressed button's value back to the main process
+		else if (mapModeStatuses.audioCtrls && mapModeStatuses.default === false) {
+			setMidiMapping(audioCtrlMap, audioCtrlMappings, audioCtrlNum, msg.controller, msg.value, "audioCtrls");
+		} 
+		else {
 			updateMidi(midiMap, midiMappings, msg.controller, msg.value);
+			updateMidi(audioCtrlMap, audioCtrlMappings, msg.controller, msg.value);
+			// ipc.send("audioCtrlChanged", msg);
 		}
 
 		module.exports.controls = midiMappings;
 	});
 }
 
-function setMidiMapping(object, array, controlNum, note, param) {
+function setMidiMapping(object, array, controlNum, note, param, mapMode) {
 	// loop through controls array
 	for (let i = 0; i < array.length; i++){
 		// look for matching controlNum/name property
@@ -108,7 +125,7 @@ function setMidiMapping(object, array, controlNum, note, param) {
 	object[note].note = note;
 	object[note].name = controlNum;
 	object[note].value = param;
-	mapModeActive = false; 
+	mapModeStatuses[mapMode] = false; 
 
 	array.push(object[note]);
 

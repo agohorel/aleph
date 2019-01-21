@@ -21,3 +21,17 @@ exports.renderLoop = (hasRun, setup, renderer, draw) => {
 	module.exports.update3D(renderer, draw);
 	image(renderer, 0, 0, width, height);
 }
+
+exports.makeDomElementWithId = (type, text, id, className, destParent, boolean) => {
+	let element = document.createElement(type);
+	let displayText = document.createTextNode(text);
+	element.appendChild(displayText);
+
+	for (let i = 0; i < className.length; i++){
+		element.classList.add(className[i]);
+	}
+	
+	element.id = id;
+	element.disabled = boolean;
+	document.querySelector(destParent).appendChild(element);
+}

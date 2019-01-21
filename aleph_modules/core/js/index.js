@@ -62,6 +62,24 @@ midiDeviceButtons.addEventListener("click", function(e) {
 	}	
 });
 
+// AUDIO CONTROLS MIDI MAPPING STUFF
+
+// @TODO async/await
+// delay to wait for dom elements to exist
+setTimeout(() => {
+	let audioCtrlsMapBtns = document.querySelectorAll(".audioCtrlsMapBtn");
+	console.log(audioCtrlsMapBtns);
+
+	audioCtrlsMapBtns.forEach((button) => {
+		button.addEventListener("click", () => {
+			console.log(`clicked ${button.id}`);
+			console.log(`button's parent knob: ${button.parentElement.id}`);
+			ipc.send("audioCtrlMapBtnPressed", button.parentElement.id);
+		}); 
+	});
+
+}, 125);
+
 // MIDI MAPPING STUFF
 
 const addMidiMap = document.querySelector("#addMidiMap");
