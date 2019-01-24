@@ -161,17 +161,15 @@ function importer(folder){
 }
 
 function smoother(volume, leftVol, rightVol, easing){
-	let scaler = 0.1; // investigate this black magic
-
-	let target = volume * scaler;
+	let target = volume;
 	let diff = target - volEased;
 	volEased += diff * easing;
 
-	let targetL = leftVol * scaler;
+	let targetL = leftVol;
 	let diffL = targetL - leftVolEased;
 	leftVolEased += diffL * easing;
 
-	let targetR = rightVol * scaler;
+	let targetR = rightVol;
 	let diffR = targetR - rightVolEased;
 	rightVolEased += diffR * easing;
 }
