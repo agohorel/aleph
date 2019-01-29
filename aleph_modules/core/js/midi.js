@@ -41,9 +41,18 @@ ipc.on("removeMidiMapping", (event, arg) => {
 });
 
 ipc.on("saveMidi", (event) => {
-	fs.writeFile(path.join(mappingsPath, "midiMappings.json"), JSON.stringify(midiMappings, null, 2), (err) => {
+	// attach audioCtrlMappings to main mappings array
+	audioCtrlMappings.forEach((audioCtrlMapping) => {
+		midiMappings.push(audioCtrlMapping);
+	});
+
+	// remove duplicates if overwriting a file
+	let uniques = [...new Set(midiMappings)];
+
+	fs.writeFile(path.join(mappingsPath, "midiMappings.json"), JSON.stringify(uniques, null, 2), (err) => {
 		if (err) throw err;
 	});
+
 	ipc.send("midiSaved");
 });
 
@@ -116,7 +125,7 @@ function setMidiMapping(object, array, controlNum, note, param, mapMode) {
 	for (let i = 0; i < array.length; i++){
 		// look for matching controlNum/name property
 		if (array[i].name === controlNum){
-			console.log(`${controlNum} found a match at index ${i}: ${array[i].name}`);
+			// console.log(`${controlNum} found a match at index ${i}: ${array[i].name}`);
 			// remove matching item (duplicate)
 			array.splice(i, 1);
 		}
