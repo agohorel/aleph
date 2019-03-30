@@ -25,6 +25,7 @@ let audioCtrlMap = {};
 let audioCtrlMappings = [];
 let controlNum = null;
 let audioCtrlNum = null;
+let midiMappingHasBeenLoaded = false;
 let mapModeStatuses = {
 	default: false,
 	audioCtrls: false
@@ -55,9 +56,16 @@ ipc.on("saveMidi", (event) => {
 	});
 
 	ipc.send("midiSaved");
+	midiMappingHasBeenLoaded = true;
 });
 
 ipc.on("loadMidi", (event) => {
+	// if midi has already been loaded, make sure to empty out the controls arrays before reloading the midi mappings file.
+	if (midiMappingHasBeenLoaded){
+		midiMappings = [];
+		audioCtrlMappings = [];
+	}
+
 	fs.readFile(path.join(mappingsPath, "midiMappings.json"), "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
@@ -73,11 +81,12 @@ ipc.on("loadMidi", (event) => {
 			}
 		}
 	});
-	
+
 	// note: no need to export audioCtrlMappings because they don't come into play w/ actually writing sketches.
-	// the main process will handing routing the audioCtrls to the p5_handler file.
+	// the main process will handle routing the audioCtrls to the p5_handler file.
 	module.exports.controls = midiMappings;
 	ipc.send("midiLoaded");
+	midiMappingHasBeenLoaded = true;
 });
 
 ipc.on("audioCtrlMapBtnPressed", (event, args) => {
