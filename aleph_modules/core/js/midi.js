@@ -41,7 +41,8 @@ ipc.on("removeMidiMapping", (event, arg) => {
 });
 
 ipc.on("saveMidi", (event) => {
-	// attach audioCtrlMappings to main mappings array
+	// consolidate midiMappings and audioCtrlsMappings arrays into single array for easy saving.
+	// we'll parse them out upon loading the midi controls by the "name" property on each individual control object.
 	audioCtrlMappings.forEach((audioCtrlMapping) => {
 		midiMappings.push(audioCtrlMapping);
 	});
@@ -60,14 +61,22 @@ ipc.on("loadMidi", (event) => {
 	fs.readFile(path.join(mappingsPath, "midiMappings.json"), "utf-8", (err, data) => {
 		if (err) throw err;
 		let obj = JSON.parse(data);
-	
+			
+		// loop through entire mappings object
 		for (let i = 0; i < obj.length; i++){
-			midiMappings.push(obj[i]);
+			// check if we're dealing w/ the "default" midi controls, or the "audioCtrls" (i.e. the UI knobs)
+			if (obj[i].name.indexOf("controller") > -1){
+				midiMappings.push(obj[i]);
+			}
+			else if (obj[i].name.indexOf("knob") > -1){
+				audioCtrlMappings.push(obj[i]);
+			}
 		}
 	});
 	
+	// note: no need to export audioCtrlMappings because they don't come into play w/ actually writing sketches.
+	// the main process will handing routing the audioCtrls to the p5_handler file.
 	module.exports.controls = midiMappings;
-	console.log(midiMappings);
 	ipc.send("midiLoaded");
 });
 

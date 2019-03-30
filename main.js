@@ -120,14 +120,14 @@ ipcMain.on("midiSaved", (event) => {
 	editorWindow.webContents.send("midiSaved");
 });
 
-ipcMain.on("knobChanged", (event, args) => {
-	displayWindow.webContents.send("knobChanged", args);
-});
-
 ipcMain.on("audioCtrlMapBtnPressed", (event, args) => {
 	displayWindow.webContents.send("audioCtrlMapBtnPressed", args);
 });
 
 ipcMain.on("audioCtrlChanged", (event, args) => {
 	editorWindow.webContents.send("audioCtrlChanged", args);
+});
+
+ipcMain.on("knobChanged", (event, args) => {
+	displayWindow.webContents.send("knobChanged", args);
 });
