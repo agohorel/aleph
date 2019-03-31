@@ -42,6 +42,11 @@ sketchSelectorButtons.addEventListener("click", function(e) {
 	}
 });
 
+ipc.on("sketchChanged", (event, args) => {
+	let selectedSketchBtn = document.getElementById(args);
+	highlightSelectedItem(".sketchSelectButton", selectedSketchBtn);
+});
+
 const new2DSketch = document.querySelector("#new2DSketch");
 const new3DSketch = document.querySelector("#new3DSketch");
 

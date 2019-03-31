@@ -63,7 +63,7 @@ function draw() {
 	checkSketchMidiControls(midi.sketchCtrl);
 	
 	analyzeAudio();
-	
+
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(path.resolve(__dirname, "../../sketches/", moduleName));
@@ -81,6 +81,7 @@ function checkSketchMidiControls(controlsArray){
 		// if a button belonging to the sketchCtrl array has been pressed, set the currently running sketch
 		if (controlsArray[i].value > 0){
 			moduleName = controlsArray[i].name;
+			ipc.send("sketchChanged", controlsArray[i].name);
 		}
 	}
 }

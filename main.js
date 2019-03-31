@@ -135,3 +135,7 @@ ipcMain.on("knobChanged", (event, args) => {
 ipcMain.on("sketchMidiMapActive", (event, args) => {
 	displayWindow.webContents.send("sketchMidiMapActive", args);
 });
+
+ipcMain.on("sketchChanged", (event, args) => {
+	editorWindow.webContents.send("sketchChanged", args);
+});
