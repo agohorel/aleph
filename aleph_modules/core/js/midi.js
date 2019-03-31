@@ -50,10 +50,14 @@ ipc.on("removeMidiMapping", (event, arg) => {
 });
 
 ipc.on("saveMidi", (event) => {
-	// consolidate midiMappings and audioCtrlsMappings arrays into single array for easy saving.
+	// consolidate all mapping arrays into single array for easy saving.
 	// we'll parse them out upon loading the midi controls by the "name" property on each individual control object.
-	audioCtrlMappings.forEach((audioCtrlMapping) => {
-		midiMappings.push(audioCtrlMapping);
+	audioCtrlMappings.forEach((audioCtrlMap) => {
+		midiMappings.push(audioCtrlMap);
+	});
+
+	sketchCtrlMappings.forEach((sketchCtrlMap) => {
+		midiMappings.push(sketchCtrlMap);
 	});
 
 	// remove duplicates if overwriting a file
@@ -68,10 +72,11 @@ ipc.on("saveMidi", (event) => {
 });
 
 ipc.on("loadMidi", (event) => {
-	// if midi has already been loaded, make sure to empty out the controls arrays before reloading the midi mappings file.
+	// if midi has already been loaded, empty out the controls arrays before reloading the midi mappings file.
 	if (midiMappingHasBeenLoaded){
 		midiMappings = [];
 		audioCtrlMappings = [];
+		sketchCtrlMappings = [];
 	}
 
 	fs.readFile(path.join(mappingsPath, "midiMappings.json"), "utf-8", (err, data) => {
@@ -86,6 +91,9 @@ ipc.on("loadMidi", (event) => {
 			}
 			else if (obj[i].name.indexOf("knob") > -1){
 				audioCtrlMappings.push(obj[i]);
+			}
+			else {
+				sketchCtrlMappings.push(obj[i]);
 			}
 		}
 	});
