@@ -60,10 +60,10 @@ function setup() {
 }
 
 function draw() {	
-	analyzeAudio();
-
 	checkSketchMidiControls(midi.sketchCtrl);
-
+	
+	analyzeAudio();
+	
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(path.resolve(__dirname, "../../sketches/", moduleName));
