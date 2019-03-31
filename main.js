@@ -131,3 +131,7 @@ ipcMain.on("audioCtrlChanged", (event, args) => {
 ipcMain.on("knobChanged", (event, args) => {
 	displayWindow.webContents.send("knobChanged", args);
 });
+
+ipcMain.on("sketchMidiMapActive", (event, args) => {
+	displayWindow.webContents.send("sketchMidiMapActive", args);
+});

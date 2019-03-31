@@ -9,6 +9,7 @@ let mappingsPath = path.resolve(__dirname, "../../mappings");
 
 // initial export of default values
 module.exports.controls = {};
+module.exports.sketchCtrl = {};
 
 // receive selected midi device from main process. assign device & listen for input.
 ipc.on("selectMidiDevice", (event, arg) => {
@@ -21,14 +22,21 @@ ipc.on("selectMidiDevice", (event, arg) => {
 
 let midiMap = {};
 let midiMappings = [];
+let controlNum = null;
+
 let audioCtrlMap = {};
 let audioCtrlMappings = [];
-let controlNum = null;
 let audioCtrlNum = null;
+
+let sketchCtrlMap = {};
+let sketchCtrlMappings = [];
+let sketchCtrlName;
+
 let midiMappingHasBeenLoaded = false;
 let mapModeStatuses = {
 	default: false,
-	audioCtrls: false
+	audioCtrls: false,
+	sketchCtrls: false
 };
 
 // receive trigger from main process to create new properties in the midiMap object
@@ -94,6 +102,11 @@ ipc.on("audioCtrlMapBtnPressed", (event, args) => {
 	mapModeStatuses.audioCtrls = true;
 });
 
+ipc.on("sketchMidiMapActive", (event, args) => {
+	sketchCtrlName = args;
+	mapModeStatuses.sketchCtrls = true;
+});
+
 function pressedButton() {
 	// listen for button presses
 	midiDevice.on('noteon', (msg) => {
@@ -101,32 +114,41 @@ function pressedButton() {
 		if (mapModeStatuses.default){
 			setMidiMapping(midiMap, midiMappings, controlNum, msg.note, msg.velocity, "default");
 		}
+		// set button mappings if sketchCtrls mapMode is active
+		else if (mapModeStatuses.sketchCtrls && !mapModeStatuses.default && !mapModeStatuses.audioCtrls) {
+			setMidiMapping(sketchCtrlMap, sketchCtrlMappings, sketchCtrlName, msg.note, msg.velocity, "sketchCtrls");
+		}
 		// otherwise update the matching entry in midiMap
 		else {
+			// @TODO only update when necessary
 			updateMidi(midiMap, midiMappings, msg.note, msg.velocity);
+			updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity);
 		}
 
 		// re-export new values on update
 		module.exports.controls = midiMappings;
+		module.exports.sketchCtrl = sketchCtrlMappings;
 	});
 }
 
 function releasedButton() {
 	midiDevice.on('noteoff', (msg) => {
-		updateMidi(midiMap, midiMappings, msg.note, msg.velocity);		
+		// @TODO only update when necessary
+		updateMidi(midiMap, midiMappings, msg.note, msg.velocity);	
+		updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity);	
 		module.exports.controls = midiMappings;
+		module.exports.sketchCtrl = sketchCtrlMappings;
 	});
 }
 
 function ccChange() {
 	midiDevice.on("cc", (msg) => {		
-		if (mapModeStatuses.default === true && mapModeStatuses.audioCtrls === false){
+		if (mapModeStatuses.default && !mapModeStatuses.audioCtrls && !mapModeStatuses.sketchCtrls){
 			setMidiMapping(midiMap, midiMappings, controlNum, msg.controller, msg.value, "default");
 		}
-		// if audioCtrlMapMode is on, send the pressed button's value back to the main process
-		else if (mapModeStatuses.audioCtrls && mapModeStatuses.default === false) {
+		else if (mapModeStatuses.audioCtrls && !mapModeStatuses.default && !mapModeStatuses.sketchCtrls) {
 			setMidiMapping(audioCtrlMap, audioCtrlMappings, audioCtrlNum, msg.controller, msg.value, "audioCtrls");
-		} 
+		}
 		else {
 			updateMidi(midiMap, midiMappings, msg.controller, msg.value);
 			// @TODO only update and ipc send audioCtrlMappings when necessary

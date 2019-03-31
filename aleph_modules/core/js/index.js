@@ -8,6 +8,8 @@ const fs = require("fs");
 const assetsPath = path.resolve(__dirname, "../../assets/");
 const sketchesPath = path.resolve(__dirname, "../../sketches/");
 
+let sketchSelectModeActive = true;
+
 // SKETCH SELECTION STUFF
 
 const sketchSelectButtons = document.querySelector("#sketchSelectorButtons");
@@ -27,7 +29,16 @@ fs.readdir(sketchesPath, (err, files) => {
 sketchSelectorButtons.addEventListener("click", function(e) {
 	if (e.target.className.includes("sketchSelectButton")){
 		highlightSelectedItem(".sketchSelectButton", e.target);
-		ipc.send("changeSketch", e.target.id);
+		// only send ipc call to switch p5 sketch if mapping mode is not active
+		if (sketchSelectModeActive) {
+			ipc.send("changeSketch", e.target.id);
+		} 
+		// otherwise forward selected sketches name to main process
+		else {
+			ipc.send("sketchMidiMapActive", e.target.id);
+			// reset sketchSelectModeActive back to default 
+			sketchSelectModeActive = true;
+		}
 	}
 });
 
@@ -149,6 +160,13 @@ ipc.on("midiLoaded", (event) => {
 	}, 250);
 });
 
+// map sketches to midi 
+const sketchMidiMapBtn = document.getElementById("sketchMidiMapBtn");
+let sketchName;
+
+sketchMidiMapBtn.addEventListener("click", () => {
+	sketchSelectModeActive = false;
+});
 
 // DISPLAY SETTINGS STUFF
 
