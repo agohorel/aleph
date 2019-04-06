@@ -105,7 +105,7 @@ ipcMain.on("applyDisplaySettings", (event, args) => {
 });
 
 ipcMain.on("saveMidi", (event) => {
-	sendToDisplayWindow("loadMidi");
+	sendToDisplayWindow("saveMidi");
 });
 
 ipcMain.on("loadMidi", (event) => {
