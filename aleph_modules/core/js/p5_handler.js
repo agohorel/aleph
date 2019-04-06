@@ -38,7 +38,7 @@ function preload() {
 }
 
 function setAA(aa){
-	if (aa > 0) {smooth();} else {noSmooth()}
+	aa > 0 ? smooth() : noSmooth();
 }
 
 function setup() {
@@ -74,7 +74,7 @@ function draw() {
 			console.error(err);
 		}
 	}
-}
+} 
 
 function checkSketchMidiControls(controlsArray){
 	for (let i = 0; i < controlsArray.length; i++){
@@ -219,8 +219,7 @@ function importShaders(array){
 
 function scanSketches(callback){
 	fs.readdir(sketchesPath, (err, sketches) => {
-		if (err) { console.log(err) }
-		else { callback(sketches); }
+		err ? console.log(err) : callback(sketches);
 	});
 }
 
