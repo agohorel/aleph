@@ -15,7 +15,7 @@ function createWindow() {
 	splash = new BrowserWindow({width: 512, height: 512, transparent: true, frame: false});
 	splash.loadFile("./aleph_modules/core/html/splash.html");
 
-	// artificial timeout to show splash screen 
+	// timeout editorWindow load to show splash screen 
 	setTimeout(() => {
 		// get system resolution
 	 	const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -68,23 +68,23 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on("changeSketch", (event, args) => {
-	displayWindow.webContents.send("sketchSelector", args);
+	sendToDisplayWindow("sketchSelector", args);
 });
 
 ipcMain.on("listMidi", (event, args) => {
-	editorWindow.webContents.send("displayMidi", args);
+	sendToEditorWindow("displayMidi", args);
 });
 
 ipcMain.on("selectMidiDevice", (event, args) => {
-	displayWindow.webContents.send("selectMidiDevice", args);
+	sendToDisplayWindow("selectMidiDevice", args);
 });
 
 ipcMain.on("addMidiMapping", (event, args) => {
-	displayWindow.webContents.send("addMidiMapping", args);
+	sendToDisplayWindow("addMidiMapping", args);
 });
 
 ipcMain.on("removeMidiMapping", (event, args) => {
-	displayWindow.webContents.send("removeMidiMapping", args);
+	sendToDisplayWindow("removeMidiMapping", args);
 });
 
 ipcMain.on("applyDisplaySettings", (event, args) => {
@@ -105,37 +105,51 @@ ipcMain.on("applyDisplaySettings", (event, args) => {
 });
 
 ipcMain.on("saveMidi", (event) => {
-	displayWindow.webContents.send("saveMidi");
+	sendToDisplayWindow("loadMidi");
 });
 
 ipcMain.on("loadMidi", (event) => {
-	displayWindow.webContents.send("loadMidi");
+	sendToDisplayWindow("loadMidi");
 });
 
 ipcMain.on("midiLoaded", (event) => {
-	editorWindow.webContents.send("midiLoaded");
+	sendToEditorWindow("midiLoaded");
 });
 
 ipcMain.on("midiSaved", (event) => {
-	editorWindow.webContents.send("midiSaved");
+	sendToEditorWindow("midiSaved");
 });
 
 ipcMain.on("audioCtrlMapBtnPressed", (event, args) => {
-	displayWindow.webContents.send("audioCtrlMapBtnPressed", args);
+	sendToDisplayWindow("audioCtrlMapBtnPressed", args);
 });
 
 ipcMain.on("audioCtrlChanged", (event, args) => {
-	editorWindow.webContents.send("audioCtrlChanged", args);
+	sendToEditorWindow("audioCtrlChanged", args);
 });
 
 ipcMain.on("knobChanged", (event, args) => {
-	displayWindow.webContents.send("knobChanged", args);
+	sendToDisplayWindow("knobChanged", args);
 });
 
 ipcMain.on("sketchMidiMapActive", (event, args) => {
-	displayWindow.webContents.send("sketchMidiMapActive", args);
+	sendToDisplayWindow("sketchMidiMapActive", args);
 });
 
 ipcMain.on("sketchChanged", (event, args) => {
-	editorWindow.webContents.send("sketchChanged", args);
+	sendToEditorWindow("sketchChanged", args);
 });
+
+function sendToEditorWindow(channel, args){
+	// check if editorWindow exists before making IPC calls
+	if (editorWindow){
+		editorWindow.webContents.send(channel, args);
+	}
+}
+
+function sendToDisplayWindow(channel, args) {
+	// check if editorWindow exists before making IPC calls
+	if (displayWindow) {
+		displayWindow.webContents.send(channel, args);
+	}
+}
