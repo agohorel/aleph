@@ -23,7 +23,7 @@ function createWindow() {
 			width, 
 			height, 
 			show: false, 
-			icon: "./aleph_modules/assets/icons/png/64x64.png"});
+			icon: setIconByOS()});
 		editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
 
 		// show window only when file has loaded to prevent flash
@@ -94,7 +94,7 @@ ipcMain.on("removeMidiMapping", (event, args) => {
 ipcMain.on("applyDisplaySettings", (event, args) => {
 	displayWindow = new BrowserWindow({width: args[0], 
 									   height: args[1],
-									   icon: "./aleph_modules/assets/icons/win/logo.ico"});
+									   icon: setIconByOS()});
 	displayWindow.setMenu(null);
 	
 	// TODO: make this a promise 
@@ -155,5 +155,17 @@ function sendToDisplayWindow(channel, args) {
 	// check if editorWindow exists before making IPC calls
 	if (displayWindow) {
 		displayWindow.webContents.send(channel, args);
+	}
+}
+
+function setIconByOS(){
+	if (process.platform === "darwin"){
+		return "./aleph_modules/assets/icons/mac/logo.icns"
+	}
+	else if (process.platform === "linux"){
+		return "./aleph_modules/assets/icons/png/64x64.ico"
+	}
+	else if (process.platform === "win32"){
+		return "./aleph_modules/assets/icons/win/logo.ico";
 	}
 }
