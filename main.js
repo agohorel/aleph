@@ -28,6 +28,10 @@ function createWindow() {
 
 		// show window only when file has loaded to prevent flash
 		editorWindow.once("ready-to-show", () => {
+			splash.on("closed", () => {
+				splash = null;
+			});
+
 			splash.destroy();
 
 			// check OS and use maximize or show
