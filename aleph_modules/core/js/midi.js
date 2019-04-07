@@ -5,6 +5,8 @@ const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
 
 let midiDevices = [];
+// separate array to track which devices has already been assigned an easymidi object
+let mappedDevices = [];
 let mappingsPath = path.resolve(__dirname, "../../mappings");
 
 // initial export of default values
@@ -14,10 +16,16 @@ module.exports.sketchCtrl = {};
 // receive selected midi device from main process. assign device & listen for input.
 ipc.on("selectMidiDevice", (event, arg) => {
 	let selectedMidiDevice = arg;
-	midiDevices.push(new easymidi.Input(selectedMidiDevice));
-	pressedButton(midiDevices[midiDevices.length-1], selectedMidiDevice);
-	releasedButton(midiDevices[midiDevices.length-1], selectedMidiDevice);
-	ccChange(midiDevices[midiDevices.length-1], selectedMidiDevice);
+	// check if selected device is new so we don't spawn multiple easymidi instances per device
+	if (mappedDevices.indexOf(selectedMidiDevice) < 0){
+		midiDevices.push(new easymidi.Input(selectedMidiDevice));
+		midiDevices[midiDevices.length - 1].deviceName = arg;
+		// push the name of the midi device associated w/ newly created easymidi object to prevent overwrites
+		mappedDevices.push(selectedMidiDevice);
+		pressedButton(midiDevices[midiDevices.length - 1], selectedMidiDevice);
+		releasedButton(midiDevices[midiDevices.length - 1], selectedMidiDevice);
+		ccChange(midiDevices[midiDevices.length - 1], selectedMidiDevice);
+	}
 });
 
 let midiMap = {};
