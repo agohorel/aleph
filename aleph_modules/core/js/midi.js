@@ -4,7 +4,7 @@ const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
 
-let midiDevice;
+let midiDevices = [];
 let mappingsPath = path.resolve(__dirname, "../../mappings");
 
 // initial export of default values
@@ -13,16 +13,16 @@ module.exports.sketchCtrl = {};
 
 // receive selected midi device from main process. assign device & listen for input.
 ipc.on("selectMidiDevice", (event, arg) => {
-	selectedMidiDevice = arg;
-	midiDevice = new easymidi.Input(selectedMidiDevice);
-	pressedButton();
-	releasedButton();
-	ccChange();
+	let selectedMidiDevice = arg;
+	midiDevices.push(new easymidi.Input(selectedMidiDevice));
+	pressedButton(midiDevices[midiDevices.length-1], selectedMidiDevice);
+	releasedButton(midiDevices[midiDevices.length-1], selectedMidiDevice);
+	ccChange(midiDevices[midiDevices.length-1], selectedMidiDevice);
 });
 
 let midiMap = {};
 let midiMappings = [];
-let controlNum = null;
+let controlID = null;
 
 let audioCtrlMap = {};
 let audioCtrlMappings = [];
@@ -41,7 +41,7 @@ let mapModeStatuses = {
 
 // receive trigger from main process to create new properties in the midiMap object
 ipc.on("addMidiMapping", (event, arg) => {
-	controlNum = arg;
+	controlID = arg;
 	mapModeStatuses.default = true;
 });
 
@@ -115,22 +115,23 @@ ipc.on("sketchMidiMapActive", (event, args) => {
 	mapModeStatuses.sketchCtrls = true;
 });
 
-function pressedButton() {
+function pressedButton(device, deviceName) {
 	// listen for button presses
-	midiDevice.on('noteon', (msg) => {
+	device.on('noteon', (msg) => {
+		console.log(msg);
 		// if mapMode is on, assign the pressed button to midiMap
 		if (mapModeStatuses.default){
-			setMidiMapping(midiMap, midiMappings, controlNum, msg.note, msg.velocity, "default");
+			setMidiMapping(midiMap, midiMappings, controlID, msg.note, msg.velocity, "default", deviceName);
 		}
 		// set button mappings if sketchCtrls mapMode is active
 		else if (mapModeStatuses.sketchCtrls && !mapModeStatuses.default && !mapModeStatuses.audioCtrls) {
-			setMidiMapping(sketchCtrlMap, sketchCtrlMappings, sketchCtrlName, msg.note, msg.velocity, "sketchCtrls");
+			setMidiMapping(sketchCtrlMap, sketchCtrlMappings, sketchCtrlName, msg.note, msg.velocity, "sketchCtrls", deviceName);
 		}
 		// otherwise update the matching entry in midiMap
 		else {
 			// @TODO only update when necessary
-			updateMidi(midiMap, midiMappings, msg.note, msg.velocity);
-			updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity);
+			updateMidi(midiMap, midiMappings, msg.note, msg.velocity, deviceName);
+			updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity, deviceName);
 		}
 
 		// re-export new values on update
@@ -139,28 +140,29 @@ function pressedButton() {
 	});
 }
 
-function releasedButton() {
-	midiDevice.on('noteoff', (msg) => {
-		// @TODO only update when necessary
-		updateMidi(midiMap, midiMappings, msg.note, msg.velocity);	
-		updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity);	
+function releasedButton(device, deviceName) {
+	device.on('noteoff', (msg) => {
+		// @TODO: 
+		// only update/export when necessary
+		updateMidi(midiMap, midiMappings, msg.note, msg.velocity, deviceName);	
+		updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity, deviceName);	
 		module.exports.controls = midiMappings;
 		module.exports.sketchCtrl = sketchCtrlMappings;
 	});
 }
 
-function ccChange() {
-	midiDevice.on("cc", (msg) => {		
+function ccChange(device, deviceName) {
+	device.on("cc", (msg) => {		
 		if (mapModeStatuses.default && !mapModeStatuses.audioCtrls && !mapModeStatuses.sketchCtrls){
-			setMidiMapping(midiMap, midiMappings, controlNum, msg.controller, msg.value, "default");
+			setMidiMapping(midiMap, midiMappings, controlID, msg.controller, msg.value, "default", deviceName);
 		}
 		else if (mapModeStatuses.audioCtrls && !mapModeStatuses.default && !mapModeStatuses.sketchCtrls) {
-			setMidiMapping(audioCtrlMap, audioCtrlMappings, audioCtrlNum, msg.controller, msg.value, "audioCtrls");
+			setMidiMapping(audioCtrlMap, audioCtrlMappings, audioCtrlNum, msg.controller, msg.value, "audioCtrls", deviceName);
 		}
 		else {
-			updateMidi(midiMap, midiMappings, msg.controller, msg.value);
+			updateMidi(midiMap, midiMappings, msg.controller, msg.value, deviceName);
 			// @TODO only update and ipc send audioCtrlMappings when necessary
-			updateMidi(audioCtrlMap, audioCtrlMappings, msg.controller, msg.value);
+			updateMidi(audioCtrlMap, audioCtrlMappings, msg.controller, msg.value, deviceName);
 			ipc.send("audioCtrlChanged", audioCtrlMappings);
 		}
 
@@ -168,12 +170,10 @@ function ccChange() {
 	});
 }
 
-function setMidiMapping(object, array, controlNum, note, param, mapMode) {
-	// loop through controls array
+function setMidiMapping(object, array, controlID, note, param, mapMode, deviceName) {
 	for (let i = 0; i < array.length; i++){
-		// look for matching controlNum/name property
-		if (array[i].name === controlNum){
-			// console.log(`${controlNum} found a match at index ${i}: ${array[i].name}`);
+		// look for matching controlID/name property
+		if (array[i].name === controlID){
 			// remove matching item (duplicate)
 			array.splice(i, 1);
 		}
@@ -181,13 +181,14 @@ function setMidiMapping(object, array, controlNum, note, param, mapMode) {
 
 	object[note] = {};
 	object[note].note = note;
-	object[note].name = controlNum;
+	object[note].name = controlID;
 	object[note].value = param;
+	object[note].deviceName = deviceName;
 	mapModeStatuses[mapMode] = false; 
 
 	array.push(object[note]);
 
-	// sort array by controlNum to ensure correct order
+	// sort array by controlID to ensure correct order
 	array.sort((a, b) => {
 		let textA = a.name.toUpperCase();
 		let textB = b.name.toUpperCase();
@@ -196,10 +197,14 @@ function setMidiMapping(object, array, controlNum, note, param, mapMode) {
 	console.log(array);
 }
 
-function updateMidi(object, array, note, param){ 
+function updateMidi(object, array, note, param, deviceName){ 
 	for (let i = 0; i < array.length; i++){
-		// only update if there's a corresponding property to update
-		if (array[i].note === note)
-			array[i].value = param;
+		// check which device the signal is coming from
+		if (array[i].deviceName === deviceName){
+			// only update if there's a corresponding property to update already
+			if (array[i].note === note){
+				array[i].value = param;
+			}
 		}
+	}
 }
