@@ -1,6 +1,7 @@
 const electron = require("electron");
 const {app, BrowserWindow, ipcMain, globalShortcut} = electron;
 const electronDebug = require("electron-debug");
+const path = require("path");
 
 electronDebug({
 	enabled: true,
@@ -160,12 +161,15 @@ function sendToDisplayWindow(channel, args) {
 
 function setIconByOS(){
 	if (process.platform === "darwin"){
-		return "./aleph_modules/assets/icons/mac/logo.icns"
+		console.log("detected mac host");
+		return path.join(__dirname, "aleph_modules/assets/icons/mac/logo.icns");
 	}
 	else if (process.platform === "linux"){
-		return "./aleph_modules/assets/icons/png/64x64.ico"
+		console.log("detected linux host");
+		return path.join(__dirname, "aleph_modules/assets/icons/png/64x64.png")
 	}
 	else if (process.platform === "win32"){
-		return "./aleph_modules/assets/icons/win/logo.ico";
+		console.log("detected windows host");
+		return path.join(__dirname, "aleph_modules/assets/icons/win/logo.ico");
 	}
 }
