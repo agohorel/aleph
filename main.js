@@ -145,6 +145,10 @@ ipcMain.on("sketchChanged", (event, args) => {
 	sendToEditorWindow("sketchChanged", args);
 });
 
+ipcMain.on("forceMomentary", (event, args) => {
+	sendToDisplayWindow("forceMomentary", args);
+});
+
 function sendToEditorWindow(channel, args){
 	// check if editorWindow exists before making IPC calls
 	if (editorWindow){

@@ -98,6 +98,7 @@ const lockMidi = document.querySelector("#lockMidiMap");
 const midiMappingButtons = document.querySelector("#midiMapIcons");
 const saveMidi = document.querySelector("#saveMidi");
 const loadMidi = document.querySelector("#loadMidi");
+const forceMomentary = document.getElementById("forceMomentary");
 let controlCount = -1;
 
 // create new midi control mappings
@@ -165,6 +166,19 @@ ipc.on("midiLoaded", (event) => {
 	}, 250);
 });
 
+forceMomentaryEnabled = false;
+
+forceMomentary.addEventListener("click", () => {
+	if (forceMomentaryEnabled){
+		forceMomentary.innerText = "Force Momentary: Off";
+		ipc.send("forceMomentary", false);
+	} else {
+		forceMomentary.innerText = "Force Momentary: On";
+		ipc.send("forceMomentary", true);
+	}
+	forceMomentaryEnabled = !forceMomentaryEnabled;
+});
+
 // map sketches to midi 
 const sketchMidiMapBtn = document.getElementById("sketchMidiMapBtn");
 let sketchName;
@@ -198,6 +212,7 @@ applyDisplaySettings.addEventListener("click", function(e){
 	let saveBtn = document.querySelector("#saveMidi");
 	let loadBtn = document.querySelector("#loadMidi");
 	let audioParamWrapper = document.querySelector("#wrapper");
+	let forceMomentaryBtn = document.getElementById("forceMomentary");
 
 	sketchBtns.forEach((btn) => { btn.disabled = false; });
 	midiBtns.forEach((btn) => { btn.disabled = false; });
@@ -206,6 +221,7 @@ applyDisplaySettings.addEventListener("click", function(e){
 	lockMappingBtn.disabled = false;
 	saveBtn.disabled = false;
 	loadBtn.disabled = false;
+	forceMomentaryBtn.disabled = false;
 	audioParamWrapper.style.pointerEvents = "all";
 
 	ipc.send("applyDisplaySettings", displayParams);

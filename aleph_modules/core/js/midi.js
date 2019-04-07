@@ -46,6 +46,7 @@ let mapModeStatuses = {
 	audioCtrls: false,
 	sketchCtrls: false
 };
+let forceMomentaryMode = false;
 
 // receive trigger from main process to create new properties in the midiMap object
 ipc.on("addMidiMapping", (event, arg) => {
@@ -123,6 +124,11 @@ ipc.on("sketchMidiMapActive", (event, args) => {
 	mapModeStatuses.sketchCtrls = true;
 });
 
+ipc.on("forceMomentary", (event, args) => {
+	forceMomentaryMode = args;
+	console.log(forceMomentaryMode);
+});
+
 function pressedButton(device, deviceName) {
 	// listen for button presses
 	device.on('noteon', (msg) => {
@@ -152,8 +158,14 @@ function releasedButton(device, deviceName) {
 	device.on('noteoff', (msg) => {
 		// @TODO: 
 		// only update/export when necessary
-		updateMidi(midiMap, midiMappings, msg.note, msg.velocity, deviceName);	
-		updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity, deviceName);	
+		if (forceMomentaryMode){
+			updateMidi(midiMap, midiMappings, msg.note, 0, deviceName);
+			updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, 0, deviceName);
+		} else {
+			updateMidi(midiMap, midiMappings, msg.note, msg.velocity, deviceName);
+			updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity, deviceName);
+		}
+	
 		module.exports.controls = midiMappings;
 		module.exports.sketchCtrl = sketchCtrlMappings;
 	});
