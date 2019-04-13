@@ -1,9 +1,7 @@
 const p5 = require("p5");
 const uiIpc = electron.ipcRenderer;
-const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let knobParams = {};
-
 const knobs = [
 	new gsuiSlider(),
 	new gsuiSlider(),
