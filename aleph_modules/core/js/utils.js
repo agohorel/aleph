@@ -114,6 +114,11 @@ exports.applyFiletypeFilter = (filetype) => {
 		filter.extensions = ["frag", "vert"];
 		return filter;
 	}
+	else if (filetype === "json"){
+		filter.name = "json";
+		filter.extensions = ["json"];
+		return filter;
+	}
 }
 
 exports.copySelectedFiles = (selectedFiles, destination) => {
@@ -165,4 +170,50 @@ exports.appendNewSketchBtn = (newSketch) => {
 	// if existing buttons are disabled, bool = true (btn is created in disabled state)
 	if (sketchBtn.disabled === true) { bool = true; } else { bool = false; }
 	utils.makeDomElement("BUTTON", newSketch, ["sketchSelectButton", "btn"], "#sketchSelectorButtons", bool);
+}
+
+exports.saveMidiDialog = (mappingsPath, array) => {
+	dialog.showSaveDialog({
+		defaultPath: mappingsPath,
+		title: "Save Mapping File As",
+		filters: [utils.applyFiletypeFilter("json")]
+	}, (filePath) => {
+		if (filePath === undefined) return;
+		let fileName = path.parse(filePath).base;
+		fs.writeFile(path.join(mappingsPath, fileName), JSON.stringify(array, null, 2), (err) => {
+			if (err) throw err;
+			// send msg to main process to trigger UI save indicator
+			ipc.send("midiSaved");
+		});
+	});
+}
+
+exports.loadMidiDialog = (mappingsPath, midiMappings, audioCtrlMappings, sketchCtrlMappings) => {
+	dialog.showOpenDialog({
+		defaultPath: mappingsPath,
+		filters: [utils.applyFiletypeFilter("json")],
+		properties: ["openFile"]
+	}, (filePath) => {
+		if (filePath === undefined) return;
+		
+		fs.readFile(filePath[0], "utf-8", (err, data) => {
+			if (err) throw err;
+			let obj = JSON.parse(data);
+			// loop through entire mappings object
+			for (let i = 0; i < obj.length; i++) {
+				// check if we're dealing w/ the "default" midi controls, or the "audioCtrls" (i.e. the UI knobs)
+				if (obj[i].name.indexOf("controller") > -1) {
+					midiMappings.push(obj[i]);
+				}
+				else if (obj[i].name.indexOf("knob") > -1) {
+					audioCtrlMappings.push(obj[i]);
+				}
+				else {
+					sketchCtrlMappings.push(obj[i]);
+				}
+			}
+		});
+		// send msg to main process to trigger UI save indicator
+		ipc.send("midiLoaded");
+	});
 }

@@ -133,10 +133,12 @@ ipcMain.on("loadMidi", (event) => {
 
 ipcMain.on("midiLoaded", (event) => {
 	sendToEditorWindow("midiLoaded");
+	sendToDisplayWindow("midiLoaded");
 });
 
 ipcMain.on("midiSaved", (event) => {
 	sendToEditorWindow("midiSaved");
+	sendToDisplayWindow("midiSaved");
 });
 
 ipcMain.on("audioCtrlMapBtnPressed", (event, args) => {

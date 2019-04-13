@@ -72,13 +72,13 @@ ipc.on("saveMidi", (event) => {
 	// remove duplicates if overwriting a file
 	let uniques = [...new Set(midiMappings)];
 
-	fs.writeFile(path.join(mappingsPath, "midiMappings.json"), JSON.stringify(uniques, null, 2), (err) => {
-		if (err) throw err;
-	});
-
-	ipc.send("midiSaved");
-	midiMappingHasBeenLoaded = true;
+	// open save dialog 
+	utils.saveMidiDialog(mappingsPath, uniques);
 });
+
+ipc.on("midiSaved", () => {
+	midiMappingHasBeenLoaded = true;
+})
 
 ipc.on("loadMidi", (event) => {
 	// if midi has already been loaded, empty out the controls arrays before reloading the midi mappings file.
@@ -88,31 +88,17 @@ ipc.on("loadMidi", (event) => {
 		sketchCtrlMappings = [];
 	}
 
-	fs.readFile(path.join(mappingsPath, "midiMappings.json"), "utf-8", (err, data) => {
-		if (err) throw err;
-		let obj = JSON.parse(data);
-			
-		// loop through entire mappings object
-		for (let i = 0; i < obj.length; i++){
-			// check if we're dealing w/ the "default" midi controls, or the "audioCtrls" (i.e. the UI knobs)
-			if (obj[i].name.indexOf("controller") > -1){
-				midiMappings.push(obj[i]);
-			}
-			else if (obj[i].name.indexOf("knob") > -1){
-				audioCtrlMappings.push(obj[i]);
-			}
-			else {
-				sketchCtrlMappings.push(obj[i]);
-			}
-		}
-	});
+	// open load dialog
+	utils.loadMidiDialog(mappingsPath, midiMappings, audioCtrlMappings, sketchCtrlMappings);
 
 	// note: no need to export audioCtrlMappings because they don't come into play w/ actually writing sketches.
 	// the main process will handle routing the audioCtrls to the p5_handler file.
 	module.exports.controls = midiMappings;
-	ipc.send("midiLoaded");
-	midiMappingHasBeenLoaded = true;
 });
+
+ipc.on("midiLoaded", () => {
+	midiMappingHasBeenLoaded = true;
+})
 
 ipc.on("audioCtrlMapBtnPressed", (event, args) => {
 	audioCtrlNum = args;

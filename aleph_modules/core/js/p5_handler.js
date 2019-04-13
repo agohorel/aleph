@@ -2,6 +2,7 @@
 
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
+const { dialog } = electron.remote;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
