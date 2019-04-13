@@ -1,5 +1,5 @@
 const electron = require("electron");
-const {app, BrowserWindow, ipcMain, globalShortcut} = electron;
+const {app, BrowserWindow, ipcMain, globalShortcut, dialog} = electron;
 const electronDebug = require("electron-debug");
 const path = require("path");
 
@@ -41,6 +41,20 @@ function createWindow() {
 			}
 
 			else {editorWindow.maximize();}
+		});
+
+		// show confirm dialog when attempting to close editorWindow
+		editorWindow.on("close", (e) => {
+			let choice = dialog.showMessageBox(editorWindow,
+				{
+					type: 'question',
+					buttons: ['Yes', 'No'],
+					title: 'Confirm',
+					message: 'Are you sure you want to quit?'
+				});
+			if (choice == 1) {
+				e.preventDefault();
+			}
 		});
 
 		// dereference windows on close
