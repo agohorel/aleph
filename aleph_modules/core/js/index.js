@@ -9,6 +9,126 @@ const assetsPath = path.resolve(__dirname, "../../assets/");
 const sketchesPath = path.resolve(__dirname, "../../sketches/");
 
 
+/////////////////////////
+// DISPLAY SETTINGS STUFF
+/////////////////////////
+
+const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
+const displayWidth = document.querySelector("#displayWindowWidth");
+const displayHeight = document.querySelector("#displayWindowHeight");
+const pixelDensity = document.querySelector("#pixelDensity");
+const antiAliasing = document.querySelector("#antiAliasing");
+
+// send display size params to main process & unlock p5 sketch & midi device select buttons
+applyDisplaySettings.addEventListener("click", function (e) {
+	// validate display settings
+	validateInputRanges(displayWidth);
+	validateInputRanges(displayHeight);
+	validateInputRanges(pixelDensity);
+	validateInputRanges(antiAliasing);
+
+	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), Number(pixelDensity.value), Number(antiAliasing.value)];
+	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
+	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
+	let addCtrlBtn = document.querySelector("#addMidiMap");
+	let removeCtrlBtn = document.querySelector("#removeMidiMap");
+	let lockMappingBtn = document.querySelector("#lockMidiMap");
+	let saveBtn = document.querySelector("#saveMidi");
+	let loadBtn = document.querySelector("#loadMidi");
+	let audioParamWrapper = document.querySelector("#wrapper");
+	let forceMomentaryBtn = document.getElementById("forceMomentary");
+
+	sketchBtns.forEach((btn) => { btn.disabled = false; });
+	midiBtns.forEach((btn) => { btn.disabled = false; });
+	addCtrlBtn.disabled = false;
+	removeCtrlBtn.disabled = false;
+	lockMappingBtn.disabled = false;
+	saveBtn.disabled = false;
+	loadBtn.disabled = false;
+	forceMomentaryBtn.disabled = false;
+	audioParamWrapper.style.pointerEvents = "all";
+
+	ipc.send("applyDisplaySettings", displayParams);
+});
+
+function validateInputRanges(elt) {
+	if (Number(elt.value) > Number(elt.max)) {
+		elt.value = elt.max;
+	}
+	if (Number(elt.value) < Number(elt.min)) {
+		elt.value = elt.min;
+	}
+}
+
+
+
+
+////////////////////////////////////
+// AUDIO CONTROLS MIDI MAPPING STUFF
+////////////////////////////////////
+
+window.onload = () => {
+	let audioCtrlsMapBtns = document.querySelectorAll(".audioCtrlsMapBtn");
+
+	audioCtrlsMapBtns.forEach((button) => {
+		button.addEventListener("click", () => {
+			ipc.send("audioCtrlMapBtnPressed", button.parentElement.id);
+		});
+	});
+}
+
+
+
+///////////////////////
+// ASSET IMPORTER STUFF
+///////////////////////
+
+const objBtn = document.querySelector("#objBtn");
+const texturesBtn = document.querySelector("#texturesBtn");
+const fontsBtn = document.querySelector("#fontsBtn");
+const shadersBtn = document.querySelector("#shadersBtn");
+
+objBtn.addEventListener("click", () => {
+	utils.importFileDialog("models");
+});
+
+texturesBtn.addEventListener("click", () => {
+	utils.importFileDialog("textures");
+});
+
+fontsBtn.addEventListener("click", () => {
+	utils.importFileDialog("fonts");
+});
+
+shadersBtn.addEventListener("click", () => {
+	utils.importFileDialog("shaders");
+});
+
+
+
+/////////////////////////
+// AVAILABLE ASSETS STUFF
+/////////////////////////
+
+const assetFolders = fs.readdirSync(assetsPath);
+const assetsDisplay = document.querySelector("#availableAssets");
+const listAssetsBtn = document.querySelector("#availableAssetsBtn");
+let listAssetsBool = false;
+utils.scanAssets(assetFolders, assetsDisplay);
+
+listAssetsBtn.addEventListener("click", () => {
+	if (listAssetsBool === false) {
+		assetsDisplay.style.display = "block";
+		listAssetsBtn.innerText = "Hide";
+		listAssetsBool = true;
+	} else {
+		assetsDisplay.style.display = "none";
+		listAssetsBtn.innerText = "Show";
+		listAssetsBool = false;
+	}
+});
+
+
 
 /////////////////////////
 // SKETCH SELECTION STUFF
@@ -82,22 +202,6 @@ midiDeviceButtons.addEventListener("click", function(e) {
 		ipc.send("selectMidiDevice", e.target.innerText);
 	}	
 });
-
-
-
-////////////////////////////////////
-// AUDIO CONTROLS MIDI MAPPING STUFF
-////////////////////////////////////
-
-window.onload = () => {
-	let audioCtrlsMapBtns = document.querySelectorAll(".audioCtrlsMapBtn");
-
-	audioCtrlsMapBtns.forEach((button) => {
-		button.addEventListener("click", () => {
-			ipc.send("audioCtrlMapBtnPressed", button.parentElement.id);
-		}); 
-	});
-}
 
 
 
@@ -197,107 +301,4 @@ const sketchMidiMapBtn = document.getElementById("sketchMidiMapBtn");
 
 sketchMidiMapBtn.addEventListener("click", () => {
 	sketchSelectModeActive = false;
-});
-
-
-
-/////////////////////////
-// DISPLAY SETTINGS STUFF
-/////////////////////////
-
-const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
-const displayWidth = document.querySelector("#displayWindowWidth");
-const displayHeight = document.querySelector("#displayWindowHeight");
-const pixelDensity = document.querySelector("#pixelDensity");
-const antiAliasing = document.querySelector("#antiAliasing");
-
-// send display size params to main process & unlock p5 sketch & midi device select buttons
-applyDisplaySettings.addEventListener("click", function(e){
-	// validate display settings
-	validateInputRanges(displayWidth);
-	validateInputRanges(displayHeight);	
-	validateInputRanges(pixelDensity);
-	validateInputRanges(antiAliasing);
-
-	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), Number(pixelDensity.value), Number(antiAliasing.value)];
-	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
-	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
-	let addCtrlBtn = document.querySelector("#addMidiMap");
-	let removeCtrlBtn = document.querySelector("#removeMidiMap");
-	let lockMappingBtn = document.querySelector("#lockMidiMap");
-	let saveBtn = document.querySelector("#saveMidi");
-	let loadBtn = document.querySelector("#loadMidi");
-	let audioParamWrapper = document.querySelector("#wrapper");
-	let forceMomentaryBtn = document.getElementById("forceMomentary");
-
-	sketchBtns.forEach((btn) => { btn.disabled = false; });
-	midiBtns.forEach((btn) => { btn.disabled = false; });
-	addCtrlBtn.disabled = false;
-	removeCtrlBtn.disabled = false;
-	lockMappingBtn.disabled = false;
-	saveBtn.disabled = false;
-	loadBtn.disabled = false;
-	forceMomentaryBtn.disabled = false;
-	audioParamWrapper.style.pointerEvents = "all";
-
-	ipc.send("applyDisplaySettings", displayParams);
-});
-
-function validateInputRanges(elt){
-	if (Number(elt.value) > Number(elt.max)){
-		elt.value = elt.max;
-	}
-	if (Number(elt.value) < Number(elt.min)) {
-		elt.value = elt.min;
-	}
-}
-
-
-///////////////////////
-// ASSET IMPORTER STUFF
-///////////////////////
-
-const objBtn = document.querySelector("#objBtn");
-const texturesBtn = document.querySelector("#texturesBtn");
-const fontsBtn = document.querySelector("#fontsBtn");
-const shadersBtn = document.querySelector("#shadersBtn");
-
-objBtn.addEventListener("click", () => {
-	utils.importFileDialog("models");
-});
-
-texturesBtn.addEventListener("click", () => {
-	utils.importFileDialog("textures");
-});
-
-fontsBtn.addEventListener("click", () => {
-	utils.importFileDialog("fonts");
-});
-
-shadersBtn.addEventListener("click", () => {
-	utils.importFileDialog("shaders");
-});
-
-
-
-/////////////////////////
-// AVAILABLE ASSETS STUFF
-/////////////////////////
-
-const assetFolders = fs.readdirSync(assetsPath);
-const assetsDisplay = document.querySelector("#availableAssets");
-const listAssetsBtn = document.querySelector("#availableAssetsBtn");
-let listAssetsBool = false;
-utils.scanAssets(assetFolders, assetsDisplay);
-
-listAssetsBtn.addEventListener("click", () => {
-	if (listAssetsBool === false){
-		assetsDisplay.style.display = "block";
-		listAssetsBtn.innerText = "Hide";
-		listAssetsBool = true;	
-	} else {
-		assetsDisplay.style.display = "none";
-		listAssetsBtn.innerText = "Show";
-		listAssetsBool = false;
-	}
 });
