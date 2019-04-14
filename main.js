@@ -25,6 +25,7 @@ function createWindow() {
 			height, 
 			show: false, 
 			icon: setIconByOS()});
+		require('./aleph_modules/core/js/menu.js');	
 		editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
 
 		// show window only when file has loaded to prevent flash
