@@ -1,6 +1,6 @@
 # a l e p h ![aleph logo](../aleph_modules/assets/icons/png/32x32.png)
 
-Aleph is a cross-platform, open source framework for developing and performing audio reactive visualizations. It is a desktop client built on [Electron](https://electronjs.org/) that uses [P5.js](https://p5js.org/) for graphics and audio analysis. Aleph exposes all of p5’s 2D *and* 3D functionality inside every user created sketch with some friendly wrappers for common boring things thrown in for good measure. In addition, Aleph provides MIDI control support which is sadly not offered by vanilla p5. Think of it as an enhanced environment for developing and performing audio-reactive p5 sketches.
+Aleph is a cross-platform desktop client and programming framework for developing and performing audio reactive visualizations. It is a desktop client built on [Electron](https://electronjs.org/) that uses [P5.js](https://p5js.org/) for graphics and audio analysis. Aleph exposes all of p5’s 2D *and* 3D functionality inside every user created sketch with some friendly wrappers to expedite development. In addition, Aleph provides MIDI control support which is sadly not offered by vanilla p5. Think of it as an enhanced environment for developing and performing audio-reactive p5 sketches. 
 
 ## The Interface:
 When you first launch Aleph, you will see the editor window, which looks like this:
@@ -8,7 +8,7 @@ When you first launch Aleph, you will see the editor window, which looks like th
 ![aleph ui](./img/ui.png)
 
 #### Display Settings:
-Aleph displays your actual p5 sketches on a separate window with no UI elements (called the display window) so you can present fullscreen graphics on a secondary display while still being able to access the editor window. You can manually assign a screen resolution by entering values into the Width and Height inputs and create the display using the “Create Display” button. This is useful if you need an exact size for whatever reason. You can also specify pixel density and enable/disable anti-aliasing for images/textures. Alternatively, because Aleph supports dynamically resizable windows, you can simply click “Create Display” without providing a size, and manually resize (or maximize) the window as you see fit. Once you have spawned a display you can enter fullscreen mode by pressing F11 or CTRL+SHIFT+F. 
+Aleph displays your actual p5 sketches on a separate window with no UI elements (called the display window) so you can present fullscreen graphics on a secondary display while still being able to access the editor window. You can manually assign a screen resolution by entering values into the Width and Height inputs and create the display using the “Create Display” button. This is useful if you need an exact size for whatever reason. You can also specify pixel density and enable/disable anti-aliasing for images/textures. Alternatively, because Aleph supports dynamically resizable windows, you can simply click “Create Display” without providing a size, and manually resize (or maximize) the window as you see fit. Once you have spawned a display you can enter fullscreen mode by pressing F11 or CTRL+SHIFT+F (or CMD+SHIFT+F on macOS).
 
 ###### *Note: many controls on the Aleph control panel are disabled until the display window is created. You cannot adjust audio settings, select sketches, or configure MIDI devices until the display window has been created.*
 
@@ -20,6 +20,8 @@ Aleph displays your actual p5 sketches on a separate window with no UI elements 
 * *FFT Smooth*: Adjusts FFT smoothing. High smoothing values result in more gradual changes between frames. 
 * *Volume Smooth*: Adjusts volume smoothing. High smoothing values result in more gradual changes between frames.
 
+These knobs can be controlled with the mouse but it is also possible to control them with MIDI (see [Controlling Audio Parameter Knobs with MIDI](#controlling-audio-parameter-knobs-with-midi)).
+
 #### Import Assets:
 Use the labeled buttons to import custom 3D models, textures, fonts, and shaders to use in your sketches. Files will be imported to the folder `resources/app/aleph_modules/core/assets`.
 
@@ -27,20 +29,40 @@ Use the labeled buttons to import custom 3D models, textures, fonts, and shaders
 Use the “show/hide” button to toggle visibility of all assets available to your local installation of Aleph. The files are displayed exactly as they should be correctly referenced in your code - ex. An imported 3D model called “myModel.obj” would be referenced as `assets.models.myModel`, as it is listed in the UI.
 
 #### Sketch Selection:
-On boot, Aleph will automatically scan your sketches folder (located at `resources/app/aleph_modules/core/sketches`) and generate labeled buttons for each sketch. You can toggle the active sketch by clicking the corresponding button of the sketch you would like to switch to. In a future update, switching sketches will also be possible via MIDI control.
+On launch, Aleph will automatically scan your sketches folder (located at `resources/app/aleph_modules/core/sketches`) and generate labeled buttons for each sketch. You can toggle the active sketch by clicking the corresponding button of the sketch you would like to switch to. It is also possible to control sketch selection with MIDI (see [Controlling Sketch Selection with MIDI](#controlling-sketch-selection-with-midi	)).
 
 #### Midi Device Selection:
-On boot, Aleph will automatically scan your computer for available MIDI devices and generate labeled buttons for each device. To select a device, simply click its button. This will enable you to use the device to send MIDI controls to Aleph. 
+On launch, Aleph will automatically scan your computer for available MIDI devices and generate labeled buttons for each device. To select a device, simply click its button. This will enable you to use the device to send MIDI controls to Aleph. You can select multiple midi devices if you wish to use more than one controller. 
 
-###### *Note: at present, there is no ability to change MIDI devices or assign multiple MIDI devices. Attempting to change MIDI device after selecting one will likely result in a crash or error with MIDI handling. If you need to reselect a MIDI device, refresh Aleph by pressing CTRL+R (or CMD+R on Mac) and reselect a device. Improvements in this department are on the roadmap!*
+###### *Note: you must select a MIDI device before attempting to create MIDI mappings!*
 
 #### Midi Mapping:
-Once you have selected a MIDI input device, you can begin mapping controls. This is 
-done by first creating a control entry by clicking “Add Control”.
 
-Next you can create an assignment by clicking the numbered box created below to “listen” for MIDI messages, then pressing/turning a MIDI control on your controller to assign that physical control to the corresponding entry.
+##### Controlling Audio Parameter Knobs with MIDI:
+You can assign MIDI controls to the audio control knobs on the UI by clicking the small box under a given control labeled "map". Clicking the button will make Aleph "listen" for any MIDI inputs, so simply turn a knob or move a fader to assign it to one of the audio control UI knobs on the editor window.
+
+![midi mapping knobs](./img/knobs.png)
+
+##### Controlling Sketch Selection with MIDI:
+You can assign MIDI controls to specific sketches to switch between sketches using a MIDI controller. To do so, click the button labeled "Midi Map Sketches", then click the sketch button you would like to map, then finally press a MIDI button to assign the button to the sketch. 
+
+![midi mapping sketch selection](./img/sketchmapping.png)
+
+##### Generic MIDI controls:
+"Generic" in this case means these are controls you can reference in your p5 sketches and set up custom behavior for, as opposed to the MIDI assignments for controlling the audio knobs on the UI or sketch selection.
+
+To create a MIDI mapping, first create a control entry by clicking “Add Control”. Next you can create an assignment by clicking the numbered box created below to “listen” for MIDI messages, then pressing/turning a MIDI control on your controller to assign that physical control to the corresponding entry. You can remove the most recently added mapping using the "Remove Control" button.
+
+![midi mapping](./img/midi-full.png)
 
 Once you have mapped all your controls, you can click “Lock Midi Assignment” to disable the assignment buttons. This prevents you from accidentally overwriting control entries. You can also save/recall mapping files.
+
+You can force momentary/hold behavior (as opposed to toggle) to buttons by enabling the "Force Momentary Mode". In most cases this is a non-issue, but certain pad controllers will behave as toggle switches, which can limit their usefulness in certain cases.
+
+##### Saving and Loading MIDI Mappings
+Once you've created a mapping file, you can save it to disk by clicking the "Save Midi Mapping" button. It will bring up a save dialog for you to name the file.
+
+To load a mapping file, click the "Load Midi Mapping" button. A dialog will appear for you to select the mapping file to load. 
 
 ## Using Aleph
 
@@ -169,7 +191,7 @@ Aleph generates an object called `assets` by scanning your local assets folder. 
 You can access them in your p5 sketches like this: `assets.models.nameOfModel` where "nameOfModel" is the filename stripped of its extension. Ex. to access an imported 3D model called “car.obj”, you would use `assets.models.car`.
 
 #### Midi:
-Through the MIDI mapping process, Aleph will generate an array called `midi` which contains objects representing each assigned MIDI control, each with the index, note, and current CC value of a MIDI control. “Index” in this case refers to the number on the button (in Aleph’s interface) that corresponds with a given control.
+Through the MIDI mapping process, Aleph will generate an array called `midi` which contains objects representing each assigned MIDI control, each with the index, note, CC value, and the name of the physical controller the MIDI control belongs to. “Index” in this case refers to the number on the button (in Aleph’s interface) that corresponds with a given control.
 
 ![midi indexes](./img/midi.png)  
 Here we have 8 MIDI entries with indexes 0-7
