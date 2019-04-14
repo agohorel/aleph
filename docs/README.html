@@ -1,0 +1,960 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>@font-face {
+  font-family: octicons-anchor;
+  src: url(https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.woff) format('woff');
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 980px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+body .markdown-body {
+    padding: 45px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    word-wrap: break-word;
+}
+
+pre {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.markdown-body {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background-color: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body input {
+  font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.markdown-body a {
+  color: #4078c0;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before {
+  display: table;
+  content: "";
+}
+
+.markdown-body hr:after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.markdown-body .select::-ms-expand {
+  opacity: 0;
+}
+
+.markdown-body .octicon {
+  font: normal normal normal 16px/1 octicons-anchor;
+  display: inline-block;
+  text-decoration: none;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.markdown-body .octicon-link:before {
+  content: '\f05c';
+}
+
+.markdown-body:before {
+  display: table;
+  content: "";
+}
+
+.markdown-body:after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.markdown-body .anchor {
+  display: inline-block;
+  padding-right: 2px;
+  margin-left: -18px;
+}
+
+.markdown-body .anchor:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+  color: #000;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h1 .anchor {
+  line-height: 1;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 .anchor {
+  line-height: 1;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h3 .anchor {
+  line-height: 1.2;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h4 .anchor {
+  line-height: 1.2;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h5 .anchor {
+  line-height: 1.1;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body h6 .anchor {
+  line-height: 1.1;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #fff;
+}
+
+.markdown-body code {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .highlight {
+  margin-bottom: 16px;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+
+.markdown-body .pl-c {
+  color: #969896;
+}
+
+.markdown-body .pl-c1,
+.markdown-body .pl-s .pl-v {
+  color: #0086b3;
+}
+
+.markdown-body .pl-e,
+.markdown-body .pl-en {
+  color: #795da3;
+}
+
+.markdown-body .pl-s .pl-s1,
+.markdown-body .pl-smi {
+  color: #333;
+}
+
+.markdown-body .pl-ent {
+  color: #63a35c;
+}
+
+.markdown-body .pl-k {
+  color: #a71d5d;
+}
+
+.markdown-body .pl-pds,
+.markdown-body .pl-s,
+.markdown-body .pl-s .pl-pse .pl-s1,
+.markdown-body .pl-sr,
+.markdown-body .pl-sr .pl-cce,
+.markdown-body .pl-sr .pl-sra,
+.markdown-body .pl-sr .pl-sre {
+  color: #183691;
+}
+
+.markdown-body .pl-v {
+  color: #ed6a43;
+}
+
+.markdown-body .pl-id {
+  color: #b52a1d;
+}
+
+.markdown-body .pl-ii {
+  background-color: #b52a1d;
+  color: #f8f8f8;
+}
+
+.markdown-body .pl-sr .pl-cce {
+  color: #63a35c;
+  font-weight: bold;
+}
+
+.markdown-body .pl-ml {
+  color: #693a17;
+}
+
+.markdown-body .pl-mh,
+.markdown-body .pl-mh .pl-en,
+.markdown-body .pl-ms {
+  color: #1d3e81;
+  font-weight: bold;
+}
+
+.markdown-body .pl-mq {
+  color: #008080;
+}
+
+.markdown-body .pl-mi {
+  color: #333;
+  font-style: italic;
+}
+
+.markdown-body .pl-mb {
+  color: #333;
+  font-weight: bold;
+}
+
+.markdown-body .pl-md {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.markdown-body .pl-mi1 {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.markdown-body .pl-mdr {
+  color: #795da3;
+  font-weight: bold;
+}
+
+.markdown-body .pl-mo {
+  color: #1d3e81;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+
+.markdown-body .plan-price-unit {
+  color: #767676;
+  font-weight: normal;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 0.35em 0.25em -1.6em;
+  vertical-align: middle;
+}
+
+.markdown-body .plan-choice {
+  padding: 15px;
+  padding-left: 40px;
+  display: block;
+  border: 1px solid #e0e0e0;
+  position: relative;
+  font-weight: normal;
+  background-color: #fafafa;
+}
+
+.markdown-body .plan-choice.open {
+  background-color: #fff;
+}
+
+.markdown-body .plan-choice.open .plan-choice-seat-breakdown {
+  display: block;
+}
+
+.markdown-body .plan-choice-free {
+  border-radius: 3px 3px 0 0;
+}
+
+.markdown-body .plan-choice-paid {
+  border-radius: 0 0 3px 3px;
+  border-top: 0;
+  margin-bottom: 20px;
+}
+
+.markdown-body .plan-choice-radio {
+  position: absolute;
+  left: 15px;
+  top: 18px;
+}
+
+.markdown-body .plan-choice-exp {
+  color: #999;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.markdown-body .plan-choice-seat-breakdown {
+  margin-top: 10px;
+  display: none;
+}
+
+.markdown-body :checked+.radio-label {
+  z-index: 1;
+  position: relative;
+  border-color: #4078c0;
+}
+
+@media print {
+  body .markdown-body {
+    padding: 0;
+    border: none;
+  }
+}
+</style><title>README</title></head><body><article class="markdown-body"><h1>
+<a id="user-content-a-l-e-p-h-" class="anchor" href="#a-l-e-p-h-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>a l e p h <a href="///H://Github_Data/aleph/aleph_modules/assets/icons/png/32x32.png" target="_blank" rel="noopener noreferrer"><img src="///H://Github_Data/aleph/aleph_modules/assets/icons/png/32x32.png" alt="aleph logo" style="max-width:100%;"></a>
+</h1>
+<p>Aleph is a cross-platform desktop client and programming framework for developing and performing audio reactive visualizations. It is a desktop client built on <a href="https://electronjs.org/" rel="nofollow">Electron</a> that uses <a href="https://p5js.org/" rel="nofollow">P5.js</a> for graphics and audio analysis. Aleph exposes all of p5’s 2D <em>and</em> 3D functionality inside every user created sketch with some friendly wrappers to expedite development. In addition, Aleph provides MIDI control support which is sadly not offered by vanilla p5. Think of it as an enhanced environment for developing and performing audio-reactive p5 sketches.</p>
+<h2>
+<a id="user-content-the-interface" class="anchor" href="#the-interface" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Interface:</h2>
+<p>When you first launch Aleph, you will see the editor window, which looks like this:</p>
+<p><a href="///H://Github_Data/aleph/docs/img/ui.png" target="_blank" rel="noopener noreferrer"><img src="///H://Github_Data/aleph/docs/img/ui.png" alt="aleph ui" style="max-width:100%;"></a></p>
+<h4>
+<a id="user-content-display-settings" class="anchor" href="#display-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Display Settings:</h4>
+<p>Aleph displays your actual p5 sketches on a separate window with no UI elements (called the display window) so you can present fullscreen graphics on a secondary display while still being able to access the editor window. You can manually assign a screen resolution by entering values into the Width and Height inputs and create the display using the “Create Display” button. This is useful if you need an exact size for whatever reason. You can also specify pixel density and enable/disable anti-aliasing for images/textures. Alternatively, because Aleph supports dynamically resizable windows, you can simply click “Create Display” without providing a size, and manually resize (or maximize) the window as you see fit. Once you have spawned a display you can enter fullscreen mode by pressing F11 or CTRL+SHIFT+F (or CMD+SHIFT+F on macOS).</p>
+<h6>
+<a id="user-content-note-many-controls-on-the-aleph-control-panel-are-disabled-until-the-display-window-is-created-you-cannot-adjust-audio-settings-select-sketches-or-configure-midi-devices-until-the-display-window-has-been-created" class="anchor" href="#note-many-controls-on-the-aleph-control-panel-are-disabled-until-the-display-window-is-created-you-cannot-adjust-audio-settings-select-sketches-or-configure-midi-devices-until-the-display-window-has-been-created" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>Note: many controls on the Aleph control panel are disabled until the display window is created. You cannot adjust audio settings, select sketches, or configure MIDI devices until the display window has been created.</em>
+</h6>
+<h4>
+<a id="user-content-audio-settings" class="anchor" href="#audio-settings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Audio Settings:</h4>
+<ul>
+<li>
+<em>Volume</em>: Adjusts volume input sensitivity.</li>
+<li>
+<em>Bass</em>: Adjusts bass frequency input sensitivity.</li>
+<li>
+<em>Mid</em>: Adjusts mid frequency input sensitivity.</li>
+<li>
+<em>High</em>: Adjusts high frequency input sensitivity.</li>
+<li>
+<em>FFT Smooth</em>: Adjusts FFT smoothing. High smoothing values result in more gradual changes between frames.</li>
+<li>
+<em>Volume Smooth</em>: Adjusts volume smoothing. High smoothing values result in more gradual changes between frames.</li>
+</ul>
+<p>These knobs can be controlled with the mouse but it is also possible to control them with MIDI (see <a href="#controlling-audio-parameter-knobs-with-midi">Controlling Audio Parameter Knobs with MIDI</a>).</p>
+<h4>
+<a id="user-content-import-assets" class="anchor" href="#import-assets" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Import Assets:</h4>
+<p>Use the labeled buttons to import custom 3D models, textures, fonts, and shaders to use in your sketches. Files will be imported to the folder <code>resources/app/aleph_modules/core/assets</code>.</p>
+<h4>
+<a id="user-content-available-assets" class="anchor" href="#available-assets" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Available Assets:</h4>
+<p>Use the “show/hide” button to toggle visibility of all assets available to your local installation of Aleph. The files are displayed exactly as they should be correctly referenced in your code - ex. An imported 3D model called “myModel.obj” would be referenced as <code>assets.models.myModel</code>, as it is listed in the UI.</p>
+<h4>
+<a id="user-content-sketch-selection" class="anchor" href="#sketch-selection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sketch Selection:</h4>
+<p>On launch, Aleph will automatically scan your sketches folder (located at <code>resources/app/aleph_modules/core/sketches</code>) and generate labeled buttons for each sketch. You can toggle the active sketch by clicking the corresponding button of the sketch you would like to switch to. It is also possible to control sketch selection with MIDI (see <a href="#controlling-sketch-selection-with-midi">Controlling Sketch Selection with MIDI</a>).</p>
+<h4>
+<a id="user-content-midi-device-selection" class="anchor" href="#midi-device-selection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Midi Device Selection:</h4>
+<p>On launch, Aleph will automatically scan your computer for available MIDI devices and generate labeled buttons for each device. To select a device, simply click its button. This will enable you to use the device to send MIDI controls to Aleph. You can select multiple midi devices if you wish to use more than one controller.</p>
+<h6>
+<a id="user-content-note-you-must-select-a-midi-device-before-attempting-to-create-midi-mappings" class="anchor" href="#note-you-must-select-a-midi-device-before-attempting-to-create-midi-mappings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>Note: you must select a MIDI device before attempting to create MIDI mappings!</em>
+</h6>
+<h4>
+<a id="user-content-midi-mapping" class="anchor" href="#midi-mapping" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Midi Mapping:</h4>
+<h5>
+<a id="user-content-controlling-audio-parameter-knobs-with-midi" class="anchor" href="#controlling-audio-parameter-knobs-with-midi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Controlling Audio Parameter Knobs with MIDI:</h5>
+<p>You can assign MIDI controls to the audio control knobs on the UI by clicking the small box under a given control labeled "map". Clicking the button will make Aleph "listen" for any MIDI inputs, so simply turn a knob or move a fader to assign it to one of the audio control UI knobs on the editor window.</p>
+<p><a href="///H://Github_Data/aleph/docs/img/knobs.png" target="_blank" rel="noopener noreferrer"><img src="///H://Github_Data/aleph/docs/img/knobs.png" alt="midi mapping knobs" style="max-width:100%;"></a></p>
+<h5>
+<a id="user-content-controlling-sketch-selection-with-midi" class="anchor" href="#controlling-sketch-selection-with-midi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Controlling Sketch Selection with MIDI:</h5>
+<p>You can assign MIDI controls to specific sketches to switch between sketches using a MIDI controller. To do so, click the button labeled "Midi Map Sketches", then click the sketch button you would like to map, then finally press a MIDI button to assign the button to the sketch.</p>
+<p><a href="///H://Github_Data/aleph/docs/img/sketchmapping.png" target="_blank" rel="noopener noreferrer"><img src="///H://Github_Data/aleph/docs/img/sketchmapping.png" alt="midi mapping sketch selection" style="max-width:100%;"></a></p>
+<h5>
+<a id="user-content-generic-midi-controls" class="anchor" href="#generic-midi-controls" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generic MIDI controls:</h5>
+<p>"Generic" in this case means these are controls you can reference in your p5 sketches and set up custom behavior for, as opposed to the MIDI assignments for controlling the audio knobs on the UI or sketch selection.</p>
+<p>To create a MIDI mapping, first create a control entry by clicking “Add Control”. Next you can create an assignment by clicking the numbered box created below to “listen” for MIDI messages, then pressing/turning a MIDI control on your controller to assign that physical control to the corresponding entry. You can remove the most recently added mapping using the "Remove Control" button.</p>
+<p><a href="///H://Github_Data/aleph/docs/img/midi-full.png" target="_blank" rel="noopener noreferrer"><img src="///H://Github_Data/aleph/docs/img/midi-full.png" alt="midi mapping" style="max-width:100%;"></a></p>
+<p>Once you have mapped all your controls, you can click “Lock Midi Assignment” to disable the assignment buttons. This prevents you from accidentally overwriting control entries. You can also save/recall mapping files.</p>
+<p>You can force momentary/hold behavior (as opposed to toggle) to buttons by enabling the "Force Momentary Mode". In most cases this is a non-issue, but certain pad controllers will behave as toggle switches, which can limit their usefulness in certain cases.</p>
+<h5>
+<a id="user-content-saving-and-loading-midi-mappings" class="anchor" href="#saving-and-loading-midi-mappings" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Saving and Loading MIDI Mappings</h5>
+<p>Once you've created a mapping file, you can save it to disk by clicking the "Save Midi Mapping" button. It will bring up a save dialog for you to name the file.</p>
+<p>To load a mapping file, click the "Load Midi Mapping" button. A dialog will appear for you to select the mapping file to load.</p>
+<h2>
+<a id="user-content-using-aleph" class="anchor" href="#using-aleph" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Aleph</h2>
+<h4>
+<a id="user-content-getting-audio-into-aleph" class="anchor" href="#getting-audio-into-aleph" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Audio Into Aleph:</h4>
+<p><strong>If you only need to receive audio on the computer running Aleph</strong> (i.e. the audio is being generated on another device), you simply need to make sure the input on your soundcard receiving the audio input is selected as the primary input in the OS's sound configuration settings.</p>
+<p><strong>If you need to send and receive audio on the same computer</strong>, you will need to configure a loopback. There are two basic approaches to routing loopbacks into Aleph - physically routing a cable from the output of your soundcard to it's input, or using some software like <a href="http://jackaudio.org/" rel="nofollow">JACK</a>.</p>
+<h4>
+<a id="user-content-adjusting-audio-parameters" class="anchor" href="#adjusting-audio-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Adjusting Audio Parameters</h4>
+<p>A common problem with audio-reactive visualizations is that every song has different sonic characteristics. Many songs are mastered at different levels, making it hard to reliably link a visual parameter to some threshold of volume, for example. To address this, Aleph has some basic audio controls that you can use to adjust the audio signal inside Aleph (i.e. this will have no effect on the audible sound source). You can adjust the overall volume, the volume of different frequency bands, and adjust the smoothing of both the volume and the FFT. At present these must be controlled with the mouse, but MIDI control over these parameters are planned for a future update.</p>
+<h4>
+<a id="user-content-using-midi-to-control-sketches" class="anchor" href="#using-midi-to-control-sketches" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using MIDI To Control Sketches</h4>
+<p>One of the most powerful features that Aleph brings to the table over vanilla p5 is it's ability to receive MIDI control input. You can use physical MIDI controllers or even send MIDI to Aleph from another program like Ableton Live, Max, or pd. See the "MIDI" section under "Writing Code" below for more detail on creating MIDI mappings.</p>
+<h2>
+<a id="user-content-writing-code" class="anchor" href="#writing-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Writing Code</h2>
+<h4>
+<a id="user-content-a-note-on-p5" class="anchor" href="#a-note-on-p5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>A Note on P5:</h4>
+<p>Writing sketches for Aleph is nearly identical to writing vanilla p5 sketches. The primary difference is that a number of p5 related things are handled for you by Aleph, like audio analysis and dealing with files &amp; windows. So if you ever encounter issues with your sketches or are looking for learning resources - look to the <a href="https://p5js.org/community/" rel="nofollow">p5.js community</a> and their growing library of <a href="https://p5js.org/reference/" rel="nofollow">documentation</a> and <a href="https://p5js.org/examples/" rel="nofollow">examples</a>!</p>
+<h4>
+<a id="user-content-folder-structure" class="anchor" href="#folder-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Folder Structure:</h4>
+<p>Aleph’s folders are structured like this:</p>
+<pre><code>├───assets
+│   ├───fonts
+│   ├───icons
+│   │   ├───mac
+│   │   ├───png
+│   │   └───win
+│   ├───models
+│   ├───shaders
+│   └───textures
+├───core
+│   ├───css
+│   ├───html
+│   └───js
+├───docs
+├───mappings
+├───scripts
+└───sketches
+</code></pre>
+<h4>
+<a id="user-content-creating-sketches" class="anchor" href="#creating-sketches" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating Sketches:</h4>
+<p>You can add new sketches by clicking one of the create sketch buttons under the “Sketch Selection” header, which come in 2D and 3D flavors.</p>
+<p>Follow the save dialog and assign your sketch a name. This will create a copy of the Aleph p5 module template which looks like this:</p>
+<h5>
+<a id="user-content-2d-template" class="anchor" href="#2d-template" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2D Template</h5>
+<div class="highlight highlight-source-js"><pre><span class="pl-c1">exports</span>.<span class="pl-en">run</span> <span class="pl-k">=</span> (<span class="pl-smi">audio</span>, <span class="pl-smi">midi</span>, <span class="pl-smi">assets</span>, <span class="pl-smi">utils</span>) <span class="pl-k">=&gt;</span> {
+	<span class="pl-c"><span class="pl-c">//</span> your code here</span>
+}</pre></div>
+<p>or this, if you're using the 3D option:</p>
+<h5>
+<a id="user-content-3d-template" class="anchor" href="#3d-template" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3D Template</h5>
+<div class="highlight highlight-source-js"><pre><span class="pl-k">let</span> hasRun <span class="pl-k">=</span> {state<span class="pl-k">:</span> <span class="pl-c1">false</span>};
+<span class="pl-k">let</span> <span class="pl-c1">_3D</span>;
+
+<span class="pl-c1">exports</span>.<span class="pl-en">run</span> <span class="pl-k">=</span> (<span class="pl-smi">audio</span>, <span class="pl-smi">midi</span>, <span class="pl-smi">assets</span>, <span class="pl-smi">utils</span>) <span class="pl-k">=&gt;</span> {
+	<span class="pl-smi">utils</span>.<span class="pl-en">renderLoop</span>(hasRun, setup, <span class="pl-c1">_3D</span>, draw);
+}
+
+<span class="pl-k">function</span> <span class="pl-en">setup</span>(){
+	<span class="pl-k">let</span> sketch <span class="pl-k">=</span> <span class="pl-smi">utils</span>.<span class="pl-en">getSketchName</span>(<span class="pl-c1">__filename</span>);
+	<span class="pl-c1">_3D</span> <span class="pl-k">=</span> renderers[sketch];
+	<span class="pl-c"><span class="pl-c">//</span> put code you only want to run once here</span>
+}
+
+<span class="pl-k">function</span> <span class="pl-en">draw</span>(){
+	<span class="pl-c"><span class="pl-c">//</span> your code here</span>
+}</pre></div>
+<h6>
+<a id="user-content-note-that-the-setup-and-draw-functions-above-are-not-actually-native-p5-functions-though-they-behave-almost-identically-setup-will-execute-whatever-code-is-inside-of-it-one-time-while-any-code-placed-in-the-draw-function-will-run-once-per-frame-indefinitely-this-is-a-hacky-workaround-to-enable-alephs-mixed-2d3d-rendering-capabilities-while-retaining-a-recognizable-coding-style-from-vanilla-p5" class="anchor" href="#note-that-the-setup-and-draw-functions-above-are-not-actually-native-p5-functions-though-they-behave-almost-identically-setup-will-execute-whatever-code-is-inside-of-it-one-time-while-any-code-placed-in-the-draw-function-will-run-once-per-frame-indefinitely-this-is-a-hacky-workaround-to-enable-alephs-mixed-2d3d-rendering-capabilities-while-retaining-a-recognizable-coding-style-from-vanilla-p5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>Note that the <code>setup()</code> and <code>draw()</code> functions above are not actually native p5 functions, though they behave almost identically. <code>setup()</code> will execute whatever code is inside of it one time, while any code placed in the <code>draw()</code> function will run once per frame indefinitely. This is a hacky workaround to enable Aleph's mixed 2D/3D rendering capabilities while retaining a recognizable coding style from vanilla p5.</em>
+</h6>
+<p>The arguments passed into the run function <code>(audio, midi, assets, utils)</code> will allow you to access Aleph’s built in objects. You can manually create .js files in the directory <code>resources/app/aleph_modules/sketches</code>, but unless you copy in the above template, you will likely encounter issues.</p>
+<h4>
+<a id="user-content-mixed-2d3d-rendering" class="anchor" href="#mixed-2d3d-rendering" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mixed 2D/3D Rendering:</h4>
+<p>Aleph uses p5's default 2D renderer as it's primary renderer to display the final image, but it creates a fresh 3D graphics buffer (renderer) for each sketch, allowing you to draw into an offscreen 3D buffer which gets drawn back into the main 2D renderer. The reason for this is that p5's 2D renderer has functionality that (at present) has not been implemented in their 3D (webgl based) renderer. This way you get the best of both worlds - want to draw stuff in 3D but then apply p5's <code>copy()</code> function (for example), which only works in 2D? You can do that. Aleph also generates a spare offscreen 2D buffer for if you want to do things like paint an entire 2D canvas across a 3D model as a texture, for example. This spare 2D renderer is accessed by calling <code>_2D.</code> before any standard p5 function like <code>_2D.line()</code>, <code>_2D.fill()</code>, <code>_2D.background()</code>, etc. Check out the <code>mixed2D_3D.js</code> example sketch to see that in action. If the concept of offscreen buffers is making you scratch your head, <a href="https://p5js.org/examples/structure-create-graphics.html" rel="nofollow">check this example out</a>.</p>
+<h3>
+<a id="user-content-built-in-objects" class="anchor" href="#built-in-objects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Built-in Objects:</h3>
+<h4>
+<a id="user-content-audio" class="anchor" href="#audio" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Audio:</h4>
+<p>Aleph’s built-in <code>audio</code> object contains the following read-only properties:</p>
+<ul>
+<li>
+<p><em>volume</em>: returns a value between 0.0 and 1.0 representing the current amplitude of the input signal.</p>
+</li>
+<li>
+<p><em>bass</em>: returns a value between 0.0 and 255 representing the amount of energy between 20-150Hz.</p>
+</li>
+<li>
+<p><em>mid</em>: returns a value between 0.0 and 255 representing the amount of energy between 400-2600Hz.</p>
+</li>
+<li>
+<p><em>high</em>: returns a value between 0.0 and 255 representing the amount of energy between 5200-14000Hz.</p>
+</li>
+<li>
+<p><em>leftVol</em>: returns a value between 0.0 and 1.0 representing the amplitude of the left audio channel.</p>
+</li>
+<li>
+<p><em>rightVol</em>: returns a value between 0.0 and 1.0 representing the amplitude of the left audio channel.</p>
+</li>
+<li>
+<p><em>volEased</em>: returns a smoothed value between 0.0 and 1.0 representing the amplitude of the master audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.</p>
+</li>
+<li>
+<p><em>leftVolEased</em>: returns a smoothed value between 0.0 and 1.0 representing the amplitude of the left audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.</p>
+</li>
+<li>
+<p><em>rightVolEased</em>: returns a smoothed value between 0.0 and 1.0 representing the amplitude of the right audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.</p>
+</li>
+<li>
+<p><em>fft</em>: FFT analyzes a very short snapshot of sound called a sample buffer. It returns an array of amplitude measurements, referred to as bins. The array is 1024 bins long by default. You can change the bin array length, but it must be a power of 2 between 16 and 1024 in order for the FFT algorithm to function correctly. The actual size of the FFT buffer is twice the number of bins, so given a standard sample rate, the buffer is 2048/44100 seconds long.</p>
+</li>
+<li>
+<p><em>spectrum</em>: returns an array of amplitude values (between 0 and 255) across the frequency spectrum. Length is equal to FFT bins (1024 by default). The array indices correspond to frequencies (i.e. pitches), from the lowest to the highest that humans can hear. Each value represents amplitude at that slice of the frequency spectrum.</p>
+</li>
+<li>
+<p><em>waveform</em>: returns an array of amplitude measurements (between -1 and +1) that represent a snapshot of amplitude readings in a single buffer. Length will be equal to bins (defaults to 1024). Can be used to draw the waveform of a sound.</p>
+</li>
+<li>
+<p><em>spectralCentroid</em>: returns the spectral centroid of the input signal. The spectral centroid indicates where the "center of mass" of the spectrum is located. Perceptually, it has a connection with the impression of "brightness" of a sound.</p>
+</li>
+</ul>
+<h4>
+<a id="user-content-assets" class="anchor" href="#assets" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Assets:</h4>
+<p>Aleph generates an object called <code>assets</code> by scanning your local assets folder. This object contains:</p>
+<ul>
+<li>
+<p><em>models</em>: 3D models you can import, manipulate, and display in your sketches. Currently p5 only supports models in the .obj format.</p>
+</li>
+<li>
+<p><em>textures</em>: textures are 2D image files you can wrap around 3D models. gif, jpg, and png files are supported. you can also use them with any of p5's image related functions like <code>image()</code> or <code>loadPixels()</code>.</p>
+</li>
+<li>
+<p><em>fonts</em>: load custom .otf or .ttf fonts to use in your sketches.</p>
+</li>
+<li>
+<p><em>shaders</em>: load custom glsl shaders to use in your sketches.</p>
+</li>
+</ul>
+<p>You can access them in your p5 sketches like this: <code>assets.models.nameOfModel</code> where "nameOfModel" is the filename stripped of its extension. Ex. to access an imported 3D model called “car.obj”, you would use <code>assets.models.car</code>.</p>
+<h4>
+<a id="user-content-midi" class="anchor" href="#midi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Midi:</h4>
+<p>Through the MIDI mapping process, Aleph will generate an array called <code>midi</code> which contains objects representing each assigned MIDI control, each with the index, note, CC value, and the name of the physical controller the MIDI control belongs to. “Index” in this case refers to the number on the button (in Aleph’s interface) that corresponds with a given control.</p>
+<p><a href="///H://Github_Data/aleph/docs/img/midi.png" target="_blank" rel="noopener noreferrer"><img src="///H://Github_Data/aleph/docs/img/midi.png" alt="midi indexes" style="max-width:100%;"></a><br>
+Here we have 8 MIDI entries with indexes 0-7</p>
+<p>You can access MIDI values in your p5 sketches like this: <code>midi[x].value</code> where <code>x</code> is the index of the control. Note that all MIDI controls output values between 0-127, so you might have to remap the values to different ranges depending on what you’re trying to accomplish. This can be accomplished easily using p5’s <code>map()</code> function.</p>
+<h4>
+<a id="user-content-debugging" class="anchor" href="#debugging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Debugging:</h4>
+<p>Aleph includes Chrome DevTools which you can use to log things out to the console, examine HTML/CSS, capture performance statistics, and more. You can access the DevTools by pressing F12 on any platform, or the following OS specific hotkeys:</p>
+<p><strong>Windows/Linux</strong>: CTRL + SHIFT + I<br>
+<strong>MacOS</strong>: CMD + ALT + I</p>
+<h6>
+<a id="user-content-note-each-aleph-window-contains-its-own-separate-instance-of-devtools-including-the-ui-window-if-you-wish-to-debug-your-p5-sketches-open-devtools-on-the-window-displaying-your-sketches" class="anchor" href="#note-each-aleph-window-contains-its-own-separate-instance-of-devtools-including-the-ui-window-if-you-wish-to-debug-your-p5-sketches-open-devtools-on-the-window-displaying-your-sketches" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><em>Note: each Aleph window contains its own separate instance of DevTools (including the UI window). If you wish to debug your p5 sketches, open DevTools on the window displaying your sketches.</em>
+</h6>
+<h2>
+<a id="user-content-resources" class="anchor" href="#resources" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Resources:</h2>
+<p><a href="https://github.com/agohorel/aleph">Aleph Github</a><br>
+<a href="https://p5js.org/reference/" rel="nofollow">P5 docs</a><br>
+<a href="https://electronjs.org/docs" rel="nofollow">Electron docs</a><br>
+<a href="https://nodejs.org/en/docs/" rel="nofollow">Node.js docs</a><br>
+<a href="https://www.chromium.org/developers" rel="nofollow">Chromium docs</a></p>
+<h2>
+<a id="user-content-submitting-feedback" class="anchor" href="#submitting-feedback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Submitting Feedback</h2>
+<p>Please submit bugs to the <a href="https://github.com/agohorel/aleph/issues">Aleph Github issue tracker</a>.
+You can also submit bug reports, feature requests, and/or general feedback to the <a href="https://discordapp.com/invite/c8fUQUb" rel="nofollow">Aleph Discord server</a>. Good <a href="https://developer.mozilla.org/en-US/docs/Mozilla/QA/Bug_writing_guidelines" rel="nofollow">bug reporting etiquette</a> is greatly appreciated!</p>
+</article></body></html>

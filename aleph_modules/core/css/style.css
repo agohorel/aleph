@@ -74,9 +74,35 @@ input[type=number]::-webkit-outer-spin-button {
 	color: #000;
 }
 
+.btn-light {
+	background-color: #d4e1e6;
+	color: #17191a;
+	font-size: 12px;
+}
+
 .btnSmall {
 	font-size: 10px;
 	margin-bottom: 0px;
+}
+
+.audioCtrlsMapBtn {
+	background-color: #505759; 
+	margin-top: 12px;
+	border: none;
+	outline: none;
+	font-family: Roboto-Mono, monospace;
+	font-size: 10px;
+}
+
+.audioCtrlsMapBtn:hover {
+	background-color: #d4e1e6;
+	cursor: pointer;
+	color: #17191a;
+}
+
+.audioCtrlsMapBtn:active {
+	background-color: #12e4a6;
+	color: #000;
 }
 
 .active {

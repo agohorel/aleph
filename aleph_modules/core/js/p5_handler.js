@@ -2,6 +2,7 @@
 
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
+const { dialog } = electron.remote;
 const p5 = require("p5");
 const p5_audio = require("p5/lib/addons/p5.sound.js");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
@@ -38,7 +39,7 @@ function preload() {
 }
 
 function setAA(aa){
-	if (aa > 0) {smooth();} else {noSmooth()}
+	aa > 0 ? smooth() : noSmooth();
 }
 
 function setup() {
@@ -46,6 +47,10 @@ function setup() {
 	_2D = createGraphics(windowWidth, windowHeight);
 
 	input = new p5.AudioIn();
+	// input.getSources((devices) => {
+	// 	console.log(devices);
+	// });
+	// input.setSource(5);
 	input.start();
 	
 	amplitude = new p5.Amplitude();
@@ -56,6 +61,8 @@ function setup() {
 }
 
 function draw() {	
+	checkSketchMidiControls(midi.sketchCtrl);
+	
 	analyzeAudio();
 
 	if (moduleName !== ""){
@@ -66,6 +73,16 @@ function draw() {
 
 		catch (err){
 			console.error(err);
+		}
+	}
+} 
+
+function checkSketchMidiControls(controlsArray){
+	for (let i = 0; i < controlsArray.length; i++){
+		// if a button belonging to the sketchCtrl array has been pressed, set the currently running sketch
+		if (controlsArray[i].value > 0){
+			moduleName = controlsArray[i].name;
+			ipc.send("sketchChanged", controlsArray[i].name);
 		}
 	}
 }
@@ -157,17 +174,15 @@ function importer(folder){
 }
 
 function smoother(volume, leftVol, rightVol, easing){
-	let scaler = 0.1;
-
-	let target = volume * scaler;
+	let target = volume;
 	let diff = target - volEased;
 	volEased += diff * easing;
 
-	let targetL = leftVol * scaler;
+	let targetL = leftVol;
 	let diffL = targetL - leftVolEased;
 	leftVolEased += diffL * easing;
 
-	let targetR = rightVol * scaler;
+	let targetR = rightVol;
 	let diffR = targetR - rightVolEased;
 	rightVolEased += diffR * easing;
 }
@@ -205,8 +220,7 @@ function importShaders(array){
 
 function scanSketches(callback){
 	fs.readdir(sketchesPath, (err, sketches) => {
-		if (err) { console.log(err) }
-		else { callback(sketches); }
+		err ? console.log(err) : callback(sketches);
 	});
 }
 
