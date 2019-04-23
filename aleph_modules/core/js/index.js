@@ -7,6 +7,7 @@ const fs = require("fs");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 const assetsPath = path.resolve(__dirname, "../../assets/");
 const sketchesPath = path.resolve(__dirname, "../../sketches/");
+const midi = require(path.resolve(__dirname, "../js/midi.js"));
 
 
 /////////////////////////
@@ -188,18 +189,11 @@ new3DSketch.addEventListener("click", () => {
 
 const midiDeviceButtons = document.querySelector("#midiDeviceButtons");
 
-// display available midi devices once they have been sent from main process
-ipc.on("displayMidi", (event, arg) => {
-	for (let i = 0; i < arg.length; i++){
-		utils.makeDomElement("BUTTON", arg[i], ["midiDeviceButtons", "btn"],"#midiDeviceButtons", true);                                    
-	}
-});
-
 // highlight selected midi device & send to main process
 midiDeviceButtons.addEventListener("click", function(e) {
 	if (e.target.className.includes("midiDeviceButtons")){
 		utils.highlightSelectedItem(".midiDeviceButtons", e.target);
-		ipc.send("selectMidiDevice", e.target.innerText);
+		midi.selectMidiDevice(e.target.innerText);
 	}	
 });
 

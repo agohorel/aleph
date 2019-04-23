@@ -3,30 +3,7 @@ const path = require("path");
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
-
-let midiDevices = [];
-// separate array to track which devices has already been assigned an easymidi object
-let mappedDevices = [];
-let mappingsPath = path.resolve(__dirname, "../../mappings");
-
-// initial export of default values
-module.exports.controls = {};
-module.exports.sketchCtrl = {};
-
-// receive selected midi device from main process. assign device & listen for input.
-ipc.on("selectMidiDevice", (event, arg) => {
-	let selectedMidiDevice = arg;
-	// check if selected device is new so we don't spawn multiple easymidi instances per device
-	if (mappedDevices.indexOf(selectedMidiDevice) < 0){
-		midiDevices.push(new easymidi.Input(selectedMidiDevice));
-		midiDevices[midiDevices.length - 1].deviceName = arg;
-		// push the name of the midi device associated w/ newly created easymidi object to prevent overwrites
-		mappedDevices.push(selectedMidiDevice);
-		pressedButton(midiDevices[midiDevices.length - 1], selectedMidiDevice);
-		releasedButton(midiDevices[midiDevices.length - 1], selectedMidiDevice);
-		ccChange(midiDevices[midiDevices.length - 1], selectedMidiDevice);
-	}
-});
+const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let midiMap = {};
 let midiMappings = [];
@@ -46,7 +23,36 @@ let mapModeStatuses = {
 	audioCtrls: false,
 	sketchCtrls: false
 };
+
 let forceMomentaryMode = false;
+let midiDevices = [];
+let mappedDevices = []; // track which devices have already been assigned an easymidi object
+let mappingsPath = path.resolve(__dirname, "../../mappings");
+
+// initial export of default values
+module.exports.controls = {};
+module.exports.sketchCtrl = {};
+
+// list midi devices
+let midiInputs = easymidi.getInputs();
+
+for (let i = 0; i < midiInputs.length; i++) {
+	utils.makeDomElement("BUTTON", midiInputs[i], ["midiDeviceButtons", "btn"], "#midiDeviceButtons", false);
+}
+
+// receive selected midi device from main process. assign device & listen for input.
+exports.selectMidiDevice = (deviceName) => {
+	// check if selected device is new so we don't spawn multiple easymidi instances per device
+	if (mappedDevices.indexOf(deviceName) < 0) {
+		midiDevices.push(new easymidi.Input(deviceName));
+		midiDevices[midiDevices.length - 1].deviceName = deviceName;
+		// push the name of the midi device associated w/ newly created easymidi object to prevent overwrites
+		mappedDevices.push(deviceName);
+		pressedButton(midiDevices[midiDevices.length - 1], deviceName);
+		releasedButton(midiDevices[midiDevices.length - 1], deviceName);
+		ccChange(midiDevices[midiDevices.length - 1], deviceName);
+	}
+}
 
 // receive trigger from main process to create new properties in the midiMap object
 ipc.on("addMidiMapping", (event, arg) => {
@@ -158,7 +164,8 @@ function releasedButton(device, deviceName) {
 }
 
 function ccChange(device, deviceName) {
-	device.on("cc", (msg) => {		
+	device.on("cc", (msg) => {
+		console.log(msg);
 		if (mapModeStatuses.default && !mapModeStatuses.audioCtrls && !mapModeStatuses.sketchCtrls){
 			setMidiMapping(midiMap, midiMappings, controlID, msg.controller, msg.value, "default", deviceName);
 		}
