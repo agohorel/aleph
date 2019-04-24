@@ -64,7 +64,7 @@ ipc.on("removeMidiMapping", (event, arg) => {
 	midiMappings.pop();
 });
 
-ipc.on("saveMidi", (event) => {
+module.exports.save = () => {
 	// consolidate all mapping arrays into single array for easy saving.
 	// we'll parse them out upon loading the midi controls by the "name" property on each individual control object.
 	audioCtrlMappings.forEach((audioCtrlMap) => {
@@ -80,15 +80,13 @@ ipc.on("saveMidi", (event) => {
 
 	// open save dialog 
 	utils.saveMidiDialog(mappingsPath, uniques);
-});
 
-ipc.on("midiSaved", () => {
 	midiMappingHasBeenLoaded = true;
-})
+}
 
-ipc.on("loadMidi", (event) => {
+module.exports.load = () => {
 	// if midi has already been loaded, empty out the controls arrays before reloading the midi mappings file.
-	if (midiMappingHasBeenLoaded){
+	if (midiMappingHasBeenLoaded) {
 		midiMappings = [];
 		audioCtrlMappings = [];
 		sketchCtrlMappings = [];
@@ -100,11 +98,9 @@ ipc.on("loadMidi", (event) => {
 	// note: no need to export audioCtrlMappings because they don't come into play w/ actually writing sketches.
 	// the main process will handle routing the audioCtrls to the p5_handler file.
 	module.exports.controls = midiMappings;
-});
 
-ipc.on("midiLoaded", () => {
 	midiMappingHasBeenLoaded = true;
-})
+}
 
 ipc.on("audioCtrlMapBtnPressed", (event, args) => {
 	audioCtrlNum = args;
@@ -165,7 +161,6 @@ function releasedButton(device, deviceName) {
 
 function ccChange(device, deviceName) {
 	device.on("cc", (msg) => {
-		console.log(msg);
 		if (mapModeStatuses.default && !mapModeStatuses.audioCtrls && !mapModeStatuses.sketchCtrls){
 			setMidiMapping(midiMap, midiMappings, controlID, msg.controller, msg.value, "default", deviceName);
 		}
@@ -180,6 +175,7 @@ function ccChange(device, deviceName) {
 		}
 
 		module.exports.controls = midiMappings;
+		console.log(midiMappings);
 	});
 }
 

@@ -255,28 +255,28 @@ lockMidi.addEventListener("click", () => {
 
 // save midi mappings
 saveMidi.addEventListener("click", () => {
-	ipc.send("saveMidi");
+	midi.save();
+	
 });
 
 ipc.on("midiSaved", (event) => {
-	let saveBtn = document.querySelector("#saveMidi");
-	saveBtn.classList.toggle("doneLoading");
-	setTimeout(() => {
-		saveBtn.classList.toggle("doneLoading");
-	}, 250);
+	flashButton(document.getElementById("saveMidi"));
 });
 
 // load midi mappings
 loadMidi.addEventListener("click", () => {
-	ipc.send("loadMidi");
+	midi.load();
 });
 
-ipc.on("midiLoaded", (event) => {
-	let loadBtn = document.querySelector("#loadMidi");
-	loadBtn.classList.toggle("doneLoading");
+function flashButton(buttonElement){
+	buttonElement.classList.toggle("doneLoading");
 	setTimeout(() => {
-		loadBtn.classList.toggle("doneLoading");
+		buttonElement.classList.toggle("doneLoading");
 	}, 250);
+}
+
+ipc.on("midiLoaded", (event) => {
+	flashButton(document.getElementById("loadMidi"));
 });
 
 forceMomentaryEnabled = false;

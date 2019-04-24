@@ -100,11 +100,11 @@ ipcMain.on("selectMidiDevice", (event, args) => {
 });
 
 ipcMain.on("addMidiMapping", (event, args) => {
-	sendToDisplayWindow("addMidiMapping", args);
+	sendToEditorWindow("addMidiMapping", args);
 });
 
 ipcMain.on("removeMidiMapping", (event, args) => {
-	sendToDisplayWindow("removeMidiMapping", args);
+	sendToEditorWindow("removeMidiMapping", args);
 });
 
 ipcMain.on("applyDisplaySettings", (event, args) => {
@@ -125,16 +125,16 @@ ipcMain.on("applyDisplaySettings", (event, args) => {
 });
 
 ipcMain.on("saveMidi", (event) => {
-	sendToDisplayWindow("saveMidi");
+	sendToEditorWindow("saveMidi");
 });
 
 ipcMain.on("loadMidi", (event) => {
-	sendToDisplayWindow("loadMidi");
+	sendToEditorWindow("loadMidi");
 });
 
 ipcMain.on("midiLoaded", (event) => {
 	sendToEditorWindow("midiLoaded");
-	sendToDisplayWindow("midiLoaded");
+	// sendToDisplayWindow("midiLoaded");
 });
 
 ipcMain.on("midiSaved", (event) => {
