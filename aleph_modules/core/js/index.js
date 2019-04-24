@@ -219,14 +219,16 @@ addMidiMap.addEventListener("click", () => {
 });
 
 removeMidiMap.addEventListener("click", () => {
-	// send button id to main to pass off to midi.js
-	ipc.send("removeMidiMapping", controlCount);
-	// decrement controlCount to account for entry we're deleting
-	controlCount--;
-	// find the midi entry DOM elements
-	let midiEntries = document.querySelectorAll(".midiMapping");
-	// remove the last midi entry button
-	midiEntries[midiEntries.length-1].parentNode.removeChild(midiEntries[midiEntries.length-1]);
+	if (controlCount >= 0) {
+		// send button id to main to pass off to midi.js
+		ipc.send("removeMidiMapping", controlCount);
+		// decrement controlCount to account for entry we're deleting
+		controlCount--;
+		// find the midi entry DOM elements
+		let midiEntries = document.querySelectorAll(".midiMapping");
+		// remove the last midi entry button
+		midiEntries[midiEntries.length - 1].parentNode.removeChild(midiEntries[midiEntries.length - 1]);
+	}
 });
 
 // highlight selected midi control mapping slot & send controller id to main process
