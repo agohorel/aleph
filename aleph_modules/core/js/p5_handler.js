@@ -38,6 +38,13 @@ function preload() {
 		aa = Number(arg[3]);
 		setAA(aa);
 	});
+
+	ipc.send("p5MidiInit", null);
+
+	ipc.on("p5MidiInit", (event, args) => {
+		midi = args;
+		console.log(midi);
+	});
 }
 
 function setAA(aa){
