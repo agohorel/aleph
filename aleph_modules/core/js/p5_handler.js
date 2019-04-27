@@ -9,7 +9,7 @@ const p5_dom = require("p5/lib/addons/p5.dom.js");
 const fs = require("fs");
 const path = require("path");
 
-const midi = require(path.resolve(__dirname, "../js/midi.js"));
+// const midi = require(path.resolve(__dirname, "../js/midi.js"));
 const assetsPath = path.resolve(__dirname, "../../assets/");
 const sketchesPath = path.resolve(__dirname, "../../sketches/");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
@@ -22,6 +22,8 @@ let cnv, _2D;
 let renderers = {};
 let pxlDensity;
 let aa;
+
+let midi = {};
 
 function preload() {
 	importer("models");
@@ -61,14 +63,14 @@ function setup() {
 }
 
 function draw() {	
-	checkSketchMidiControls(midi.sketchCtrl);
+	// checkSketchMidiControls(midi.sketchCtrl);
 	
 	analyzeAudio();
 
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(path.resolve(__dirname, "../../sketches/", moduleName));
-			moduleFile.run(audio, midi.controls, assets, utils);
+			moduleFile.run(audio, midi, assets, utils);
 		} 
 
 		catch (err){
@@ -115,6 +117,11 @@ ipc.on("knobChanged", (event, arg) => {
 	audioParams = arg;
 });
 
+ipc.on("updateMidi", (event, args) => {
+	midi = args;
+	console.log(midi);
+});
+
 // resize canvas if window is resized
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
@@ -136,7 +143,6 @@ function nearestPow2(value){
 }
 
 function importer(folder){
-	let count = 0;
 	fs.readdir(path.join(assetsPath, folder), (err, files) => {
 		if (err){ console.log(err); } 
 		else {
@@ -167,7 +173,6 @@ function importer(folder){
 						assets.fonts[fontName] = loadFont(path.join(assetsPath, "fonts", file));;
 					}
 				}
-				
 			});			
 		}
 	});

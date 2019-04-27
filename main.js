@@ -166,6 +166,19 @@ ipcMain.on("forceMomentary", (event, args) => {
 	sendToDisplayWindow("forceMomentary", args);
 });
 
+// variable to store the last state of the midi object so we can quickly send it to the 
+// displayWindow right as it's loading so refreshing a sketch doesn't bork the midi workflow
+let lastMidi = {};
+
+ipcMain.on("updateMidi", (event, args) => {
+	sendToDisplayWindow("updateMidi", args);
+	lastMidi = args;
+});
+
+ipcMain.on("p5MidiInit", (event, args) => {
+	sendToDisplayWindow("p5MidiInit", lastMidi);
+});
+
 function sendToEditorWindow(channel, args){
 	// check if editorWindow exists before making IPC calls
 	if (editorWindow){

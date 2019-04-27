@@ -138,6 +138,8 @@ function pressedButton(device, deviceName) {
 		// re-export new values on update
 		module.exports.controls = midiMappings;
 		module.exports.sketchCtrl = sketchCtrlMappings;
+
+		ipc.send("updateMidi", midiMappings);
 	});
 }
 
@@ -155,6 +157,8 @@ function releasedButton(device, deviceName) {
 	
 		module.exports.controls = midiMappings;
 		module.exports.sketchCtrl = sketchCtrlMappings;
+
+		ipc.send("updateMidi", midiMappings);
 	});
 }
 
@@ -175,6 +179,8 @@ function ccChange(device, deviceName) {
 
 		module.exports.controls = midiMappings;
 		console.log(midiMappings);
+
+		ipc.send("updateMidi", midiMappings);
 	});
 }
 
