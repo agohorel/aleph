@@ -221,7 +221,8 @@ addMidiMap.addEventListener("click", () => {
 removeMidiMap.addEventListener("click", () => {
 	if (controlCount >= 0) {
 		// send button id to main to pass off to midi.js
-		ipc.send("removeMidiMapping", controlCount);
+		// ipc.send("removeMidiMapping", controlCount);
+		midi.removeMidiEntry();
 		// decrement controlCount to account for entry we're deleting
 		controlCount--;
 		// find the midi entry DOM elements
@@ -231,11 +232,11 @@ removeMidiMap.addEventListener("click", () => {
 	}
 });
 
-// highlight selected midi control mapping slot & send controller id to main process
+// highlight selected midi control mapping slot & send controller id to midi.js
 midiMappingButtons.addEventListener("click", function(e) {
 	if (e.target.className.includes("midiMapping")){
 		utils.highlightSelectedItem(".midiMapping", e.target);
-		ipc.send("addMidiMapping", `controller_${e.target.id}`);
+		midi.addMidiEntry(`controller_${e.target.id}`);
 	}	
 });
 
@@ -256,7 +257,6 @@ lockMidi.addEventListener("click", () => {
 // save midi mappings
 saveMidi.addEventListener("click", () => {
 	midi.save();
-	
 });
 
 ipc.on("midiSaved", (event) => {

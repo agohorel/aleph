@@ -54,15 +54,14 @@ exports.selectMidiDevice = (deviceName) => {
 	}
 }
 
-// receive trigger from main process to create new properties in the midiMap object
-ipc.on("addMidiMapping", (event, arg) => {
-	controlID = arg;
+module.exports.addMidiEntry = (controlCount) => {
+	controlID = controlCount;
 	mapModeStatuses.default = true;
-});
+}
 
-ipc.on("removeMidiMapping", (event, arg) => {
+module.exports.removeMidiEntry = () => {
 	midiMappings.pop();
-});
+}
 
 module.exports.save = () => {
 	// consolidate all mapping arrays into single array for easy saving.
