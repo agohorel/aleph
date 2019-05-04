@@ -42,7 +42,7 @@ for (let i = 0; i < midiInputs.length; i++) {
 }
 
 // receive selected midi device from main process. assign device & listen for input.
-exports.selectMidiDevice = (deviceName) => {
+module.exports.selectMidiDevice = (deviceName) => {
 	// check if selected device is new so we don't spawn multiple easymidi instances per device
 	if (mappedDevices.indexOf(deviceName) < 0) {
 		midiDevices.push(new easymidi.Input(deviceName));
@@ -114,13 +114,11 @@ ipc.on("sketchMidiMapActive", (event, args) => {
 
 ipc.on("forceMomentary", (event, args) => {
 	forceMomentaryMode = args;
-	console.log(forceMomentaryMode);
 });
 
 function pressedButton(device, deviceName) {
 	// listen for button presses
 	device.on('noteon', (msg) => {
-		console.log(msg);
 		// if mapMode is on, assign the pressed button to midiMap
 		if (mapModeStatuses.default){
 			setMidiMapping(midiMap, midiMappings, controlID, msg.note, msg.velocity, "default", deviceName);
@@ -179,7 +177,6 @@ function ccChange(device, deviceName) {
 		}
 
 		module.exports.controls = midiMappings;
-		console.log(midiMappings);
 
 		ipc.send("updateMidi", midiMappings);
 	});

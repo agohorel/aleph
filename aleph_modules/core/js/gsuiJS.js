@@ -35,7 +35,7 @@ knobs.forEach((knob, i) => {
 	utils.makeDomElementWithId("BUTTON", "map", `mapAudioCtrl_${i}`,["audioCtrlsMapBtn"], "#knob" + i, false);
 });
 
-exports.updateKnobs = (args) => {
+module.exports.updateKnobs = (args) => {
 	for (let i = 0; i < args.length; i++) {
 		// not sure why i can't just use map()?
 		let scaledInput = p5.prototype.map(args[i].value, 0, 127, knobs[i]._options.min, knobs[i]._options.max);
