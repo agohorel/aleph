@@ -73,7 +73,7 @@ window.onload = () => {
 
 	audioCtrlsMapBtns.forEach((button) => {
 		button.addEventListener("click", () => {
-			ipc.send("audioCtrlMapBtnPressed", button.parentElement.id);
+			midi.listenForAudioCtrlMapping(button.parentElement.id);
 		});
 	});
 }
@@ -220,8 +220,6 @@ addMidiMap.addEventListener("click", () => {
 
 removeMidiMap.addEventListener("click", () => {
 	if (controlCount >= 0) {
-		// send button id to main to pass off to midi.js
-		// ipc.send("removeMidiMapping", controlCount);
 		midi.removeMidiEntry();
 		// decrement controlCount to account for entry we're deleting
 		controlCount--;
@@ -232,7 +230,6 @@ removeMidiMap.addEventListener("click", () => {
 	}
 });
 
-// highlight selected midi control mapping slot & send controller id to midi.js
 midiMappingButtons.addEventListener("click", function(e) {
 	if (e.target.className.includes("midiMapping")){
 		utils.highlightSelectedItem(".midiMapping", e.target);

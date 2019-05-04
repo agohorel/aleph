@@ -4,6 +4,7 @@ const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const easymidi = require("easymidi");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
+const knobs = require(path.resolve(__dirname, "../js/gsuiJS.js"));
 
 let midiMap = {};
 let midiMappings = [];
@@ -101,10 +102,10 @@ module.exports.load = () => {
 	midiMappingHasBeenLoaded = true;
 }
 
-ipc.on("audioCtrlMapBtnPressed", (event, args) => {
-	audioCtrlNum = args;
+module.exports.listenForAudioCtrlMapping = (btnID) => {
+	audioCtrlNum = btnID;
 	mapModeStatuses.audioCtrls = true;
-});
+}
 
 ipc.on("sketchMidiMapActive", (event, args) => {
 	sketchCtrlName = args;
@@ -174,7 +175,7 @@ function ccChange(device, deviceName) {
 			updateMidi(midiMap, midiMappings, msg.controller, msg.value, deviceName);
 			// @TODO only update and ipc send audioCtrlMappings when necessary
 			updateMidi(audioCtrlMap, audioCtrlMappings, msg.controller, msg.value, deviceName);
-			ipc.send("audioCtrlChanged", audioCtrlMappings);
+			knobs.updateKnobs(audioCtrlMappings);
 		}
 
 		module.exports.controls = midiMappings;
