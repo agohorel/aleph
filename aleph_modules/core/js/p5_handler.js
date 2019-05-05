@@ -69,9 +69,7 @@ function setup() {
 	fft.setInput(input);
 }
 
-function draw() {	
-	// checkSketchMidiControls(midi.sketchCtrl);
-	
+function draw() {		
 	analyzeAudio();
 
 	if (moduleName !== ""){
@@ -118,6 +116,10 @@ function analyzeAudio(){
 ipc.on("sketchSelector", (event, arg) => {
 	resetStyles();
 	moduleName = arg;
+});
+
+ipc.on("sketchChangedWithMidi", (event, arg) => {
+	checkSketchMidiControls(arg);
 });
 
 ipc.on("knobChanged", (event, arg) => {

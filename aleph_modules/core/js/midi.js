@@ -107,10 +107,10 @@ module.exports.listenForAudioCtrlMapping = (btnID) => {
 	mapModeStatuses.audioCtrls = true;
 }
 
-ipc.on("sketchMidiMapActive", (event, args) => {
-	sketchCtrlName = args;
+module.exports.midiMapSketchSelector = (id) => {
+	sketchCtrlName = id;
 	mapModeStatuses.sketchCtrls = true;
-});
+}
 
 ipc.on("forceMomentary", (event, args) => {
 	forceMomentaryMode = args;
@@ -133,12 +133,9 @@ function pressedButton(device, deviceName) {
 			updateMidi(midiMap, midiMappings, msg.note, msg.velocity, deviceName);
 			updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity, deviceName);
 		}
-
-		// re-export new values on update
-		module.exports.controls = midiMappings;
-		module.exports.sketchCtrl = sketchCtrlMappings;
-
+		
 		ipc.send("updateMidi", midiMappings);
+		ipc.send("sketchChangedWithMidi", sketchCtrlMappings);
 	});
 }
 
@@ -153,9 +150,6 @@ function releasedButton(device, deviceName) {
 			updateMidi(midiMap, midiMappings, msg.note, msg.velocity, deviceName);
 			updateMidi(sketchCtrlMap, sketchCtrlMappings, msg.note, msg.velocity, deviceName);
 		}
-	
-		module.exports.controls = midiMappings;
-		module.exports.sketchCtrl = sketchCtrlMappings;
 
 		ipc.send("updateMidi", midiMappings);
 	});
@@ -175,8 +169,6 @@ function ccChange(device, deviceName) {
 			updateMidi(audioCtrlMap, audioCtrlMappings, msg.controller, msg.value, deviceName);
 			knobs.updateKnobs(audioCtrlMappings);
 		}
-
-		module.exports.controls = midiMappings;
 
 		ipc.send("updateMidi", midiMappings);
 	});

@@ -154,10 +154,6 @@ ipcMain.on("knobChanged", (event, args) => {
 	sendToDisplayWindow("knobChanged", args);
 });
 
-ipcMain.on("sketchMidiMapActive", (event, args) => {
-	sendToDisplayWindow("sketchMidiMapActive", args);
-});
-
 ipcMain.on("sketchChanged", (event, args) => {
 	sendToEditorWindow("sketchChanged", args);
 });
@@ -177,6 +173,10 @@ ipcMain.on("updateMidi", (event, args) => {
 
 ipcMain.on("p5MidiInit", (event, args) => {
 	sendToDisplayWindow("p5MidiInit", lastMidi);
+});
+
+ipcMain.on("sketchChangedWithMidi", (event, args) => {
+	sendToDisplayWindow("sketchChangedWithMidi", args);
 });
 
 function sendToEditorWindow(channel, args){

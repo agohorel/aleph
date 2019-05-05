@@ -156,9 +156,9 @@ sketchSelectorButtons.addEventListener("click", function(e) {
 		if (sketchSelectModeActive) {
 			ipc.send("changeSketch", e.target.id);
 		} 
-		// otherwise forward selected sketches name to main process
+		// otherwise forward selected sketches name to midi.js to setup mapping
 		else {
-			ipc.send("sketchMidiMapActive", e.target.id);
+			midi.midiMapSketchSelector(e.target.id);
 			// reset sketchSelectModeActive back to default 
 			sketchSelectModeActive = true;
 		}
