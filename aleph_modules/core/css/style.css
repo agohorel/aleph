@@ -12,7 +12,7 @@ html, body {
 	background-color: #060b0d;
 	margin: 0;
 	height: 100%;
-	overflow: hidden;
+	overflow-x: hidden;
 	user-select: none;
 }
 
