@@ -11,9 +11,11 @@ ipc.on("knobChanged", (event, arg) => {
 
 function setup(){
     input = new p5.AudioIn();
-    // input.getSources((devices) => {
-    // 	console.log(devices);
-    // });
+    input.getSources((devices) => {
+        devices.forEach((device) => {
+            utils.makeDomElementWithId("BUTTON", device.label, device.deviceId, ["btn"], "#audioDeviceButtons", false);
+        });
+    });
     // input.setSource(5);
     input.start();
 
