@@ -1,29 +1,28 @@
 // p5.disableFriendlyErrors = true;
-
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const { dialog } = electron.remote;
 const p5 = require("p5");
-const p5_audio = require("p5/lib/addons/p5.sound.js");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
 const fs = require("fs");
 const path = require("path");
 
-// const midi = require(path.resolve(__dirname, "../js/midi.js"));
 const assetsPath = path.resolve(__dirname, "../../assets/");
 const sketchesPath = path.resolve(__dirname, "../../sketches/");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
-let fft, input, spectrum, waveform, spectralCentroid, bass, mid, high, moduleName = "", amplitude, leftVol, rightVol, leftVolEased = .001, rightVolEased = .001, volEased = .001;
+let moduleName = "";
 let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
-let audio = {};
-let audioParams = {0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25}; // set up initial values for audioParams object
 let cnv, _2D;
 let renderers = {};
 let pxlDensity;
 let aa;
-
 let midi = {};
+let audio = {};
+
+ipc.on("updateAudio", (event, args) => {
+	audio = args;
+});
 
 function preload() {
 	importer("models");
@@ -39,11 +38,11 @@ function preload() {
 		setAA(aa);
 	});
 
+	// ipc calls to check for previously loaded MIDI if window is refreshed
 	ipc.send("p5MidiInit", null);
 
 	ipc.on("p5MidiInit", (event, args) => {
 		midi = args;
-		console.log(midi);
 	});
 }
 
@@ -54,24 +53,9 @@ function setAA(aa){
 function setup() {
 	cnv = createCanvas(windowWidth, windowHeight);
 	_2D = createGraphics(windowWidth, windowHeight);
-
-	input = new p5.AudioIn();
-	// input.getSources((devices) => {
-	// 	console.log(devices);
-	// });
-	// input.setSource(5);
-	input.start();
-	
-	amplitude = new p5.Amplitude();
-	amplitude.setInput(input);
-
-	fft = new p5.FFT();
-	fft.setInput(input);
 }
 
 function draw() {		
-	analyzeAudio();
-
 	if (moduleName !== ""){
 		try {
 			let moduleFile = require(path.resolve(__dirname, "../../sketches/", moduleName));
@@ -94,25 +78,6 @@ function checkSketchMidiControls(controlsArray){
 	}
 }
 
-function analyzeAudio(){
-	volume = clamp(amplitude.getLevel() * audioParams[0], 0, 1);
-	leftVol = clamp(amplitude.getLevel(0) * audioParams[0], 0, 1);
-	rightVol = clamp(amplitude.getLevel(1) * audioParams[0], 0, 1);
-	spectrum = fft.analyze();
-	waveform = fft.waveform();
-	bass = clamp(fft.getEnergy("bass") * audioParams[1], 0, 255);
-	mid = clamp(fft.getEnergy("mid") * audioParams[2], 0, 255);
-	high = clamp(fft.getEnergy("treble") * audioParams[3], 0, 255);
-	fft.smooth(audioParams[4]);
-	spectralCentroid = fft.getCentroid();
-	smoother(volume, leftVol, rightVol, .5 - audioParams[5]);
-	audio = {
-		fft, volume, leftVol, rightVol, spectrum, waveform, 
-		bass, mid, high, spectralCentroid, 
-		volEased, leftVolEased, rightVolEased
-	};
-}
-
 ipc.on("sketchSelector", (event, arg) => {
 	resetStyles();
 	moduleName = arg;
@@ -122,13 +87,8 @@ ipc.on("sketchChangedWithMidi", (event, arg) => {
 	checkSketchMidiControls(arg);
 });
 
-ipc.on("knobChanged", (event, arg) => {
-	audioParams = arg;
-});
-
 ipc.on("updateMidi", (event, args) => {
 	midi = args;
-	console.log(midi);
 });
 
 // resize canvas if window is resized
@@ -187,20 +147,6 @@ function importer(folder){
 	});
 }
 
-function smoother(volume, leftVol, rightVol, easing){
-	let target = volume;
-	let diff = target - volEased;
-	volEased += diff * easing;
-
-	let targetL = leftVol;
-	let diffL = targetL - leftVolEased;
-	leftVolEased += diffL * easing;
-
-	let targetR = rightVol;
-	let diffR = targetR - rightVolEased;
-	rightVolEased += diffR * easing;
-}
-
 // reset basic p5 visual params when changing sketch to prevent "leaking" styles
 function resetStyles(){
 	clear();
@@ -212,10 +158,6 @@ function resetStyles(){
 	rectMode(CORNER);
 	resetMatrix();
 	setAA(aa);
-}
-
-function clamp(val, min, max){
-	return Math.max(min, Math.min(val, max));
 }
 
 function scanShaders(){

@@ -151,7 +151,7 @@ ipcMain.on("audioCtrlChanged", (event, args) => {
 });
 
 ipcMain.on("knobChanged", (event, args) => {
-	sendToDisplayWindow("knobChanged", args);
+	sendToEditorWindow("knobChanged", args);
 });
 
 ipcMain.on("sketchChanged", (event, args) => {
@@ -178,6 +178,10 @@ ipcMain.on("p5MidiInit", (event, args) => {
 ipcMain.on("sketchChangedWithMidi", (event, args) => {
 	sendToDisplayWindow("sketchChangedWithMidi", args);
 });
+
+ipcMain.on("updateAudio", (event, args) => {
+	sendToDisplayWindow("updateAudio", args);
+})
 
 function sendToEditorWindow(channel, args){
 	// check if editorWindow exists before making IPC calls

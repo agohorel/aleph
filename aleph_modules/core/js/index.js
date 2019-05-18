@@ -17,7 +17,7 @@ const midi = require(path.resolve(__dirname, "../js/midi.js"));
 const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
 const displayWidth = document.querySelector("#displayWindowWidth");
 const displayHeight = document.querySelector("#displayWindowHeight");
-const pixelDensity = document.querySelector("#pixelDensity");
+const pxlDensity = document.querySelector("#pxlDensity");
 const antiAliasing = document.querySelector("#antiAliasing");
 
 // send display size params to main process & unlock p5 sketch & midi device select buttons
@@ -25,10 +25,10 @@ applyDisplaySettings.addEventListener("click", function (e) {
 	// validate display settings
 	validateInputRanges(displayWidth);
 	validateInputRanges(displayHeight);
-	validateInputRanges(pixelDensity);
+	validateInputRanges(pxlDensity);
 	validateInputRanges(antiAliasing);
 
-	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), Number(pixelDensity.value), Number(antiAliasing.value)];
+	let displayParams = [Number(displayWidth.value), Number(displayHeight.value), Number(pxlDensity.value), Number(antiAliasing.value)];
 	let sketchBtns = document.querySelectorAll(".sketchSelectButton");
 	let midiBtns = document.querySelectorAll(".midiDeviceButtons");
 	let addCtrlBtn = document.querySelector("#addMidiMap");
