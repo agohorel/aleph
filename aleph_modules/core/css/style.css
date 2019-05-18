@@ -8,6 +8,16 @@
   src: url(../../assets/fonts/RobotoMono_Light.ttf);
 }
 
+body::-webkit-scrollbar {
+    width: 10px;
+    background-color: #060b0d;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: #2e3233;
+  outline: none;
+}
+
 html, body {
 	background-color: #060b0d;
 	margin: 0;
