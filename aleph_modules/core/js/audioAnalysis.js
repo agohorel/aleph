@@ -4,14 +4,26 @@ const p5_audio = require("p5/lib/addons/p5.sound.js");
 let input, amplitude, fft;
 let audioParams = { 0: 1, 1: 1, 2: 1, 3: 1, 4: .45, 5: 0.25 }; // initial values for audioParams object
 let volEased = .001, leftVolEased = .001, rightVolEased = .001; // initial values for smoothing
+let audioDeviceSelected = false;
 
 ipc.on("knobChanged", (event, arg) => {
     audioParams = arg;
 });
 
 ipc.on("audioDeviceSelected", (event, args) => {
-    input.setSource(args);
-    input.start();
+    // set and start audio device
+    if (!audioDeviceSelected){
+        input.setSource(args);
+        input.start();
+        audioDeviceSelected = true;
+    } 
+    // if there's already an audio device running, kill it and re-set the source
+    else {
+        input.stop();
+        input.setSource(args);
+        input.start();
+    }
+
 });
 
 function setup(){
