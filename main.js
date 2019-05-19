@@ -3,7 +3,8 @@ const {app, BrowserWindow, ipcMain, globalShortcut, dialog} = electron;
 const electronDebug = require("electron-debug");
 const path = require("path");
 // global reference to windows to prevent closing on js garbage collection
-let editorWindow, displayWindow, splash;
+let editorWindow, splash;
+let displayWindows = [];
 let lastMidi = {}; // stores the last state of the midi object to use when refreshing displayWindows
 
 electronDebug({
@@ -131,8 +132,10 @@ function sendToEditorWindow(channel, args){
 
 function sendToDisplayWindow(channel, args) {
 	// check if editorWindow exists before making IPC calls
-	if (displayWindow) {
-		displayWindow.webContents.send(channel, args);
+	if (displayWindows.length > 0) {
+		displayWindows.forEach((displayWindow) => {
+			displayWindow.webContents.send(channel, args);
+		});		
 	}
 }
 
@@ -200,7 +203,7 @@ function createEditorWindow() {
 }
 
 function createDisplayWindow(args){
-	displayWindow = new BrowserWindow({
+	let displayWindow = new BrowserWindow({
 		width: args[0],
 		height: args[1],
 		icon: setIconByOS()
@@ -214,5 +217,6 @@ function createDisplayWindow(args){
 
 	displayWindow.on("closed", () => {
 		displayWindow = null;
-	});	
+	});
+	displayWindows.push(displayWindow);
 }
