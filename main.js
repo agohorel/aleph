@@ -181,7 +181,11 @@ ipcMain.on("sketchChangedWithMidi", (event, args) => {
 
 ipcMain.on("updateAudio", (event, args) => {
 	sendToDisplayWindow("updateAudio", args);
-})
+});
+
+ipcMain.on("audioDeviceSelected", (event, args) => {
+	sendToEditorWindow("audioDeviceSelected", args);
+});
 
 function sendToEditorWindow(channel, args){
 	// check if editorWindow exists before making IPC calls

@@ -9,15 +9,18 @@ ipc.on("knobChanged", (event, arg) => {
     audioParams = arg;
 });
 
+ipc.on("audioDeviceSelected", (event, args) => {
+    input.setSource(args);
+    input.start();
+});
+
 function setup(){
     input = new p5.AudioIn();
     input.getSources((devices) => {
-        devices.forEach((device) => {
-            utils.makeDomElementWithId("BUTTON", device.label, device.deviceId, ["btn"], "#audioDeviceButtons", false);
+        devices.forEach((device, index) => {
+            utils.makeDomElementWithId("BUTTON", device.label, index, ["btn", "audioDeviceButton"], "#audioDeviceButtons", false);
         });
     });
-    // input.setSource(5);
-    input.start();
 
     amplitude = new p5.Amplitude();
     amplitude.setInput(input);
