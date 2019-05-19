@@ -19,8 +19,8 @@ function draw() {
   _3D.translate(-width/2, -height/2, 0);
   _3D.textAlign(CENTER);
   _3D.noStroke();
-  _3D.fill(map(spectralCentroid, 0, 12000, 0, 255));
+  _3D.fill(map(audio.spectralCentroid, 0, 12000, 0, 255));
   _3D.textFont(assets.fonts.RobotoMono_Light);
-  _3D.textSize(width/8 * volume);
+  _3D.textSize(width/8 * audio.volume);
   _3D.text('hello i am some text', width/2, height/2);
 }

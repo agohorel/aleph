@@ -30,7 +30,7 @@ exports.run = (audio, midi, assets, utils) => {
 	centroidplot = map(log(mean_freq_index), 0, log(audio.spectrum.length), 0, width);
 
 	stroke(255,0,0); // the line showing where the centroid is will be red
-	rect(centroidplot, 0, width / spectrum.length, height);
+	rect(centroidplot, 0, width / audio.spectrum.length, height);
 
 	noStroke();
 	fill(255);  

@@ -13,7 +13,7 @@ function setup(){
 function draw() {
 	let r = audio.bass, g = audio.mid, b = audio.high;
 	_3D.background(255);
-	_2D.background(255 - volume * 255);
+	_2D.background(255 - audio.volume * 255);
 	_2D.noStroke();
 	_2D.fill(r, g, b);
 
