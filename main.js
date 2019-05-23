@@ -4,7 +4,6 @@ const electronDebug = require("electron-debug");
 const path = require("path");
 // global reference to windows to prevent closing on js garbage collection
 let editorWindow, splash;
-let displayWindows = [];
 let lastMidi = {}; // stores the last state of the midi object to use when refreshing displayWindows
 
 electronDebug({
@@ -74,7 +73,6 @@ ipcMain.on("loadMidi", (event) => {
 
 ipcMain.on("midiLoaded", (event) => {
 	sendToEditorWindow("midiLoaded");
-	// sendToDisplayWindow("midiLoaded");
 });
 
 ipcMain.on("midiSaved", (event) => {
@@ -132,8 +130,8 @@ function sendToEditorWindow(channel, args){
 
 function sendToDisplayWindow(channel, args) {
 	// check if editorWindow exists before making IPC calls
-	if (displayWindows.length > 0) {
-		displayWindows.forEach((displayWindow) => {
+	if (BrowserWindow.getAllWindows().length > 0) {
+		BrowserWindow.getAllWindows().forEach((displayWindow) => {
 			displayWindow.webContents.send(channel, args);
 		});		
 	}
@@ -212,11 +210,10 @@ function createDisplayWindow(args){
 
 	// wait for the window to exist before trying to ipc to it 
 	setTimeout(() => displayWindow.webContents.send("applyDisplaySettings", args), 1000);
-
+	
 	displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
 
 	displayWindow.on("closed", () => {
 		displayWindow = null;
 	});
-	displayWindows.push(displayWindow);
 }
