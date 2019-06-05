@@ -13,7 +13,7 @@ const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let moduleName = "";
 let assets = {models: {}, textures: {}, fonts: {}, shaders: {}};
-let cnv, _2D;
+let cnv, _2D, _3D;
 let renderers = {};
 let pxlDensity;
 let aa;
@@ -29,7 +29,7 @@ function preload() {
 	importer("textures");
 	importer("fonts");
 	importer("shaders");
-	scanSketches(assignRenderers);
+	// scanSketches(assignRenderers);
 
 	ipc.on("applyDisplaySettings", (event, arg) => {
 		pxlDensity = Number(arg[2]);
@@ -53,6 +53,7 @@ function setAA(aa){
 function setup() {
 	cnv = createCanvas(windowWidth, windowHeight);
 	_2D = createGraphics(windowWidth, windowHeight);
+	_3D = createGraphics(windowWidth, windowHeight, WEBGL);
 }
 
 function draw() {		
@@ -95,7 +96,8 @@ ipc.on("updateMidi", (event, args) => {
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 	_2D.resizeCanvas(windowWidth, windowHeight);
-	scanSketches(resizeOffscreenRenderers);
+	_3D.resizeCanvas(windowWidth, windowHeight);
+	// scanSketches(resizeOffscreenRenderers);
 	centerCanvas();
 	background(0);
 }
@@ -149,15 +151,19 @@ function importer(folder){
 
 // reset basic p5 visual params when changing sketch to prevent "leaking" styles
 function resetStyles(){
+	// clear();
+	// _2D.clear();
+	// strokeWeight(1);
+	// stroke(255);
+	// fill(0);
+	// ellipseMode(CENTER);
+	// rectMode(CORNER);
+	// resetMatrix();
+	// setAA(aa);
 	clear();
 	_2D.clear();
-	strokeWeight(1);
-	stroke(255);
-	fill(0);
-	ellipseMode(CENTER);
-	rectMode(CORNER);
-	resetMatrix();
-	setAA(aa);
+	_3D.clear();
+	_3D.reset();
 }
 
 function scanShaders(){
