@@ -9,6 +9,8 @@ exports.getSketchName = (myPath) => {
 	return sketch = path.basename(myPath, ".js");
 };
 
+// probably obsolete as of p5 0.8.0?
+// this was my hacky workaround for a lack of the reset() function from Processing
 exports.update3D = (renderer, yourCode) => {
 	renderer.push();
 	yourCode();
@@ -18,7 +20,8 @@ exports.update3D = (renderer, yourCode) => {
 
 exports.renderLoop = (hasRun, setup, renderer, draw) => {
 	module.exports.runOnce(hasRun, setup);
-	module.exports.update3D(renderer, draw);
+	// module.exports.update3D(renderer, draw);
+	draw();
 	image(renderer, 0, 0, width, height);
 }
 
