@@ -49,7 +49,7 @@ class Point {
         other.position.y
       );
       strokeWeight(map(audio.volume, 0, 1, .25, 5));
-      if (d < this.perceptionDistance && d > this.perceptionDistance*.75 && other !== this) {
+      if (d < this.perceptionDistance && d > this.perceptionDistance*.25 && other !== this) {
         line(
           this.position.x,
           this.position.y,
