@@ -5,6 +5,7 @@ const path = require("path");
 // global reference to windows to prevent closing on js garbage collection
 let editorWindow, splash;
 let lastMidi = {}; // stores the last state of the midi object to use when refreshing displayWindows
+let displays = []; // stores p5 display windows
 
 electronDebug({
   enabled: true,
@@ -134,11 +135,13 @@ function sendToEditorWindow(channel, args) {
 }
 
 function sendToDisplayWindow(channel, args) {
-  // check if editorWindow exists before making IPC calls
-  // @TODO don't send to EDITOR window - this is getting ALL browserWindows
-  if (BrowserWindow.getAllWindows().length > 0) {
-    BrowserWindow.getAllWindows().forEach(displayWindow => {
-      displayWindow.webContents.send(channel, args);
+  // check for displays
+  if (displays.length) {
+    displays.forEach(display => {
+      // skip over destroyed displays
+      if (!display.displayWindow.isDestroyed()) {
+        display.displayWindow.webContents.send(channel, args);
+      }
     });
   }
 }
@@ -203,13 +206,18 @@ function createEditorWindow() {
   });
 }
 
-function createDisplayWindow(args) {
+function createDisplayWindow(displayParams) {
   let displayWindow = new BrowserWindow({
-    width: args[0],
-    height: args[1],
+    width: displayParams.width,
+    height: displayParams.height,
     icon: setIconByOS()
   });
   displayWindow.setMenu(null);
+
+  displays.push({
+    displayWindow,
+    index: displayParams.index
+  });
 
   // wait for the window to exist before trying to ipc to it
   setTimeout(
@@ -227,5 +235,10 @@ function createDisplayWindow(args) {
 
   displayWindow.on("close", () => {
     displayWindow = null;
+    displays.splice(displayParams.index, 1);
+
+    console.log(
+      `attempting to remove display with index ${displayParams.index}`
+    );
   });
 }
