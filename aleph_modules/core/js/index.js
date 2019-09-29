@@ -64,7 +64,7 @@ applyDisplaySettings.addEventListener("click", function(e) {
     "activeDisplayButton",
     ["btn"],
 	"#activeDisplayIcons",
-	true
+	false
   );
   activeDisplayCount++;
 
