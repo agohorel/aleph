@@ -1,24 +1,24 @@
 // this sketch illustrates p5's built-in 3D primitives box(), torus(), sphere(), cylinder(), and cone().
 // it also makes use of p5's push/pop functions to apply transforms and styling to shapes individually.
 
-let hasRun = {state: false};
-let _3D;
+// let hasRun = {state: false};
+// let _3D;
+
+// exports.run = (audio, midi, assets, utils) => {
+// 	utils.renderLoop(hasRun, setup, _3D, draw);
+// }
+
+// function setup(){
+// 	let sketch = utils.getSketchName(__filename);
+// 	_3D = renderers[sketch];
+// }
 
 exports.run = (audio, midi, assets, utils) => {
-	utils.renderLoop(hasRun, setup, _3D, draw);
-}
-
-function setup(){
-	let sketch = utils.getSketchName(__filename);
-	_3D = renderers[sketch];
-}
-
-function draw() {
 	// set black background
 	_3D.background(0);
 	
 	// create a variable for constant rotation
-	let rotator = frameCount * .005;	
+	let rotator = audio.volEased * .1;	
 
 	// rotate on all 3 axes 
 	_3D.rotateX(rotator);
@@ -35,7 +35,7 @@ function draw() {
 	let box_detailX = int(map(detailX, 1, 24, 1, 4));
 	let box_detailY = int(map(detailY, 1, 16, 1, 4));
 	// link color to volume and scale using map()
-	let col = map(audio.volume, 0, 1, 50, 255);
+	let col = map(audio.volume, 0, .5, 20, 255);
 
 	// set a normal material to the box
 	_3D.normalMaterial();
@@ -70,6 +70,8 @@ function draw() {
 	_3D.translate(0, height/3);
 	_3D.cone(size, size, detailX, detailY);
 	_3D.pop();
+
+	image(_3D, 0, 0, width, height);
 }
 
 // reusable function to reset styles in each push/pop

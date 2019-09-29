@@ -130,6 +130,7 @@ function sendToEditorWindow(channel, args){
 
 function sendToDisplayWindow(channel, args) {
 	// check if editorWindow exists before making IPC calls
+	// @TODO don't send to EDITOR window - this is getting ALL browserWindows
 	if (BrowserWindow.getAllWindows().length > 0) {
 		BrowserWindow.getAllWindows().forEach((displayWindow) => {
 			displayWindow.webContents.send(channel, args);
