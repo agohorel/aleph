@@ -234,11 +234,8 @@ function createDisplayWindow(displayParams) {
   displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
 
   displayWindow.on("close", () => {
+    sendToEditorWindow("removeDisplay", displayParams.index);
     displayWindow = null;
     displays.splice(displayParams.index, 1);
-
-    console.log(
-      `attempting to remove display with index ${displayParams.index}`
-    );
   });
 }

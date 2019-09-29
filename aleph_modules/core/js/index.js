@@ -55,8 +55,8 @@ applyDisplaySettings.addEventListener("click", function(e) {
   createActiveDisplayButton(
     "BUTTON",
     activeDisplayCount,
-    "activeDisplayButton",
-    ["btn"],
+    activeDisplayCount,
+    ["btn", "activeDisplayButtons"],
     "#activeDisplayIcons",
     false
   );
@@ -90,8 +90,13 @@ function createActiveDisplayButton(
   destParent,
   boolean
 ) {
-  utils.makeDomElementWithId(type, text, id, className, destParent, boolean);
+  utils.makeDomElementWithId(type, text, `display_${id}`, className, destParent, boolean);
 }
+
+ipc.on("removeDisplay", (event, displayIndex) => {
+  const button = document.getElementById(`display_${displayIndex}`);
+  button.parentNode.removeChild(button);
+});
 
 ////////////////////////////////////
 // AUDIO CONTROLS MIDI MAPPING STUFF
@@ -250,11 +255,10 @@ const midiMappingButtons = document.querySelector("#midiMapIcons");
 const saveMidi = document.querySelector("#saveMidi");
 const loadMidi = document.querySelector("#loadMidi");
 const forceMomentary = document.getElementById("forceMomentary");
-let controlCount = -1;
+let controlCount = 0;
 
 // create new midi control mappings
 addMidiMap.addEventListener("click", () => {
-  controlCount++;
   utils.makeDomElement(
     "BUTTON",
     controlCount,
@@ -262,6 +266,7 @@ addMidiMap.addEventListener("click", () => {
     "#midiMapIcons",
     false
   );
+  controlCount++;
 });
 
 removeMidiMap.addEventListener("click", () => {
