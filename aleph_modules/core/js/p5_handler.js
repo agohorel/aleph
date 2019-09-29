@@ -31,11 +31,9 @@ function preload() {
   importer("shaders");
   // scanSketches(assignRenderers);
 
-  ipc.on("applyDisplaySettings", (event, arg) => {
-    pxlDensity = Number(arg[2]);
-    pixelDensity(pxlDensity);
-    aa = Number(arg[3]);
-    setAA(aa);
+  ipc.on("applyDisplaySettings", (event, displayParams) => {
+    pixelDensity(displayParams.pixelDensity);
+    setAA(displayParams.antiAliasing);
   });
 
   // ipc calls to check for previously loaded MIDI if window is refreshed

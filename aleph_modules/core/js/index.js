@@ -28,12 +28,6 @@ applyDisplaySettings.addEventListener("click", function(e) {
   validateInputRanges(pxlDensity);
   validateInputRanges(antiAliasing);
 
-  let displayParams = [
-    Number(displayWidth.value),
-    Number(displayHeight.value),
-    Number(pxlDensity.value),
-    Number(antiAliasing.value)
-  ];
   let sketchBtns = document.querySelectorAll(".sketchSelectButton");
   let midiBtns = document.querySelectorAll(".midiDeviceButtons");
   let addCtrlBtn = document.querySelector("#addMidiMap");
@@ -63,12 +57,20 @@ applyDisplaySettings.addEventListener("click", function(e) {
     activeDisplayCount,
     "activeDisplayButton",
     ["btn"],
-	"#activeDisplayIcons",
-	false
+    "#activeDisplayIcons",
+    false
   );
-  activeDisplayCount++;
+
+  let displayParams = {
+    width: Number(displayWidth.value),
+    height: Number(displayHeight.value),
+    pixelDensity: Number(pxlDensity.value),
+    antiAliasing: Number(antiAliasing.value),
+    index: activeDisplayCount
+  };
 
   ipc.send("applyDisplaySettings", displayParams);
+  activeDisplayCount++;
 });
 
 function validateInputRanges(elt) {
