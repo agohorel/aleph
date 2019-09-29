@@ -9,10 +9,12 @@ exports.getSketchName = (myPath) => {
 	return sketch = path.basename(myPath, ".js");
 };
 
+// probably obsolete as of p5 0.8.0?
+// this was my hacky workaround for a lack of the reset() function from Processing
 exports.update3D = (renderer, yourCode) => {
 	renderer.push();
 	yourCode();
-	renderer._renderer._update();
+	// renderer._renderer._update();
 	renderer.pop();
 }
 
