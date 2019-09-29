@@ -20,6 +20,8 @@ const pxlDensity = document.querySelector("#pxlDensity");
 const antiAliasing = document.querySelector("#antiAliasing");
 let activeDisplayCount = 0;
 
+showActiveDisplays(activeDisplayCount);
+
 // send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e) {
   // validate display settings
@@ -61,16 +63,18 @@ applyDisplaySettings.addEventListener("click", function(e) {
     false
   );
 
+  
   let displayParams = {
-    width: Number(displayWidth.value),
-    height: Number(displayHeight.value),
-    pixelDensity: Number(pxlDensity.value),
-    antiAliasing: Number(antiAliasing.value),
-    index: activeDisplayCount
-  };
-
-  ipc.send("applyDisplaySettings", displayParams);
-  activeDisplayCount++;
+	  width: Number(displayWidth.value),
+	  height: Number(displayHeight.value),
+	  pixelDensity: Number(pxlDensity.value),
+	  antiAliasing: Number(antiAliasing.value),
+	  index: activeDisplayCount
+	};
+	
+	ipc.send("applyDisplaySettings", displayParams);
+	activeDisplayCount++;
+	showActiveDisplays(activeDisplayCount);
 });
 
 function validateInputRanges(elt) {
@@ -90,13 +94,30 @@ function createActiveDisplayButton(
   destParent,
   boolean
 ) {
-  utils.makeDomElementWithId(type, text, `display_${id}`, className, destParent, boolean);
+  utils.makeDomElementWithId(
+    type,
+    text,
+    `display_${id}`,
+    className,
+    destParent,
+    boolean
+  );
 }
 
 ipc.on("removeDisplay", (event, displayIndex) => {
   const button = document.getElementById(`display_${displayIndex}`);
   button.parentNode.removeChild(button);
+  activeDisplayCount--;
+  showActiveDisplays(activeDisplayCount);
 });
+
+function showActiveDisplays(activeDisplayCount) {
+  if (activeDisplayCount <= 1) {
+    document.getElementById("activeDisplaysDiv").style.display = "none";
+  } else {
+    document.getElementById("activeDisplaysDiv").style.display = "block";
+  }
+}
 
 ////////////////////////////////////
 // AUDIO CONTROLS MIDI MAPPING STUFF
