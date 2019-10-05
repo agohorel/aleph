@@ -14,7 +14,7 @@ electronDebug({
   devToolsMode: "bottom"
 });
 
-function createWindow() {
+function createSplashScreen() {
   splash = new BrowserWindow({
     width: 512,
     height: 512,
@@ -22,12 +22,11 @@ function createWindow() {
     frame: false
   });
   splash.loadFile("./aleph_modules/core/html/splash.html");
-  // timeout editorWindow load to show splash screen
-  setTimeout(createEditorWindow, 1500);
 }
 
 app.on("ready", () => {
-  createWindow();
+  createSplashScreen();
+  createEditorWindow();
 
   let isFullScreen = false;
   // toggle fullscreen hotkey
@@ -194,12 +193,11 @@ function createEditorWindow() {
 
   // show window only when file has loaded to prevent flash
   editorWindow.once("ready-to-show", () => {
+    splash.destroy();
+
     splash.on("closed", () => {
       splash = null;
     });
-
-    splash.destroy();
-
     // check OS and use maximize or show
     if (process.platform === "darwin") {
       editorWindow.show();
