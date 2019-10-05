@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { app, BrowserWindow, ipcMain, globalShortcut, dialog } = electron;
+const { app, BrowserWindow, ipcMain, dialog } = electron;
 const electronDebug = require("electron-debug");
 const path = require("path");
 // global reference to windows to prevent closing on js garbage collection
@@ -27,13 +27,6 @@ function createSplashScreen() {
 app.on("ready", () => {
   createSplashScreen();
   createEditorWindow();
-
-  let isFullScreen = false;
-  // toggle fullscreen hotkey
-  globalShortcut.register("CommandOrControl+Shift+F", () => {
-    isFullScreen = !isFullScreen;
-    displayWindow.setFullScreen(isFullScreen);
-  });
 });
 
 // quit when all windows are closed.
@@ -231,6 +224,8 @@ function createDisplayWindow(displayParams) {
     height: displayParams.height,
     icon: setIconByOS()
   });
+
+  // remove menu
   displayWindow.setMenu(null);
 
   displays.push({
