@@ -87,14 +87,13 @@ function validateInputRanges(elt) {
 
 ipc.on("removeDisplay", (event, displayIndex) => {
   const button = document.getElementById(`display_${displayIndex}`);
-  console.log(button.parentNode);
   button.parentNode.removeChild(button);
   activeDisplayCount--;
   showActiveDisplays(activeDisplayCount);
 });
 
 function showActiveDisplays(activeDisplayCount) {
-  if (activeDisplayCount <= 1) {
+  if (activeDisplayCount < 1) {
     document.getElementById("activeDisplaysDiv").style.display = "none";
   } else {
     document.getElementById("activeDisplaysDiv").style.display = "block";
