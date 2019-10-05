@@ -1,0 +1,6 @@
+html, body {
+	background-color: #000;
+    overflow-x: hidden;
+    overflow-y: hidden;
+	user-select: none;
+}
