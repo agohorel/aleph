@@ -6,6 +6,7 @@ const path = require("path");
 let editorWindow, splash;
 let lastMidi = {}; // stores the last state of the midi object to use when refreshing displayWindows
 let displays = []; // stores p5 display windows
+let selectedDisplays = []; // stores references to display windows we want to send p5 sketch program changes to
 
 electronDebug({
   enabled: true,
@@ -46,7 +47,7 @@ app.on("window-all-closed", () => {
 });
 
 ipcMain.on("changeSketch", (event, args) => {
-  sendToDisplayWindow("sketchSelector", args);
+  sendToSelectedDisplayWindows("sketchSelector", args);
 });
 
 ipcMain.on("listMidi", (event, args) => {
@@ -127,6 +128,16 @@ ipcMain.on("audioDeviceSelected", (event, args) => {
   sendToEditorWindow("audioDeviceSelected", args);
 });
 
+ipcMain.on("selectedDisplayWindow", (event, displayId) => {
+  if (displayId === "All") {
+    selectedDisplays = displays;
+  } else {
+    selectedDisplays = displays.filter(
+      display => display.index === Number(displayId)
+    );
+  }
+});
+
 function sendToEditorWindow(channel, args) {
   // check if editorWindow exists before making IPC calls
   if (editorWindow) {
@@ -139,6 +150,16 @@ function sendToDisplayWindow(channel, args) {
   if (displays.length) {
     displays.forEach(display => {
       // skip over destroyed displays
+      if (!display.displayWindow.isDestroyed()) {
+        display.displayWindow.webContents.send(channel, args);
+      }
+    });
+  }
+}
+
+function sendToSelectedDisplayWindows(channel, args) {
+  if (selectedDisplays) {
+    selectedDisplays.forEach(display => {
       if (!display.displayWindow.isDestroyed()) {
         display.displayWindow.webContents.send(channel, args);
       }

@@ -104,9 +104,9 @@ function showActiveDisplays(activeDisplayCount) {
 activeDisplayIcons.addEventListener("click", function(e) {
   if (e.target.className.includes("activeDisplayButtons")) {
     utils.highlightSelectedItem(".activeDisplayButtons", e.target);
+    ipc.send("selectedDisplayWindow", e.target.innerText);
   }
 });
-
 
 ////////////////////////////////////
 // AUDIO CONTROLS MIDI MAPPING STUFF
