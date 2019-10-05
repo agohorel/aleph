@@ -19,6 +19,7 @@ const displayHeight = document.querySelector("#displayWindowHeight");
 const pxlDensity = document.querySelector("#pxlDensity");
 const antiAliasing = document.querySelector("#antiAliasing");
 let activeDisplayCount = 0;
+let numDisplaysCreated = 0;
 const activeDisplayIcons = document.querySelector("#activeDisplayIcons");
 
 showActiveDisplays(activeDisplayCount);
@@ -57,23 +58,24 @@ applyDisplaySettings.addEventListener("click", function(e) {
 
   utils.makeDomElementWithId(
     "BUTTON",
-    activeDisplayCount,
-    `display_${activeDisplayCount}`,
+    numDisplaysCreated,
+    `display_${numDisplaysCreated}`,
     ["btn", "activeDisplayButtons"],
     "#activeDisplayIcons",
     false
   );
-
+  
   let displayParams = {
     width: Number(displayWidth.value),
     height: Number(displayHeight.value),
     pixelDensity: Number(pxlDensity.value),
     antiAliasing: Number(antiAliasing.value),
-    index: activeDisplayCount
+    index: numDisplaysCreated
   };
 
   ipc.send("applyDisplaySettings", displayParams);
   activeDisplayCount++;
+  numDisplaysCreated++;
   showActiveDisplays(activeDisplayCount);
 });
 
