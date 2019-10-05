@@ -19,6 +19,7 @@ const displayHeight = document.querySelector("#displayWindowHeight");
 const pxlDensity = document.querySelector("#pxlDensity");
 const antiAliasing = document.querySelector("#antiAliasing");
 let activeDisplayCount = 0;
+const activeDisplayIcons = document.querySelector("#activeDisplayIcons");
 
 showActiveDisplays(activeDisplayCount);
 
@@ -99,6 +100,13 @@ function showActiveDisplays(activeDisplayCount) {
     document.getElementById("activeDisplaysDiv").style.display = "block";
   }
 }
+
+activeDisplayIcons.addEventListener("click", function(e) {
+  if (e.target.className.includes("activeDisplayButtons")) {
+    utils.highlightSelectedItem(".activeDisplayButtons", e.target);
+  }
+});
+
 
 ////////////////////////////////////
 // AUDIO CONTROLS MIDI MAPPING STUFF
