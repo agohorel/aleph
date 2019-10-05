@@ -54,27 +54,26 @@ applyDisplaySettings.addEventListener("click", function(e) {
   forceMomentaryBtn.disabled = false;
   audioParamWrapper.style.pointerEvents = "all";
 
-  createActiveDisplayButton(
+  utils.makeDomElementWithId(
     "BUTTON",
     activeDisplayCount,
-    activeDisplayCount,
+    `display_${activeDisplayCount}`,
     ["btn", "activeDisplayButtons"],
     "#activeDisplayIcons",
     false
   );
 
-  
   let displayParams = {
-	  width: Number(displayWidth.value),
-	  height: Number(displayHeight.value),
-	  pixelDensity: Number(pxlDensity.value),
-	  antiAliasing: Number(antiAliasing.value),
-	  index: activeDisplayCount
-	};
-	
-	ipc.send("applyDisplaySettings", displayParams);
-	activeDisplayCount++;
-	showActiveDisplays(activeDisplayCount);
+    width: Number(displayWidth.value),
+    height: Number(displayHeight.value),
+    pixelDensity: Number(pxlDensity.value),
+    antiAliasing: Number(antiAliasing.value),
+    index: activeDisplayCount
+  };
+
+  ipc.send("applyDisplaySettings", displayParams);
+  activeDisplayCount++;
+  showActiveDisplays(activeDisplayCount);
 });
 
 function validateInputRanges(elt) {
@@ -86,26 +85,9 @@ function validateInputRanges(elt) {
   }
 }
 
-function createActiveDisplayButton(
-  type,
-  text,
-  id,
-  className,
-  destParent,
-  boolean
-) {
-  utils.makeDomElementWithId(
-    type,
-    text,
-    `display_${id}`,
-    className,
-    destParent,
-    boolean
-  );
-}
-
 ipc.on("removeDisplay", (event, displayIndex) => {
   const button = document.getElementById(`display_${displayIndex}`);
+  console.log(button.parentNode);
   button.parentNode.removeChild(button);
   activeDisplayCount--;
   showActiveDisplays(activeDisplayCount);
