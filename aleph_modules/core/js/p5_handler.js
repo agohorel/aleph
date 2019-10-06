@@ -29,7 +29,6 @@ function preload() {
   importer("textures");
   importer("fonts");
   importer("shaders");
-  // scanSketches(assignRenderers);
 
   ipc.on("applyDisplaySettings", (event, displayParams) => {
     pixelDensity(displayParams.pixelDensity);
@@ -97,7 +96,6 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   _2D.resizeCanvas(windowWidth, windowHeight);
   _3D.resizeCanvas(windowWidth, windowHeight);
-  // scanSketches(resizeOffscreenRenderers);
   centerCanvas();
   background(0);
 }
@@ -182,25 +180,5 @@ function importShaders(array) {
     let vert = path.join(assetsPath, "shaders", `${name}.vert`);
     let frag = path.join(assetsPath, "shaders", `${name}.frag`);
     assets.shaders[name] = loadShader(vert, frag);
-  }
-}
-
-function scanSketches(callback) {
-  fs.readdir(sketchesPath, (err, sketches) => {
-    err ? console.log(err) : callback(sketches);
-  });
-}
-
-function assignRenderers(sketches) {
-  for (let i = 0; i < sketches.length; i++) {
-    let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
-    renderers[sketch] = createGraphics(width, height, WEBGL);
-  }
-}
-
-function resizeOffscreenRenderers(sketches) {
-  for (let i = 0; i < sketches.length; i++) {
-    let sketch = sketches[i].substring(0, sketches[i].lastIndexOf("."));
-    renderers[sketch].resizeCanvas(windowWidth, windowHeight);
   }
 }
