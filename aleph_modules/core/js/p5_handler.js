@@ -164,6 +164,7 @@ function resetStyles() {
   _2D.clear();
   _3D.clear();
   _3D.reset();
+  _3D.fill(255); // default fill to white, will be overriden by any fill/materials within sketches
   colorMode(RGB);
   _2D.colorMode(RGB);
   _3D.colorMode(RGB);
