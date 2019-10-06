@@ -41,7 +41,6 @@ applyDisplaySettings.addEventListener("click", function(e) {
   let lockMappingBtn = document.querySelector("#lockMidiMap");
   let saveBtn = document.querySelector("#saveMidi");
   let loadBtn = document.querySelector("#loadMidi");
-  let audioParamWrapper = document.querySelector("#wrapper");
   let forceMomentaryBtn = document.getElementById("forceMomentary");
 
   sketchBtns.forEach(btn => {
@@ -56,7 +55,6 @@ applyDisplaySettings.addEventListener("click", function(e) {
   saveBtn.disabled = false;
   loadBtn.disabled = false;
   forceMomentaryBtn.disabled = false;
-  audioParamWrapper.style.pointerEvents = "all";
 
   utils.makeDomElementWithId(
     "BUTTON",
