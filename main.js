@@ -109,7 +109,7 @@ ipcMain.on("p5MidiInit", (event, args) => {
 });
 
 ipcMain.on("sketchChangedWithMidi", (event, args) => {
-  sendToDisplayWindow("sketchChangedWithMidi", args);
+  sendToSelectedDisplayWindows("sketchChangedWithMidi", args);
 });
 
 ipcMain.on("updateAudio", (event, args) => {

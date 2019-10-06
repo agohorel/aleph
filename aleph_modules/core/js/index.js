@@ -24,6 +24,8 @@ const activeDisplayIcons = document.querySelector("#activeDisplayIcons");
 
 showActiveDisplays(activeDisplayCount);
 
+let displaySelectModeActive = true;
+
 // send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e) {
   // validate display settings
@@ -64,7 +66,7 @@ applyDisplaySettings.addEventListener("click", function(e) {
     "#activeDisplayIcons",
     false
   );
-  
+
   let displayParams = {
     width: Number(displayWidth.value),
     height: Number(displayHeight.value),
@@ -103,10 +105,26 @@ function showActiveDisplays(activeDisplayCount) {
   }
 }
 
+const midiMapDisplaySelect = document.querySelector("#midiMapDisplaySelect");
+
+midiMapDisplaySelect.addEventListener("click", () => {
+  displaySelectModeActive = !displaySelectModeActive;
+});
+
+// highlight selected mode & send mode to p5 via main process
 activeDisplayIcons.addEventListener("click", function(e) {
   if (e.target.className.includes("activeDisplayButtons")) {
     utils.highlightSelectedItem(".activeDisplayButtons", e.target);
-    ipc.send("selectedDisplayWindow", e.target.innerText);
+    // only send ipc call to change selected displayWindow if mapping mode is not enabled
+    if (displaySelectModeActive) {
+      ipc.send("selectedDisplayWindow", e.target.innerText);
+    }
+    // otherwise forward to midi.js to setup mapping
+    else {
+      midi.displayOutputSelector(e.target.id);
+      // reset displaySelectModeActive back to default
+      displaySelectModeActive = true;
+    }
   }
 });
 
