@@ -234,6 +234,8 @@ function createDisplayWindow(displayParams) {
     index: displayParams.index
   });
 
+  selectedDisplays = displays;
+
   // wait for the window to exist before trying to ipc to it
   setTimeout(
     () => (
