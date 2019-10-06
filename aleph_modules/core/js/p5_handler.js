@@ -69,12 +69,12 @@ function draw() {
   }
 }
 
-function checkSketchMidiControls(controlsArray) {
+function forwardSketchChangesToUI(controlsArray) {
   for (let i = 0; i < controlsArray.length; i++) {
     // if a button belonging to the sketchCtrl array has been pressed, set the currently running sketch
     if (controlsArray[i].value > 0) {
       moduleName = controlsArray[i].name;
-      ipc.send("sketchChanged", controlsArray[i].name);
+      ipc.send("sketchChanged", moduleName);
     }
   }
 }
@@ -85,7 +85,7 @@ ipc.on("sketchSelector", (event, arg) => {
 });
 
 ipc.on("sketchChangedWithMidi", (event, arg) => {
-  checkSketchMidiControls(arg);
+  forwardSketchChangesToUI(arg);
 });
 
 ipc.on("updateMidi", (event, args) => {

@@ -95,6 +95,10 @@ ipcMain.on("sketchChanged", (event, args) => {
   sendToEditorWindow("sketchChanged", args);
 });
 
+ipcMain.on("displayOutputChanged", (event, displayId) => {
+  sendToEditorWindow("displayOutputChanged", displayId);
+})
+
 ipcMain.on("forceMomentary", (event, args) => {
   sendToDisplayWindow("forceMomentary", args);
 });

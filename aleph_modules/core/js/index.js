@@ -128,6 +128,11 @@ activeDisplayIcons.addEventListener("click", function(e) {
   }
 });
 
+ipc.on("displayOutputChanged", (event, displayId) => {
+  let elem = document.getElementById(displayId);
+  utils.highlightSelectedItem(".activeDisplayButtons", elem);
+});
+
 ////////////////////////////////////
 // AUDIO CONTROLS MIDI MAPPING STUFF
 ////////////////////////////////////

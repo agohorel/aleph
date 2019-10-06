@@ -219,13 +219,13 @@ function pressedButton(device, deviceName) {
     ipc.send("sketchChangedWithMidi", sketchCtrlMappings);
 
     // was the button just pressed belonging to the displayOutput group? if so get it's name
-    // the assignment-within-an-if-statement
     if (
       (selectedDisplay = filterDisplayOutputMappings(
         displayOutputMappings,
         msg.note
       ))
     ) {
+      ipc.send("displayOutputChanged", selectedDisplay.name);
       // chop out just the index number to send via ipc
       selectedDisplay = selectedDisplay.name.substring(8,selectedDisplay.length);
       ipc.send("selectedDisplayWindow", selectedDisplay);
