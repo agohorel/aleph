@@ -121,7 +121,7 @@ ipcMain.on("audioDeviceSelected", (event, args) => {
 });
 
 ipcMain.on("selectedDisplayWindow", (event, displayId) => {
-  if (displayId === "All") {
+  if (displayId === "ALL") {
     selectedDisplays = displays;
   } else {
     selectedDisplays = displays.filter(
@@ -161,13 +161,10 @@ function sendToSelectedDisplayWindows(channel, args) {
 
 function setIconByOS() {
   if (process.platform === "darwin") {
-    console.log("detected mac host");
     return path.join(__dirname, "aleph_modules/assets/icons/mac/logo.icns");
   } else if (process.platform === "linux") {
-    console.log("detected linux host");
     return path.join(__dirname, "aleph_modules/assets/icons/png/64x64.png");
   } else if (process.platform === "win32") {
-    console.log("detected windows host");
     return path.join(__dirname, "aleph_modules/assets/icons/win/logo.ico");
   }
 }
