@@ -125,7 +125,7 @@ ipcMain.on("audioDeviceSelected", (event, args) => {
 });
 
 ipcMain.on("selectedDisplayWindow", (event, displayId) => {
-  if (displayId === "ALL") {
+  if (displayId === "ALL" || displayId === "All") {
     selectedDisplays = displays;
   } else {
     selectedDisplays = displays.filter(
