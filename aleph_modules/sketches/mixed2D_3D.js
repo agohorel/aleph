@@ -1,11 +1,11 @@
-let hasRun = {state: false};
+let sketchName = path.basename(__filename);
 
-exports.run = (audio, midi, assets, utils) => {
-	utils.renderLoop(hasRun, setup, _3D, draw);
+exports.run = (audio, midi, assets, utils, state) => {
+	utils.renderLoop(state[sketchName], setup, _3D, draw);
 }
 
 function setup(){
-	
+	console.log("1 - SHOULD ONLY EVER HAPPEN ONCE");
 }
 
 function draw() {

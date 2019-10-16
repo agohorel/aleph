@@ -7,6 +7,8 @@ const p5_dom = require("p5/lib/addons/p5.dom.js");
 const fs = require("fs");
 const path = require("path");
 
+const state = require(path.resolve(__dirname, "../js/generateState.js"));
+
 const assetsPath = path.resolve(__dirname, "../../assets/");
 const sketchesPath = path.resolve(__dirname, "../../sketches/");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
@@ -15,8 +17,6 @@ let moduleName = "";
 let assets = { models: {}, textures: {}, fonts: {}, shaders: {} };
 let cnv, _2D, _3D;
 let renderers = {};
-let pxlDensity;
-let aa;
 let midi = {};
 let audio = {};
 
@@ -61,7 +61,7 @@ function draw() {
         "../../sketches/",
         moduleName
       ));
-      moduleFile.run(audio, midi, assets, utils);
+      moduleFile.run(audio, midi, assets, utils, state);
     } catch (err) {
       console.error(err);
     }
