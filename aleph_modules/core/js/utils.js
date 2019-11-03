@@ -9,18 +9,14 @@ exports.getSketchName = myPath => {
   return (sketch = path.basename(myPath, ".js"));
 };
 
-// probably obsolete as of p5 0.8.0?
-// this was my hacky workaround for a lack of the reset() function from Processing
-exports.update3D = (renderer, yourCode) => {
-  renderer.push();
+exports.update3D = (renderer, yourCode, reset) => {
   yourCode();
-  // renderer._renderer._update();
-  renderer.pop();
+  reset ? renderer.reset() : null; // optionally reset transforms and lighting information each frame
 };
 
-exports.renderLoop = (hasRun, setup, renderer, draw) => {
+exports.renderLoop = (hasRun, setup, renderer, draw, resetTransforms) => {
   module.exports.runOnce(hasRun, setup);
-  module.exports.update3D(renderer, draw);
+  module.exports.update3D(renderer, draw, resetTransforms);
   image(renderer, 0, 0, width, height);
 };
 
