@@ -52,6 +52,6 @@ function renderShape(shapeType, stepSize, offset, inverted) {
   _3D.endShape();
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw, "reset");
 };

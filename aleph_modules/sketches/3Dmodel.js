@@ -35,6 +35,6 @@ function draw() {
   _3D.model(assets.models.floppy);
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw, "reset");
 };

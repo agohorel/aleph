@@ -12,6 +12,6 @@ function draw() {
   _3D.text("hello i am some text", width / 2, height / 2);
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw, "reset");
 };

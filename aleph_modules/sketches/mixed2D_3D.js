@@ -26,6 +26,6 @@ function draw() {
   }
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw, "reset");
 };

@@ -21,7 +21,7 @@ function draw() {
   rect(width / 2, height / 2, width / 3, width / 3);
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.runOnce(state[path.basename(__filename)], setup);
   draw();
 };

@@ -6,7 +6,7 @@ function draw() {
   // code you want to run every frame
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.runOnce(state[path.basename(__filename)], setup);
   draw();
 };

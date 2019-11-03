@@ -46,7 +46,7 @@ function draw() {
   text(`centroid: ${round(spectralCentroid)} Hz`, 10, 40);
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.runOnce(state[path.basename(__filename)], setup);
   draw();
 };

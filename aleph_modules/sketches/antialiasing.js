@@ -28,7 +28,7 @@ function draw() {
   );
 }
 
-exports.run = (audio, midi, assets, utils, state) => {
+exports.run = () => {
   utils.runOnce(state[path.basename(__filename)], setup);
   draw();
 };
