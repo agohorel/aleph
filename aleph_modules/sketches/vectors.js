@@ -1,13 +1,14 @@
-p5.disableFriendlyErrors = true; // disables FES
-
 let flock = [];
-let numPoints = 100;
+let numPoints = 75;
 
-exports.run = (audio, midi, assets, utils) => {
-  background(0);
-  if (flock.length < numPoints && frameCount % 2 === 0) {
+function setup() {
+  while (flock.length < numPoints) {
     flock.push(new Point());
   }
+}
+
+function draw() {
+  background(0);
 
   for (let point of flock) {
     point.update();
@@ -15,7 +16,7 @@ exports.run = (audio, midi, assets, utils) => {
     point.lines(flock);
     point.display();
   }
-};
+}
 
 class Point {
   constructor() {
@@ -48,8 +49,12 @@ class Point {
         other.position.x,
         other.position.y
       );
-      strokeWeight(map(audio.volume, 0, 1, .25, 5));
-      if (d < this.perceptionDistance && d > this.perceptionDistance*.25 && other !== this) {
+      strokeWeight(map(audio.volume, 0, 1, 0.25, 5));
+      if (
+        d < this.perceptionDistance &&
+        d > this.perceptionDistance * 0.25 &&
+        other !== this
+      ) {
         line(
           this.position.x,
           this.position.y,
@@ -70,6 +75,11 @@ class Point {
   }
 
   display() {
-    stroke(map(audio.volume, 0, .5, 50, 255));
+    stroke(map(audio.volume, 0, 0.5, 50, 255));
   }
 }
+
+exports.run = (audio, midi, assets, utils, state) => {
+  utils.runOnce(state[path.basename(__filename)], setup);
+  draw();
+};
