@@ -1,16 +1,11 @@
-let hasRun = {state: false};
-let _3D;
-
-exports.run = (audio, midi, assets, utils) => {
-	utils.renderLoop(hasRun, setup, _3D, draw);
+function setup() {
+	// code you only want to run ONCE
 }
 
-function setup(){
-	let sketch = utils.getSketchName(__filename);
-	_3D = renderers[sketch];
-	// put code you only want to run once here
+function draw() {
+	// code you want to run every frame
 }
 
-function draw(){
-	// your code here
+exports.run = (audio, midi, assets, utils, state) => {
+	utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw);
 }
