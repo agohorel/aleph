@@ -8,145 +8,158 @@
   src: url(../../assets/fonts/RobotoMono_Light.ttf);
 }
 
-body::-webkit-scrollbar {
-    width: 10px;
-    background-color: #060b0d;
+:root {
+  --aleph-green: #12e4a6;
+  --aleph-blue: #00b4f6;
+  --aleph-nearblack: #060b0d;
+  --aleph-darkgrey: #2e3233;
+  --aleph-lightgrey: #d4e1e6;
 }
- 
+
+body::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--aleph-nearblack);
+}
+
 body::-webkit-scrollbar-thumb {
-  background-color: #2e3233;
+  background-color: var(--aleph-darkgrey);
   outline: none;
 }
 
-html, body {
-	background-color: #060b0d;
-	margin: 0;
-	height: 100%;
-	overflow-x: hidden;
-	user-select: none;
+html,
+body {
+  background-color: var(--aleph-nearblack);
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+  user-select: none;
 }
 
 label {
-	font-family: Roboto-Mono, monospace;
-	color: #d4e1e6;
-	margin-top: 10px;
-	font-size: 12px;
+  font-family: Roboto-Mono, monospace;
+  color: var(--aleph-lightgrey);
+  margin-top: 10px;
+  font-size: 12px;
 }
 
 input {
-	width: 60px;
-	margin-right: 10px;
-	background-color: #2e3233;
-	border: none;
-	outline: none;
-	font-family: Roboto-Mono, monospace;
-	color: #d4e1e6;
-	font-size: 12px;
+  width: 60px;
+  margin-right: 10px;
+  background-color: var(--aleph-darkgrey);
+  border: none;
+  outline: none;
+  font-family: Roboto-Mono, monospace;
+  color: var(--aleph-lightgrey);
+  font-size: 12px;
 }
 
 input:focus {
-	background-color: #999;
-	color: #000;
+  background-color: #999;
+  color: #000;
 }
 
 /*disable number input "spinners" (increment/decrement arrows)*/
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .btn {
-	background-color: #2e3233;
-	border: none;
-	outline: none;
-	color: #d4e1e6;
-	font-size: 12px;
-	font-family: Roboto-Mono, monospace;
-	margin: 3px 3px 3px 0px;
-	padding: 4px 8px 4px 8px;
+  background-color: var(--aleph-darkgrey);
+  border: none;
+  outline: none;
+  color: var(--aleph-lightgrey);
+  font-size: 12px;
+  font-family: Roboto-Mono, monospace;
+  margin: 3px 3px 3px 0px;
+  padding: 4px 8px 4px 8px;
 }
 
 .btn:hover {
-	background-color: #505759;
-	cursor: pointer;
-	color: #eee;
+  background-color: #505759;
+  cursor: pointer;
+  color: #eee;
 }
 
 .btn:disabled {
-	background-color: #17191a;
-	color: #000;
-	cursor: default;
+  background-color: #17191a;
+  color: #000;
+  cursor: default;
 }
 
 .btn:active {
-	background-color: #d4e1e6;
-	color: #000;
+  background-color: var(--aleph-lightgrey);
+  color: #000;
 }
 
 .btn-light {
-	background-color: #d4e1e6;
-	color: #17191a;
-	font-size: 12px;
+  background-color: var(--aleph-lightgrey);
+  color: #17191a;
+  font-size: 12px;
 }
 
 .btnSmall {
-	font-size: 10px;
-	margin-bottom: 0px;
+  font-size: 10px;
+  margin-bottom: 0px;
 }
 
 .audioCtrlsMapBtn {
-	background-color: #505759; 
-	margin-top: 12px;
-	border: none;
-	outline: none;
-	font-family: Roboto-Mono, monospace;
-	font-size: 10px;
+  background-color: #505759;
+  margin-top: 12px;
+  border: none;
+  outline: none;
+  font-family: Roboto-Mono, monospace;
+  font-size: 10px;
 }
 
 .audioCtrlsMapBtn:hover {
-	background-color: #d4e1e6;
-	cursor: pointer;
-	color: #17191a;
+  background-color: var(--aleph-lightgrey);
+  cursor: pointer;
+  color: #17191a;
 }
 
 .audioCtrlsMapBtn:active {
-	background-color: #12e4a6;
-	color: #000;
+  background-color: var(--aleph-green);
+  color: #000;
 }
 
 .active {
-	background-color: #757d80;
-	color: #060b0d;
+  background-color: #757d80;
+  color: var(--aleph-nearblack);
 }
 
 .active:hover {
-	background-color: #757d80;
-	color: #060b0d;
+  background-color: #757d80;
+  color: var(--aleph-nearblack);
 }
 
 .section {
-	margin: 15px;
+  margin: 15px;
 }
 
 .textHeaders {
-	font-family: Roboto, sans-serif;
-	color: #d4e1e6;
-	margin: 0px;
+  font-family: Roboto, sans-serif;
+  color: var(--aleph-lightgrey);
+  margin: 0px;
 }
 
 .buttons {
-	padding: 5px 10px 10px 0px;
+  padding: 5px 10px 10px 0px;
 }
 
 .buttons .doneLoading {
-	background-color: #12e4a6;
-	color: #000;
+  background-color: var(--aleph-green);
+  color: #000;
 }
 
 #availableAssets {
-	font-family: Roboto-Mono, monospace;
-	font-size: 12px;
-	color: #757d80;
-	margin: 0;
+  font-family: Roboto-Mono, monospace;
+  font-size: 12px;
+  color: #757d80;
+  margin: 0;
+}
+
+.checkbox {
+  background-color: ;
 }
