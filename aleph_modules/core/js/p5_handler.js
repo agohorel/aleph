@@ -1,4 +1,3 @@
-// p5.disableFriendlyErrors = true;
 const electron = require("electron");
 const ipc = electron.ipcRenderer;
 const { dialog } = electron.remote;
@@ -6,6 +5,8 @@ const p5 = require("p5");
 const p5_dom = require("p5/lib/addons/p5.dom.js");
 const fs = require("fs");
 const path = require("path");
+
+p5.disableFriendlyErrors = true;
 
 const state = require(path.resolve(__dirname, "../js/generateState.js"));
 const assetsPath = path.resolve(__dirname, "../../assets/");
@@ -20,6 +21,13 @@ let audio = {};
 
 ipc.on("updateAudio", (event, args) => {
   audio = args;
+});
+
+ipc.on("devModeToggle", (event, devmode) => {
+  p5.disableFriendlyErrors = devmode;
+  console.log(
+    `${p5.disableFriendlyErrors ? "devmode disabled..." : "devmode enabled..."}`
+  );
 });
 
 function preload() {

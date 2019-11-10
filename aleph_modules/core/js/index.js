@@ -18,13 +18,22 @@ const displayWidth = document.querySelector("#displayWindowWidth");
 const displayHeight = document.querySelector("#displayWindowHeight");
 const pxlDensity = document.querySelector("#pxlDensity");
 const antiAliasing = document.querySelector("#antiAliasing");
+const activeDisplayIcons = document.querySelector("#activeDisplayIcons");
+
 let activeDisplayCount = 0;
 let numDisplaysCreated = 0;
-const activeDisplayIcons = document.querySelector("#activeDisplayIcons");
 
 showActiveDisplays(activeDisplayCount);
 
 let displaySelectModeActive = true;
+
+const devModeToggle = document.querySelector("#devmode");
+let devmode = false;
+
+devModeToggle.addEventListener("click", () => {
+  devmode = !devmode;
+  ipc.send("devModeToggle", !devmode);
+});
 
 // send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function(e) {
@@ -70,7 +79,8 @@ applyDisplaySettings.addEventListener("click", function(e) {
     height: Number(displayHeight.value),
     pixelDensity: Number(pxlDensity.value),
     antiAliasing: Number(antiAliasing.value),
-    index: numDisplaysCreated
+    index: numDisplaysCreated,
+    devmode
   };
 
   ipc.send("applyDisplaySettings", displayParams);

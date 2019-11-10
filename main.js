@@ -58,8 +58,12 @@ ipcMain.on("removeMidiMapping", (event, args) => {
   sendToEditorWindow("removeMidiMapping", args);
 });
 
-ipcMain.on("applyDisplaySettings", (event, args) => {
-  createDisplayWindow(args);
+ipcMain.on("applyDisplaySettings", (event, displayParams) => {
+  createDisplayWindow(displayParams);
+});
+
+ipcMain.on("devModeToggle", (event, devmode) => {
+  sendToDisplayWindow("devModeToggle", devmode);
 });
 
 ipcMain.on("saveMidi", event => {
@@ -97,7 +101,7 @@ ipcMain.on("sketchChanged", (event, args) => {
 
 ipcMain.on("displayOutputChanged", (event, displayId) => {
   sendToEditorWindow("displayOutputChanged", displayId);
-})
+});
 
 ipcMain.on("forceMomentary", (event, args) => {
   sendToDisplayWindow("forceMomentary", args);
@@ -226,6 +230,8 @@ function createDisplayWindow(displayParams) {
     icon: setIconByOS()
   });
 
+  displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
+
   // remove menu
   displayWindow.setMenu(null);
 
@@ -247,8 +253,6 @@ function createDisplayWindow(displayParams) {
       1000
     )
   );
-
-  displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
 
   displayWindow.on("close", () => {
     sendToEditorWindow("removeDisplay", displayParams.index);
