@@ -10,7 +10,17 @@ When you first launch Aleph, you will see the editor window, which looks like th
 
 #### Display Settings:
 
-Aleph displays your p5 sketches on a separate window with no UI elements (called the display window) so you can present fullscreen graphics on a secondary display while still being able to access the editor window. You can manually assign a screen resolution by entering values into the Width and Height inputs and create the display using the “Create Display” button. This is useful if you need an exact size for whatever reason. You can also specify pixel density and enable/disable anti-aliasing for images/textures. Alternatively, because Aleph supports dynamically resizable windows, you can simply click “Create Display” without providing a size, and manually resize (or maximize) the window as you see fit. Once you have spawned a display you can enter fullscreen mode by pressing CTRL+F.
+Aleph displays your p5 sketches on a separate window with no UI elements (called the display window) so you can present fullscreen graphics on a secondary display while still being able to access the editor window. You can manually assign a screen resolution by entering values into the Width and Height inputs and create the display using the “Create Display” button. This is useful if you need an exact size for whatever reason. Alternatively, because Aleph supports dynamically resizable windows, you can simply click “Create Display” without providing a size, and manually resize (or maximize) the window as you see fit. Once you have created a display you can enter fullscreen mode by pressing CTRL+F.
+
+
+| Parameter      | Description                                                                                                                                                                              |
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Width          | Set the Display Window's width explicitly (optional)                                                                                                                                     |
+| Height         | Set the Display Window's height explicitly (optional)                                                                                                                                    |
+| Pixel Density  | Set the ratio of renderer pixels to display pixels.  Values below 1.0 will result in upscaling, values above 1.0 will result in supersampling. |
+| Anti-Aliasing  | Toggle anti-aliasing for all windows.                                                                                                                                                    |
+| Dev Mode       | Toggle additional debugging information at the cost of performance. Targets all Display Windows.                                                                                                                      |
+| Create Display | Create a new Display Window with the specified information.                                                                                                                              |
 
 #### Send Sketch to Displays:
 
@@ -178,9 +188,11 @@ exports.run = () => {
 };
 ```
 
-###### _Note that the `setup()` and `draw()` functions above are not actually native p5 functions, though they behave similarly. `setup()` will execute whatever code is inside of it one time, while any code placed in the `draw()` function will run once per frame indefinitely._
+The final argument to the `utils.renderLoop` function (`"reset"`) is an optional flag that will reset transforms and lighting information every frame. Rule of thumb: if you want a constant tranform, like rotating an object X degrees every frame, you want to reset transforms, otherwise the rotation will stack across frames. If you want to apply some non-constant rotation (maybe your rotation is based on audio input), you probably don't want to reset transforms. To remove this `reset` behavior, simply remove the `"reset"` string. See the `3D.js` (`"reset"` disabled) vs `3Dmodel.js` (`"reset"` enabled) example sketches for real examples of this. 
 
-**In the vast majority of cases, you will never need to touch the code inside the `exports.run` function of each Aleph sketch.**
+###### _Note that the `setup()` and `draw()` functions above are not actually native p5 functions, though they behave similarly. `setup()` will execute whatever code is inside of it one time, while any code placed in the `draw()` function will run once per frame as long as the sketch is running._
+
+**In the majority of cases, you will never need to touch the code inside the `exports.run` function of each Aleph sketch, especially for 2D sketches.**
 
 #### Mixed 2D/3D Rendering:
 
@@ -194,31 +206,21 @@ The reason Aleph's primary renderer is 2D and not 3D is that p5's 2D renderer ha
 
 Aleph’s built-in `audio` object contains the following read-only properties:
 
-- _volume_: returns a value between 0.0 and 1.0 representing the current amplitude of the input signal.
-
-- _bass_: returns a value between 0.0 and 255 representing the amount of energy between 20-150Hz.
-
-- _mid_: returns a value between 0.0 and 255 representing the amount of energy between 400-2600Hz.
-
-- _high_: returns a value between 0.0 and 255 representing the amount of energy between 5200-14000Hz.
-
-- _leftVol_: returns a value between 0.0 and 1.0 representing the amplitude of the left audio channel.
-
-- _rightVol_: returns a value between 0.0 and 1.0 representing the amplitude of the left audio channel.
-
-- _volEased_: returns a smoothed value between 0.0 and 1.0 representing the amplitude of the master audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.
-
-- _leftVolEased_: returns a smoothed value between 0.0 and 1.0 representing the amplitude of the left audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.
-
-- _rightVolEased_: returns a smoothed value between 0.0 and 1.0 representing the amplitude of the right audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.
-
-- _fft_: FFT analyzes a very short snapshot of sound called a sample buffer. It returns an array of amplitude measurements, referred to as bins. The array is 1024 bins long by default. You can change the bin array length, but it must be a power of 2 between 16 and 1024 in order for the FFT algorithm to function correctly. The actual size of the FFT buffer is twice the number of bins, so given a standard sample rate, the buffer is 2048/44100 seconds long.
-
-- _spectrum_: returns an array of amplitude values (between 0 and 255) across the frequency spectrum. Length is equal to FFT bins (1024 by default). The array indices correspond to frequencies (i.e. pitches), from the lowest to the highest that humans can hear. Each value represents amplitude at that slice of the frequency spectrum.
-
-- _waveform_: returns an array of amplitude measurements (between -1 and +1) that represent a snapshot of amplitude readings in a single buffer. Length will be equal to bins (defaults to 1024). Can be used to draw the waveform of a sound.
-
-- _spectralCentroid_: returns the spectral centroid of the input signal. The spectral centroid indicates where the "center of mass" of the spectrum is located. Perceptually, it has a connection with the impression of "brightness" of a sound.
+| Property        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| volume           | returns a value between 0.0 and 1.0 representing the current amplitude of the input signal.                                                                                                                                                                                                                                                                                                                                                                       |
+| bass             | returns a value between 0.0 and 255 representing the amount of energy between 20-150Hz.                                                                                                                                                                                                                                                                                                                                                                           |
+| mid              | returns a value between 0.0 and 255 representing the amount of energy between 400-2600Hz.                                                                                                                                                                                                                                                                                                                                                                         |
+| high             | returns a value between 0.0 and 255 representing the amount of energy between 5200-14000Hz.                                                                                                                                                                                                                                                                                                                                                                       |
+| leftVol          | returns a value between 0.0 and 1.0 representing the amplitude of the left audio channel.                                                                                                                                                                                                                                                                                                                                                                         |
+| rightVol         | returns a value between 0.0 and 1.0 representing the amplitude of the left audio channel.                                                                                                                                                                                                                                                                                                                                                                         |
+| volEased         | returns a smoothed value between 0.0 and 1.0 representing the amplitude of the master audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.                                                                                                                                                                                                                                                                                         |
+| leftVolEased     | returns a smoothed value between 0.0 and 1.0 representing the amplitude of the left audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.                                                                                                                                                                                                                                                                                           |
+| rightVolEased    | returns a smoothed value between 0.0 and 1.0 representing the amplitude of the right audio channel. Adjust the smoothing factor using the “vol. smooth” knob on the GUI.                                                                                                                                                                                                                                                                                          |
+| fft              | FFT analyzes a very short snapshot of sound called a sample buffer. It returns an array of amplitude measurements, referred to as bins. The array is 1024 bins long by default. You can change the bin array length, but it must be a power of 2 between 16 and 1024 in order for the FFT algorithm to function correctly. The actual size of the FFT buffer is twice the number of bins, so given a standard sample rate, the buffer is 2048/44100 seconds long. |
+| spectrum         | returns an array of amplitude values (between 0 and 255) across the frequency spectrum. Length is equal to FFT bins (1024 by default). The array indices correspond to frequencies (i.e. pitches), from the lowest to the highest that humans can hear. Each value represents amplitude at that slice of the frequency spectrum.                                                                                                                                  |
+| waveform         | returns an array of amplitude measurements (between -1 and +1) that represent a snapshot of amplitude readings in a single buffer. Length will be equal to bins (defaults to 1024). Can be used to draw the waveform of a sound.                                                                                                                                                                                                                                  |
+| spectralCentroid | returns the spectral centroid of the input signal. The spectral centroid indicates where the "center of mass" of the spectrum is located. Perceptually, it has a connection with the impression of "brightness" of a sound.                                                                                                                                                                                                                                       |
 
 #### Assets:
 
