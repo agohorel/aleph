@@ -56,6 +56,7 @@ function preload() {
 }
 
 function setup() {
+  setAttributes("antialias", false);
   cnv = createCanvas(windowWidth, windowHeight);
   _2D = createGraphics(windowWidth, windowHeight);
   _3D = createGraphics(windowWidth, windowHeight, WEBGL);
@@ -195,4 +196,5 @@ function importShaders(array) {
 
 function setAA(aa) {
   aa ? smooth() : noSmooth();
+  aa ? setAttributes("antialias", true) : setAttributes("antialias", false);
 }
