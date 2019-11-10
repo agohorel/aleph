@@ -27,6 +27,6 @@
   "dependencies": {
     "easymidi": "^1.0.1",
     "electron-debug": "^2.0.0",
-    "p5": "^0.7.2"
+    "p5": "^0.9.0"
   }
 }

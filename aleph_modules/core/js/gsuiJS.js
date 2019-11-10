@@ -1,5 +1,5 @@
 const p5 = require("p5");
-const uiIpc = electron.ipcRenderer;
+const ipc = electron.ipcRenderer;
 
 let knobParams = {};
 const knobs = [
@@ -30,13 +30,13 @@ knobs.forEach((knob, i) => {
 	knobParams[i] = knob._options.value;
 	knob.oninput = (value) => {
 		knobParams[i] = value;
-		uiIpc.send("knobChanged", knobParams);
+		ipc.send("knobChanged", knobParams);
 	}
 	utils.makeDomElementWithId("BUTTON", "map", `mapAudioCtrl_${i}`,["audioCtrlsMapBtn"], "#knob" + i, false);
 });
 
-uiIpc.on("audioCtrlChanged", (event, args) => {
-	for (let i = 0; i < args.length; i++){
+module.exports.updateKnobs = (args) => {
+	for (let i = 0; i < args.length; i++) {
 		// not sure why i can't just use map()?
 		let scaledInput = p5.prototype.map(args[i].value, 0, 127, knobs[i]._options.min, knobs[i]._options.max);
 		// set the gsui element's value (controls appearance of svg elements)
@@ -44,6 +44,5 @@ uiIpc.on("audioCtrlChanged", (event, args) => {
 		// set the knobParams object's value as well (controls the actual audio analysis)
 		knobParams[i] = scaledInput;
 	}
-	// send updated params back to main process
-	uiIpc.send("knobChanged", knobParams);
-});
+	ipc.send("knobChanged", knobParams);
+}

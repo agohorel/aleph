@@ -1,127 +1,175 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>a l e p h</title>
-	<link rel="stylesheet" type="text/css" href="../css/style.css">
-	<link rel="stylesheet" type="text/css" href="../css/gsuiStyles.css">
-	<link rel="stylesheet" type="text/css" href="../../../gs-ui-components/gsuiSlider/gsuiSlider.css">
-</head>
-<body>
+  <head>
+    <title>a l e p h</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/gsuiStyles.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../../gs-ui-components/gsuiSlider/gsuiSlider.css"
+    />
+  </head>
+  <body>
+    <div id="displaySettingsDiv" class="section">
+      <h3 class="textHeaders">Display Settings:</h3>
 
-	<div id="displaySettingsDiv" class="section">
-		<h3 class="textHeaders">Display Settings:</h3>
+      <div>
+        <label for="displayWindowWidth">Width:</label>
+        <input
+          id="displayWindowWidth"
+          type="number"
+          name="displayWindowWidth"
+          value="500"
+          min="200"
+          max="3840"
+        />
+        <label for="displayWindowHeight">Height:</label>
+        <input
+          id="displayWindowHeight"
+          type="number"
+          name="displayWindowHeight"
+          value="500"
+          min="200"
+          max="2160"
+        />
+        <label for="pxlDensity">Pixel Density:</label>
+        <input
+          id="pxlDensity"
+          type="number"
+          name="pxlDensity"
+          value="1"
+          min="0.1"
+          max="8"
+        />
+        <label for="antiAliasing">Anti-Aliasing:</label>
+        <input type="checkbox" name="antiAliasing" id="antiAliasing" class="checkbox"/>
+        
+        <label for="devmode">Dev Mode:</label>
+        <input type="checkbox" name="devmode" id="devmode" class="checkbox" />
 
-		<label for="displayWindowWidth">Width:</label>
-		<input id="displayWindowWidth" type="number" name="displayWindowWidth" value="500" min="200" max="3840">
-		<label for="displayWindowHeight">Height:</label>
-		<input id="displayWindowHeight" type="number" name="displayWindowHeight" value="500" min="200" max="2160">
-		<label for="pixelDensity">Pixel Density:</label>
-		<input id="pixelDensity" type="number" name="pixelDensity" value="1" min="0.1" max="8">
-		<label for="antiAliasing">Anti-Aliasing:</label>
-		<input id="antiAliasing" type="number" name="antiAliasing" value="1" min="0" max="1">
+        <button class="btn" id="applyDisplaySettings">Create Display</button>
+      </div>
+    </div>
 
-		<button class="btn" id="applyDisplaySettings">Create Display</button>
-	</div>
+    <div id="activeDisplaysDiv" class="section">
+      <h3 class="textHeaders">Send Sketch To Displays:</h3>
+      <button id="midiMapDisplaySelect" class="btn btnSmall">Midi Map</button>
+      <div id="activeDisplayIcons" class="buttons">
+        <button id="display_ALL" class="btn activeDisplayButtons">All</button>
+        <!-- dynamically generated buttons go here -->
+      </div>
+    </div>
 
-	<div id="audioSettingsDiv" class="section">
-		<h3 id="audioSettingsHeader" class="textHeaders">Audio Settings:</h3>
-		<div id="audioSettingsCtrls">
-			
-			<div id="wrapper">
-				<div id="knobContainer">
-					<div id="knobs">			
-						<div id="knob0" class="knobItem">
-							<p class="audioSettingsLabels">volume</p>
-						</div>
-						<div id="knob1" class="knobItem">
-							<p class="audioSettingsLabels">bass</p>
-						</div>
-						<div id="knob2" class="knobItem">
-							<p class="audioSettingsLabels">mid</p>
-						</div>
-						<div id="knob3" class="knobItem">
-							<p class="audioSettingsLabels">high</p>
-						</div>
-						<div id="knob4" class="knobItem">
-							<p class="audioSettingsLabels">fft smooth</p>
-						</div>
-						<div id="knob5" class="knobItem">
-							<p class="audioSettingsLabels">vol. smooth</p>
-						</div>
-					</div>
-				</div>
-			</div>
+    <div id="audioSettingsDiv" class="section">
+      <h3 id="audioSettingsHeader" class="textHeaders">Audio Settings:</h3>
+      <div id="audioSettingsCtrls">
+        <div id="wrapper">
+          <div id="knobContainer">
+            <div id="knobs">
+              <div id="knob0" class="knobItem">
+                <p class="audioSettingsLabels">volume</p>
+              </div>
+              <div id="knob1" class="knobItem">
+                <p class="audioSettingsLabels">bass</p>
+              </div>
+              <div id="knob2" class="knobItem">
+                <p class="audioSettingsLabels">mid</p>
+              </div>
+              <div id="knob3" class="knobItem">
+                <p class="audioSettingsLabels">high</p>
+              </div>
+              <div id="knob4" class="knobItem">
+                <p class="audioSettingsLabels">fft smooth</p>
+              </div>
+              <div id="knob5" class="knobItem">
+                <p class="audioSettingsLabels">vol. smooth</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-			<div id="gsuiSlider-template" class="gsuiSlider">
-				<input type="range"/>
-				<div class="gsui-line">
-					<div class="gsui-lineColor"></div>
-				</div>
-				<svg>
-					<circle class="gsui-svgLine"/>
-					<circle class="gsui-svgLineColor"/>
-				</svg>
-				<div class="gsui-eventCatcher"></div>
-			</div>
+        <div id="gsuiSlider-template" class="gsuiSlider">
+          <input type="range" />
+          <div class="gsui-line">
+            <div class="gsui-lineColor"></div>
+          </div>
+          <svg>
+            <circle class="gsui-svgLine" />
+            <circle class="gsui-svgLineColor" />
+          </svg>
+          <div class="gsui-eventCatcher"></div>
+        </div>
+      </div>
+    </div>
 
-		</div>
-	</div>
+    <div id="audioDeviceSelectorDiv" class="section">
+      <h3 id="midiDeviceHeader" class="textHeaders">Audio Device Selection:</h3>
+      <div id="audioDeviceButtons" class="buttons">
+        <!-- dynamically generated buttons go here -->
+      </div>
+    </div>
 
-	<div id="assetImporterDiv" class="section">
-		<h3 class="textHeaders">Import Assets:</h3>
-		<div id="assetImporterbuttons" class="buttons">		
-			<button class="btn" id="objBtn">models</button>
-			<button class="btn" id="texturesBtn">textures</button>
-			<button class="btn" id="fontsBtn">fonts</button>
-			<button class="btn" id="shadersBtn">shaders</button>
-		</div>
-	</div>
+    <div id="assetImporterDiv" class="section">
+      <h3 class="textHeaders">Import Assets:</h3>
+      <div id="assetImporterbuttons" class="buttons">
+        <button class="btn" id="objBtn">models</button>
+        <button class="btn" id="texturesBtn">textures</button>
+        <button class="btn" id="fontsBtn">fonts</button>
+        <button class="btn" id="shadersBtn">shaders</button>
+      </div>
+    </div>
 
-	<div id="availableAssetsDiv" class="section">
-		<h3 class="textHeaders">Available Assets:</h3>
-		<div class="buttons">
-			<button id="availableAssetsBtn" class="btn btnSmall">Show</button>	
-		</div>
-		<p id="availableAssets" style="display: none"></p>
-	</div>
+    <div id="availableAssetsDiv" class="section">
+      <h3 class="textHeaders">Available Assets:</h3>
+      <div class="buttons">
+        <button id="availableAssetsBtn" class="btn btnSmall">Show</button>
+      </div>
+      <p id="availableAssets" style="display: none"></p>
+    </div>
 
-	<div id="sketchSelectorDiv" class="section">
-		<h3 class="textHeaders">Sketch Selection:</h3>
-		<div class="buttons">
-			<button id="new2DSketch" class="btn btnSmall">Create 2D Sketch</button>	
-			<button id="new3DSketch" class="btn btnSmall">Create 3D Sketch</button>	
-			<button id="sketchMidiMapBtn" class="btn btnSmall">Midi Map Sketches</button>	
-		</div>
-		<div id="sketchSelectorButtons" class="buttons">		
-			<!-- dynamically generated buttons go here -->
-		</div>
-	</div>
+    <div id="sketchSelectorDiv" class="section">
+      <h3 class="textHeaders">Sketch Selection:</h3>
+      <div class="buttons">
+        <button id="new2DSketch" class="btn btnSmall">Create 2D Sketch</button>
+        <button id="new3DSketch" class="btn btnSmall">Create 3D Sketch</button>
+        <button id="sketchMidiMapBtn" class="btn btnSmall">
+          Midi Map Sketches
+        </button>
+      </div>
+      <div id="sketchSelectorButtons" class="buttons">
+        <!-- dynamically generated buttons go here -->
+      </div>
+    </div>
 
-	<div id="midiSelectorDiv" class="section">
-		<h3 id="midiDeviceHeader" class="textHeaders">Midi Device Selection:</h3>
-		<div id="midiDeviceButtons" class="buttons">
-			<!-- dynamically generated buttons go here -->
-		</div>
-	</div>
+    <div id="midiSelectorDiv" class="section">
+      <h3 id="midiDeviceHeader" class="textHeaders">Midi Device Selection:</h3>
+      <div id="midiDeviceButtons" class="buttons">
+        <!-- dynamically generated buttons go here -->
+      </div>
+    </div>
 
-	<div id="midiMappingDiv" class="section">
-		<h3 class="textHeaders">Midi Mapping:</h3>
-		<div class="buttons">
-			<button class="btn" id="addMidiMap" disabled="true">Add Control</button>	
-			<button class="btn" id="removeMidiMap" disabled="true">Remove Control</button>	
-			<button class="btn" id="lockMidiMap" disabled="true">Lock Midi Assignment</button>	
-			<button class="btn" id="saveMidi" disabled="true">Save Midi Mapping</button>
-			<button class="btn" id="loadMidi" disabled="true">Load Midi Mapping</button>
-			<button class="btn" id="forceMomentary" disabled="true">Force Momentary: Off</button>
-		</div>
-		<div id="midiMapIcons" class="buttons">
-			<!-- dynamically generated buttons go here -->
-		</div>		
-	</div>
+    <div id="midiMappingDiv" class="section">
+      <h3 class="textHeaders">Midi Mapping:</h3>
+      <div class="buttons">
+        <button class="btn" id="addMidiMap">Add Control</button>
+        <button class="btn" id="removeMidiMap">Remove Control</button>
+        <button class="btn" id="lockMidiMap">Lock Midi Assignment</button>
+        <button class="btn" id="saveMidi">Save Midi Mapping</button>
+        <button class="btn" id="loadMidi">Load Midi Mapping</button>
+        <button class="btn" id="forceMomentary">Force Momentary: Off</button>
+      </div>
+      <div id="midiMapIcons" class="buttons">
+        <!-- dynamically generated buttons go here -->
+      </div>
+    </div>
 
-	<script type="text/javascript" src="../js/index.js"></script>
-	<script type="text/javascript" src="../js/scanMidi.js"></script>
-	<script type="text/javascript" src="../../../gs-ui-components/gsuiSlider/gsuiSlider.js"></script>
-	<script type="text/javascript" src="../js/gsuiJS.js"></script>
-</body>
+    <script
+      type="text/javascript"
+      src="../../../gs-ui-components/gsuiSlider/gsuiSlider.js"
+    ></script>
+    <script type="text/javascript" src="../js/index.js"></script>
+    <script type="text/javascript" src="../js/audioAnalysis.js"></script>
+    <script type="text/javascript" src="../js/fullscreen.js"></script>
+  </body>
 </html>
