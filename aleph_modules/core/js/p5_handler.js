@@ -30,6 +30,13 @@ ipc.on("devModeToggle", (event, devmode) => {
   );
 });
 
+ipc.on("antiAliasingToggle", (event, aaBool) => {
+  console.log(
+    `${aaBool ? "anti-aliasing enabled..." : "anti-aliasing disabled..."}`
+  );
+  setAA(aaBool);
+});
+
 function preload() {
   importer("models");
   importer("textures");
@@ -38,7 +45,6 @@ function preload() {
 
   ipc.on("applyDisplaySettings", (event, displayParams) => {
     pixelDensity(displayParams.pixelDensity);
-    setAA(displayParams.antiAliasing);
   });
 
   // ipc calls to check for previously loaded MIDI if window is refreshed
@@ -49,14 +55,11 @@ function preload() {
   });
 }
 
-function setAA(aa) {
-  aa > 0 ? smooth() : noSmooth();
-}
-
 function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   _2D = createGraphics(windowWidth, windowHeight);
   _3D = createGraphics(windowWidth, windowHeight, WEBGL);
+  noSmooth();
 }
 
 function draw() {
@@ -188,4 +191,8 @@ function importShaders(array) {
     let frag = path.join(assetsPath, "shaders", `${name}.frag`);
     assets.shaders[name] = loadShader(vert, frag);
   }
+}
+
+function setAA(aa) {
+  aa ? smooth() : noSmooth();
 }

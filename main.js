@@ -62,8 +62,12 @@ ipcMain.on("applyDisplaySettings", (event, displayParams) => {
   createDisplayWindow(displayParams);
 });
 
-ipcMain.on("devModeToggle", (event, devmode) => {
-  sendToDisplayWindow("devModeToggle", devmode);
+ipcMain.on("devModeToggle", (event, devmodeBool) => {
+  sendToDisplayWindow("devModeToggle", devmodeBool);
+});
+
+ipcMain.on("antiAliasingToggle", (event, aaBool) => {
+  sendToDisplayWindow("antiAliasingToggle", aaBool);
 });
 
 ipcMain.on("saveMidi", event => {

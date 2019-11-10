@@ -17,7 +17,8 @@ const applyDisplaySettings = document.querySelector("#applyDisplaySettings");
 const displayWidth = document.querySelector("#displayWindowWidth");
 const displayHeight = document.querySelector("#displayWindowHeight");
 const pxlDensity = document.querySelector("#pxlDensity");
-const antiAliasing = document.querySelector("#antiAliasing");
+const antiAliasingToggle = document.querySelector("#antiAliasing");
+const devModeToggle = document.querySelector("#devmode");
 const activeDisplayIcons = document.querySelector("#activeDisplayIcons");
 
 let activeDisplayCount = 0;
@@ -27,12 +28,12 @@ showActiveDisplays(activeDisplayCount);
 
 let displaySelectModeActive = true;
 
-const devModeToggle = document.querySelector("#devmode");
-let devmode = false;
-
 devModeToggle.addEventListener("click", () => {
-  devmode = !devmode;
-  ipc.send("devModeToggle", !devmode);
+  ipc.send("devModeToggle", !devModeToggle.checked);
+});
+
+antiAliasingToggle.addEventListener("click", () => {
+  ipc.send("antiAliasingToggle", antiAliasingToggle.checked);
 });
 
 // send display size params to main process & unlock p5 sketch & midi device select buttons
@@ -41,7 +42,6 @@ applyDisplaySettings.addEventListener("click", function(e) {
   validateInputRanges(displayWidth);
   validateInputRanges(displayHeight);
   validateInputRanges(pxlDensity);
-  validateInputRanges(antiAliasing);
 
   let sketchBtns = document.querySelectorAll(".sketchSelectButton");
   let midiBtns = document.querySelectorAll(".midiDeviceButtons");
@@ -78,9 +78,7 @@ applyDisplaySettings.addEventListener("click", function(e) {
     width: Number(displayWidth.value),
     height: Number(displayHeight.value),
     pixelDensity: Number(pxlDensity.value),
-    antiAliasing: Number(antiAliasing.value),
-    index: numDisplaysCreated,
-    devmode
+    index: numDisplaysCreated
   };
 
   ipc.send("applyDisplaySettings", displayParams);
