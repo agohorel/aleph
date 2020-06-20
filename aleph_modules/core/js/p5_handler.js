@@ -14,10 +14,8 @@ const sketchesPath = path.resolve(__dirname, "../../sketches/");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let moduleName = "";
-let assets = { models: {}, textures: {}, fonts: {}, shaders: {} };
+let assets = { models: {}, textures: {}, fonts: {}, shaders: {}, videos: {} };
 let cnv, _2D, _3D;
-let midi = {};
-let audio = {};
 
 ipc.on("updateAudio", (event, args) => {
   audio = args;
@@ -42,6 +40,7 @@ function preload() {
   importer("textures");
   importer("fonts");
   importer("shaders");
+  importer("videos");
 
   ipc.on("applyDisplaySettings", (event, displayParams) => {
     pixelDensity(displayParams.pixelDensity);
@@ -128,42 +127,43 @@ function importer(folder) {
     } else {
       if (folder === "shaders") {
         scanShaders();
-      }
+      } else {
+        files.forEach((file) => {
+          // get file name
+          let name =
+            file.substring(0, file.lastIndexOf(".")).replace(/[- ]/g, "_") ||
+            file;
 
-      files.forEach((file, index) => {
-        // get file name
-        let name =
-          file.substring(0, file.lastIndexOf(".")).replace(/[- ]/g, "_") ||
-          file;
-
-        // check which folder we're importing from
-        if (folder === "models") {
-          // create entry on assets object & load file
-          assets.models[name] = loadModel(
-            path.join(assetsPath, "models", file),
-            true
-          );
-        }
-
-        if (folder === "textures") {
-          assets.textures[name] = loadImage(
-            path.join(assetsPath, "textures", file)
-          );
-        }
-
-        if (folder === "fonts") {
-          // grab file names and replace hyphens with underscores
-          let fontName = file
-            .substring(0, file.lastIndexOf("."))
-            .replace(/[- ]/g, "_");
-          // filter out font license txt files
-          if (file.substring(file.length - 4, file.length) !== ".txt") {
-            assets.fonts[fontName] = loadFont(
-              path.join(assetsPath, "fonts", file)
+          // check which folder we're importing from
+          if (folder === "models") {
+            // create entry on assets object & load file
+            assets.models[name] = loadModel(
+              path.join(assetsPath, "models", file),
+              true
             );
+          } else if (folder === "textures") {
+            assets.textures[name] = loadImage(
+              path.join(assetsPath, "textures", file)
+            );
+          } else if (folder === "videos") {
+            assets.videos[name] = createVideo(
+              path.join(assetsPath, "videos", file)
+            );
+            assets.videos[name].hide();
+          } else if (folder === "fonts") {
+            // grab file names and replace hyphens with underscores
+            let fontName = file
+              .substring(0, file.lastIndexOf("."))
+              .replace(/[- ]/g, "_");
+            // filter out font license txt files
+            if (file.substring(file.length - 4, file.length) !== ".txt") {
+              assets.fonts[fontName] = loadFont(
+                path.join(assetsPath, "fonts", file)
+              );
+            }
           }
-        }
-      });
+        });
+      }
     }
   });
 }
