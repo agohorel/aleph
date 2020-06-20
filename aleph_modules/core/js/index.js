@@ -176,6 +176,7 @@ const objBtn = document.querySelector("#objBtn");
 const texturesBtn = document.querySelector("#texturesBtn");
 const fontsBtn = document.querySelector("#fontsBtn");
 const shadersBtn = document.querySelector("#shadersBtn");
+const videosBtn = document.querySelector("#videosBtn");
 
 objBtn.addEventListener("click", () => {
   utils.importFileDialog("models");
@@ -191,6 +192,10 @@ fontsBtn.addEventListener("click", () => {
 
 shadersBtn.addEventListener("click", () => {
   utils.importFileDialog("shaders");
+});
+
+videosBtn.addEventListener("click", () => {
+  utils.importFileDialog("videos");
 });
 
 /////////////////////////

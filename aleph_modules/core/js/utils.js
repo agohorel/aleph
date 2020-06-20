@@ -5,7 +5,7 @@ exports.runOnce = (hasRun, codeToRun) => {
   }
 };
 
-exports.getSketchName = myPath => {
+exports.getSketchName = (myPath) => {
   return (sketch = path.basename(myPath, ".js"));
 };
 
@@ -43,19 +43,18 @@ exports.makeDomElementWithId = (
 
 exports.scanAssets = (assetFolders, element) => {
   let assetList = "";
-  assetFolders.forEach(folder => {
+  assetFolders.forEach((folder) => {
     // filter out aleph system icons
     if (folder !== "icons") {
       assetList += `${folder}\n`.toUpperCase();
       let assets = fs.readdirSync(path.join(assetsPath, folder));
 
-      assets.forEach(asset => {
+      assets.forEach((asset) => {
         // filter out font licenses
         if (!asset.toUpperCase().includes("LICENSE")) {
-          assetList += `|__assets.${folder}.${asset.substring(
-            0,
-            asset.lastIndexOf(".")
-          ) || asset}\n`;
+          assetList += `|__assets.${folder}.${
+            asset.substring(0, asset.lastIndexOf(".")) || asset
+          }\n`;
         }
       });
       assetList += "\n";
@@ -81,26 +80,26 @@ exports.makeDomElement = (type, text, className, destParent, boolean) => {
 
 exports.highlightSelectedItem = (className, target) => {
   let selectedClass = document.querySelectorAll(className);
-  Array.from(selectedClass).forEach(item =>
+  Array.from(selectedClass).forEach((item) =>
     item.classList.toggle("active", "")
   );
   target.classList.add("active");
 };
 
-exports.importFileDialog = filetype => {
+exports.importFileDialog = (filetype) => {
   dialog.showOpenDialog(
     {
       filters: [utils.applyFiletypeFilter(filetype)],
-      properties: ["openFile", "multiSelections"]
+      properties: ["openFile", "multiSelections"],
     },
-    files => {
+    (files) => {
       if (files === undefined) return;
       utils.copySelectedFiles(files, path.resolve(assetsPath, filetype));
     }
   );
 };
 
-exports.applyFiletypeFilter = filetype => {
+exports.applyFiletypeFilter = (filetype) => {
   let filter = {};
   if (filetype === "3d" || filetype === "obj" || filetype === "models") {
     filter.name = filetype;
@@ -126,6 +125,10 @@ exports.applyFiletypeFilter = filetype => {
     filter.name = "json";
     filter.extensions = ["json"];
     return filter;
+  } else if (filetype === "videos") {
+    filter.name = "videos";
+    filter.extensions = ["mp4", "ogg", "webm", "mov"];
+    return filter;
   }
 };
 
@@ -135,7 +138,7 @@ exports.copySelectedFiles = (selectedFiles, destination) => {
   for (let i = 0; i < selectedFiles.length; i++) {
     // strip filename off path
     let filename = path.parse(selectedFiles[i]).base.replace(/[- ]/g, "_");
-    fs.copyFile(selectedFiles[i], path.join(destination, filename), err => {
+    fs.copyFile(selectedFiles[i], path.join(destination, filename), (err) => {
       if (err) throw err;
       console.log(
         `${selectedFiles[i]} copied to ${path.join(destination, filename)}`
@@ -150,9 +153,9 @@ exports.newSketchDialog = (type, sketchesPath) => {
     {
       defaultPath: sketchesPath,
       title: "Save New Sketch As",
-      filters: [utils.applyFiletypeFilter("js")]
+      filters: [utils.applyFiletypeFilter("js")],
     },
-    sketchPath => {
+    (sketchPath) => {
       if (sketchPath === undefined) return;
       let sketchName = path.parse(sketchPath).base;
       utils.copySketchTemplate(sketchName, type);
@@ -170,14 +173,14 @@ exports.copySketchTemplate = (name, type) => {
     srcPath = path.resolve(__dirname, "../js/3D_template.js");
   }
 
-  fs.copyFile(srcPath, path.join(sketchesPath, name), err => {
+  fs.copyFile(srcPath, path.join(sketchesPath, name), (err) => {
     if (err) throw err;
     console.log(`created new sketch "${name}"`);
     utils.appendNewSketchBtn(name.substring(0, name.lastIndexOf(".")));
   });
 };
 
-exports.appendNewSketchBtn = newSketch => {
+exports.appendNewSketchBtn = (newSketch) => {
   let bool = true;
   let sketchBtn = document.querySelector(".sketchSelectButton");
   // if existing buttons are disabled, bool = true (btn is created in disabled state)
@@ -200,15 +203,15 @@ exports.saveMidiDialog = (mappingsPath, array) => {
     {
       defaultPath: mappingsPath,
       title: "Save Mapping File As",
-      filters: [utils.applyFiletypeFilter("json")]
+      filters: [utils.applyFiletypeFilter("json")],
     },
-    filePath => {
+    (filePath) => {
       if (filePath === undefined) return;
       let fileName = path.parse(filePath).base;
       fs.writeFile(
         path.join(mappingsPath, fileName),
         JSON.stringify(array, null, 2),
-        err => {
+        (err) => {
           if (err) throw err;
           // send msg to main process to trigger UI save indicator
           ipc.send("midiSaved");
@@ -229,9 +232,9 @@ exports.loadMidiDialog = (
     {
       defaultPath: mappingsPath,
       filters: [utils.applyFiletypeFilter("json")],
-      properties: ["openFile"]
+      properties: ["openFile"],
     },
-    filePath => {
+    (filePath) => {
       if (filePath === undefined) return;
 
       fs.readFile(filePath[0], "utf-8", (err, data) => {
