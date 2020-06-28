@@ -137,29 +137,28 @@ function importer(folder) {
           // check which folder we're importing from
           if (folder === "models") {
             // create entry on assets object & load file
-            assets.models[name] = loadModel(
-              path.join(assetsPath, "models", file),
-              true
-            );
+            const filePath = path.join(assetsPath, "models", file);
+            assets.models[name] = loadModel(filePath, true);
+            assets.models[name].path = filePath;
           } else if (folder === "textures") {
-            assets.textures[name] = loadImage(
-              path.join(assetsPath, "textures", file)
-            );
+            const filePath = path.join(assetsPath, "textures", file);
+            assets.textures[name] = loadImage(filePath);
+            assets.textures[name].path = filePath;
           } else if (folder === "videos") {
-            assets.videos[name] = createVideo(
-              path.join(assetsPath, "videos", file)
-            );
+            const filePath = path.join(assetsPath, "videos", file);
+            assets.videos[name] = createVideo(filePath);
+            assets.videos[name].path = filePath;
             assets.videos[name].hide();
           } else if (folder === "fonts") {
+            const filePath = path.join(assetsPath, "fonts", file);
             // grab file names and replace hyphens with underscores
             let fontName = file
               .substring(0, file.lastIndexOf("."))
               .replace(/[- ]/g, "_");
             // filter out font license txt files
             if (file.substring(file.length - 4, file.length) !== ".txt") {
-              assets.fonts[fontName] = loadFont(
-                path.join(assetsPath, "fonts", file)
-              );
+              assets.fonts[fontName] = loadFont(filePath);
+              assets.fonts[fontName].path = filePath;
             }
           }
         });
