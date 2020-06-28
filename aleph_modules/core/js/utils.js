@@ -259,3 +259,7 @@ exports.loadMidiDialog = (
     }
   );
 };
+
+exports.centerGif = (gif) => {
+  gif.position(width * 0.5 - gif.width * 0.5, height * 0.5 - gif.height / 2);
+};
