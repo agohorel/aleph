@@ -87,8 +87,14 @@ function forwardSketchChangesToUI(controlsArray) {
   }
 }
 
+function clearImgTags() {
+  const imgs = document.querySelectorAll("img");
+  imgs.forEach((img) => img.remove());
+}
+
 ipc.on("sketchSelector", (event, arg) => {
   resetStyles();
+  clearImgTags(); // remove Img tags embedded via p5's createImg()
   moduleName = arg;
 });
 
