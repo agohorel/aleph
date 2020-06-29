@@ -27,7 +27,7 @@ let mapModeStatuses = {
   default: false,
   audioCtrls: false,
   sketchCtrls: false,
-  displayOutput: false
+  displayOutput: false,
 };
 
 let forceMomentaryMode = false;
@@ -53,7 +53,7 @@ for (let i = 0; i < midiInputs.length; i++) {
 }
 
 // receive selected midi device from main process. assign device & listen for input.
-module.exports.selectMidiDevice = deviceName => {
+module.exports.selectMidiDevice = (deviceName) => {
   // check if selected device is new so we don't spawn multiple easymidi instances per device
   if (mappedDevices.indexOf(deviceName) < 0) {
     midiDevices.push(new easymidi.Input(deviceName));
@@ -66,7 +66,7 @@ module.exports.selectMidiDevice = deviceName => {
   }
 };
 
-module.exports.addMidiEntry = controlCount => {
+module.exports.addMidiEntry = (controlCount) => {
   controlID = controlCount;
   mapModeStatuses.default = true;
 };
@@ -78,15 +78,15 @@ module.exports.removeMidiEntry = () => {
 module.exports.save = () => {
   // consolidate all mapping arrays into single array for easy saving.
   // we'll parse them out upon loading the midi controls by the "name" property on each individual control object.
-  audioCtrlMappings.forEach(audioCtrlMap => {
+  audioCtrlMappings.forEach((audioCtrlMap) => {
     midiMappings.push(audioCtrlMap);
   });
 
-  sketchCtrlMappings.forEach(sketchCtrlMap => {
+  sketchCtrlMappings.forEach((sketchCtrlMap) => {
     midiMappings.push(sketchCtrlMap);
   });
 
-  displayOutputMappings.forEach(control => {
+  displayOutputMappings.forEach((control) => {
     midiMappings.push(control);
   });
 
@@ -124,17 +124,17 @@ module.exports.load = () => {
   midiMappingHasBeenLoaded = true;
 };
 
-module.exports.listenForAudioCtrlMapping = btnID => {
+module.exports.listenForAudioCtrlMapping = (btnID) => {
   audioCtrlNum = btnID;
   mapModeStatuses.audioCtrls = true;
 };
 
-module.exports.midiMapSketchSelector = id => {
+module.exports.midiMapSketchSelector = (id) => {
   sketchCtrlName = id;
   mapModeStatuses.sketchCtrls = true;
 };
 
-module.exports.displayOutputSelector = id => {
+module.exports.displayOutputSelector = (id) => {
   displayOutputName = id;
   mapModeStatuses.displayOutput = true;
 };
@@ -145,7 +145,7 @@ ipc.on("forceMomentary", (event, args) => {
 
 function pressedButton(device, deviceName) {
   // listen for button presses
-  device.on("noteon", msg => {
+  device.on("noteon", (msg) => {
     // if mapMode is on, assign the pressed button to midiMap
     if (mapModeStatuses.default) {
       setMidiMapping(
@@ -160,12 +160,7 @@ function pressedButton(device, deviceName) {
       mapModeStatuses.default = false;
     }
     // set button mappings if sketchCtrls mapMode is active
-    else if (
-      mapModeStatuses.sketchCtrls &&
-      !mapModeStatuses.default &&
-      !mapModeStatuses.audioCtrls &&
-      !mapModeStatuses.displayOutput
-    ) {
+    else if (mapModeStatuses.sketchCtrls) {
       setMidiMapping(
         sketchCtrlMap,
         sketchCtrlMappings,
@@ -176,12 +171,7 @@ function pressedButton(device, deviceName) {
         deviceName
       );
       mapModeStatuses.sketchCtrls = false;
-    } else if (
-      mapModeStatuses.displayOutput &&
-      !mapModeStatuses.sketchCtrls &&
-      !mapModeStatuses.default &&
-      !mapModeStatuses.audioCtrls
-    ) {
+    } else if (mapModeStatuses.displayOutput) {
       setMidiMapping(
         displayOutputMap,
         displayOutputMappings,
@@ -227,7 +217,10 @@ function pressedButton(device, deviceName) {
     ) {
       ipc.send("displayOutputChanged", selectedDisplay.name);
       // chop out just the index number to send via ipc
-      selectedDisplay = selectedDisplay.name.substring(8,selectedDisplay.length);
+      selectedDisplay = selectedDisplay.name.substring(
+        8,
+        selectedDisplay.length
+      );
       ipc.send("selectedDisplayWindow", selectedDisplay);
     }
   });
@@ -235,7 +228,7 @@ function pressedButton(device, deviceName) {
 
 function filterDisplayOutputMappings(mappings, buttonId) {
   let elementPos = mappings
-    .map(mapping => {
+    .map((mapping) => {
       return mapping.note;
     })
     .indexOf(buttonId);
@@ -243,7 +236,7 @@ function filterDisplayOutputMappings(mappings, buttonId) {
 }
 
 function releasedButton(device, deviceName) {
-  device.on("noteoff", msg => {
+  device.on("noteoff", (msg) => {
     // @TODO:
     // only update/export when necessary
     if (forceMomentaryMode) {
@@ -275,12 +268,8 @@ function releasedButton(device, deviceName) {
 }
 
 function ccChange(device, deviceName) {
-  device.on("cc", msg => {
-    if (
-      mapModeStatuses.default &&
-      !mapModeStatuses.audioCtrls &&
-      !mapModeStatuses.sketchCtrls
-    ) {
+  device.on("cc", (msg) => {
+    if (mapModeStatuses.default) {
       setMidiMapping(
         midiMap,
         midiMappings,
@@ -290,11 +279,7 @@ function ccChange(device, deviceName) {
         "default",
         deviceName
       );
-    } else if (
-      mapModeStatuses.audioCtrls &&
-      !mapModeStatuses.default &&
-      !mapModeStatuses.sketchCtrls
-    ) {
+    } else if (mapModeStatuses.audioCtrls) {
       setMidiMapping(
         audioCtrlMap,
         audioCtrlMappings,
