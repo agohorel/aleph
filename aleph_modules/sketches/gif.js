@@ -1,18 +1,35 @@
-let gif;
+let pathToGif;
 
 function setup() {
-  gif = createImg(assets.textures.glitchdotcool.path);
+  // to render the gif, we'll need to access it's file path
+  pathToGif = assets.textures.glitchdotcool.path;
 }
 
 function draw() {
-  // call gif.position and pass in X/Y coords if you want arbitrary placement
-  gif.position(mouseX, mouseY);
+  // in it's simplest form you can simply pass a path to a gif.
+  // by default it will be placed in the center of the screen.
+  // utils.renderGif(pathToGif);
 
-  // or use built-in util for centering
-  // utils.centerGif(gif);
+  // but you can pass in an options object for optional:
+  // x,y placement (relative to center of gif)
+  // and an array of objects representing standard CSS filters:
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+  utils.renderGif(pathToGif, {
+    x: mouseX,
+    y: mouseY,
+    filters: [
+      {
+        name: "invert",
+        amount: map(mouseX, 0, width, 0, 1),
+      },
+      {
+        name: "blur",
+        amount: "5px",
+      },
+    ],
+  });
 }
 
 exports.run = () => {
-  utils.runOnce(state[path.basename(__filename)], setup);
-  draw();
+  utils.render2D(state[path.basename(__filename)], setup, draw);
 };
