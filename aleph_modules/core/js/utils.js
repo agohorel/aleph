@@ -264,3 +264,30 @@ exports.loadMidiDialog = (
     }
   );
 };
+
+exports.renderGif = (pathToGif, options) => {
+  let gifID = path.basename(pathToGif);
+  gifID = gifID.substring(0, gifID.lastIndexOf("."));
+
+  if (!document.getElementsByTagName("img").length) {
+    gif = createImg(pathToGif);
+    gif.id(gifID);
+  }
+
+  if (options && options.filters) {
+    const img = document.querySelector(`#${gifID}`);
+    let filterString = "";
+
+    options.filters.forEach((filter) => {
+      filterString += `${filter.name}(${filter.amount}) `;
+      img.style.filter = filterString;
+    });
+  }
+
+  if (options && options.x && options.y) {
+    gif.position(options.x - gif.width * 0.5, options.y - gif.height * 0.5);
+  } else {
+    // default to center of canvas
+    gif.position(width * 0.5 - gif.width * 0.5, height * 0.5 - gif.height / 2);
+  }
+};
