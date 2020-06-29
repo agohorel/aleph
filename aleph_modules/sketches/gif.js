@@ -12,11 +12,13 @@ function draw() {
 
   // but you can pass in an options object for optional:
   // x,y placement (relative to center of gif)
+  // scale (scales x,y uniformly, where 1 = 100% = normal size)
   // and an array of objects representing standard CSS filters:
   // https://developer.mozilla.org/en-US/docs/Web/CSS/filter
   utils.renderGif(pathToGif, {
     x: mouseX,
     y: mouseY,
+    scale: map(mouseY, 0, height, 0.5, 2),
     filters: [
       {
         name: "invert",
@@ -24,7 +26,7 @@ function draw() {
       },
       {
         name: "blur",
-        amount: "5px",
+        amount: "3px",
       },
     ],
   });

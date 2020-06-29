@@ -268,14 +268,18 @@ exports.loadMidiDialog = (
 exports.renderGif = (pathToGif, options) => {
   let gifID = path.basename(pathToGif);
   gifID = gifID.substring(0, gifID.lastIndexOf("."));
+  const img = document.querySelector(`#${gifID}`);
 
   if (!document.getElementsByTagName("img").length) {
     gif = createImg(pathToGif);
     gif.id(gifID);
   }
 
+  if (options && options.scale) {
+    img.style.transform = `scale(${options.scale})`;
+  }
+
   if (options && options.filters) {
-    const img = document.querySelector(`#${gifID}`);
     let filterString = "";
 
     options.filters.forEach((filter) => {
