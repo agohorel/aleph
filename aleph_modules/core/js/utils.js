@@ -245,6 +245,7 @@ exports.loadMidiDialog = (
       fs.readFile(filePath[0], "utf-8", (err, data) => {
         if (err) throw err;
         let obj = JSON.parse(data);
+
         // loop through entire mappings object
         for (let i = 0; i < obj.length; i++) {
           // check if we're dealing w/ the "default" midi controls, or the "audioCtrls" (i.e. the UI knobs)
@@ -252,7 +253,7 @@ exports.loadMidiDialog = (
             midiMappings.push(obj[i]);
           } else if (obj[i].name.indexOf("knob") > -1) {
             audioCtrlMappings.push(obj[i]);
-          } else if (obj[i].name.indexOf("display")) {
+          } else if (obj[i].name.indexOf("display") > -1) {
             displayOutputMappings.push(obj[i]);
           } else {
             sketchCtrlMappings.push(obj[i]);
