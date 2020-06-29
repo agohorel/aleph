@@ -11,7 +11,7 @@ let selectedDisplays = []; // stores references to display windows we want to se
 electronDebug({
   enabled: true,
   showDevTools: false,
-  devToolsMode: "bottom"
+  devToolsMode: "bottom",
 });
 
 function createSplashScreen() {
@@ -19,7 +19,7 @@ function createSplashScreen() {
     width: 512,
     height: 512,
     transparent: true,
-    frame: false
+    frame: false,
   });
   splash.loadFile("./aleph_modules/core/html/splash.html");
 }
@@ -70,19 +70,19 @@ ipcMain.on("antiAliasingToggle", (event, aaBool) => {
   sendToDisplayWindow("antiAliasingToggle", aaBool);
 });
 
-ipcMain.on("saveMidi", event => {
+ipcMain.on("saveMidi", (event) => {
   sendToEditorWindow("saveMidi");
 });
 
-ipcMain.on("loadMidi", event => {
+ipcMain.on("loadMidi", (event) => {
   sendToEditorWindow("loadMidi");
 });
 
-ipcMain.on("midiLoaded", event => {
+ipcMain.on("midiLoaded", (event) => {
   sendToEditorWindow("midiLoaded");
 });
 
-ipcMain.on("midiSaved", event => {
+ipcMain.on("midiSaved", (event) => {
   sendToEditorWindow("midiSaved");
   sendToDisplayWindow("midiSaved");
 });
@@ -108,7 +108,7 @@ ipcMain.on("displayOutputChanged", (event, displayId) => {
 });
 
 ipcMain.on("forceMomentary", (event, args) => {
-  sendToDisplayWindow("forceMomentary", args);
+  sendToEditorWindow("forceMomentary", args);
 });
 
 ipcMain.on("updateMidi", (event, args) => {
@@ -137,7 +137,7 @@ ipcMain.on("selectedDisplayWindow", (event, displayId) => {
     selectedDisplays = displays;
   } else {
     selectedDisplays = displays.filter(
-      display => display.index === Number(displayId)
+      (display) => display.index === Number(displayId)
     );
   }
 });
@@ -152,7 +152,7 @@ function sendToEditorWindow(channel, args) {
 function sendToDisplayWindow(channel, args) {
   // check for displays
   if (displays.length) {
-    displays.forEach(display => {
+    displays.forEach((display) => {
       // skip over destroyed displays
       if (!display.displayWindow.isDestroyed()) {
         display.displayWindow.webContents.send(channel, args);
@@ -163,7 +163,7 @@ function sendToDisplayWindow(channel, args) {
 
 function sendToSelectedDisplayWindows(channel, args) {
   if (selectedDisplays) {
-    selectedDisplays.forEach(display => {
+    selectedDisplays.forEach((display) => {
       if (!display.displayWindow.isDestroyed()) {
         display.displayWindow.webContents.send(channel, args);
       }
@@ -188,7 +188,7 @@ function createEditorWindow() {
     width,
     height,
     show: false,
-    icon: setIconByOS()
+    icon: setIconByOS(),
   });
   require("./aleph_modules/core/js/menu.js");
   editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
@@ -209,12 +209,12 @@ function createEditorWindow() {
   });
 
   // show confirm dialog when attempting to close editorWindow
-  editorWindow.on("close", e => {
+  editorWindow.on("close", (e) => {
     let choice = dialog.showMessageBox(editorWindow, {
       type: "question",
       buttons: ["Yes", "No"],
       title: "Confirm",
-      message: "Are you sure you want to quit?"
+      message: "Are you sure you want to quit?",
     });
     if (choice == 1) {
       e.preventDefault();
@@ -231,7 +231,7 @@ function createDisplayWindow(displayParams) {
   let displayWindow = new BrowserWindow({
     width: displayParams.width,
     height: displayParams.height,
-    icon: setIconByOS()
+    icon: setIconByOS(),
   });
 
   displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
@@ -241,7 +241,7 @@ function createDisplayWindow(displayParams) {
 
   displays.push({
     displayWindow,
-    index: displayParams.index
+    index: displayParams.index,
   });
 
   selectedDisplays = displays;
@@ -252,7 +252,7 @@ function createDisplayWindow(displayParams) {
       {
         if(displayWindow) {
           displayWindow.webContents.send("applyDisplaySettings", args);
-        }
+        },
       },
       1000
     )
