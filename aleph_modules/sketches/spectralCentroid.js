@@ -47,6 +47,5 @@ function draw() {
 }
 
 exports.run = () => {
-  utils.runOnce(state[path.basename(__filename)], setup);
-  draw();
+  utils.render2D(state[path.basename(__filename)], setup, draw);
 };

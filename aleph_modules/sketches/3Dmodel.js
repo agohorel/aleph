@@ -20,7 +20,7 @@ function draw() {
   // check if we've already packed the array so we don't keep adding to it
   if (textures.length < Object.keys(assets.textures).length) {
     // loop through the textures object
-    Object.keys(assets.textures).forEach(texture => {
+    Object.keys(assets.textures).forEach((texture) => {
       // add each texture into the textures array so we can pull them at random
       textures.push(assets.textures[texture]);
     });
@@ -36,5 +36,5 @@ function draw() {
 }
 
 exports.run = () => {
-  utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw, "reset");
+  utils.render3D(state[path.basename(__filename)], setup, _3D, draw, "reset");
 };

@@ -14,10 +14,15 @@ exports.update3D = (renderer, yourCode, reset) => {
   reset ? renderer.reset() : null; // optionally reset transforms and lighting information each frame
 };
 
-exports.renderLoop = (hasRun, setup, renderer, draw, resetTransforms) => {
+exports.render3D = (hasRun, setup, renderer, draw, resetTransforms) => {
   module.exports.runOnce(hasRun, setup);
   module.exports.update3D(renderer, draw, resetTransforms);
   image(renderer, 0, 0, width, height);
+};
+
+exports.render2D = (hasRun, setup, draw) => {
+  module.exports.runOnce(hasRun, setup);
+  draw();
 };
 
 exports.makeDomElementWithId = (
@@ -258,8 +263,4 @@ exports.loadMidiDialog = (
       ipc.send("midiLoaded");
     }
   );
-};
-
-exports.centerGif = (gif) => {
-  gif.position(width * 0.5 - gif.width * 0.5, height * 0.5 - gif.height / 2);
 };

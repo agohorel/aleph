@@ -27,5 +27,5 @@ function smoother(val, easing) {
 }
 
 exports.run = () => {
-  utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw);
+  utils.render3D(state[path.basename(__filename)], setup, _3D, draw);
 };

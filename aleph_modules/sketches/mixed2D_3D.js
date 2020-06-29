@@ -27,5 +27,5 @@ function draw() {
 }
 
 exports.run = () => {
-  utils.renderLoop(state[path.basename(__filename)], setup, _3D, draw, "reset");
+  utils.render3D(state[path.basename(__filename)], setup, _3D, draw, "reset");
 };
