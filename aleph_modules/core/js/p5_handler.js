@@ -35,6 +35,10 @@ ipc.on("antiAliasingToggle", (event, aaBool) => {
   setAA(aaBool);
 });
 
+ipc.on("updatePixelDensity", (event, pxlDensity) => {
+  pixelDensity(Number(pxlDensity));
+});
+
 function preload() {
   importer("models");
   importer("images");

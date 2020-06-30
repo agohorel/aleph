@@ -36,6 +36,10 @@ antiAliasingToggle.addEventListener("click", () => {
   ipc.send("antiAliasingToggle", antiAliasingToggle.checked);
 });
 
+pxlDensity.addEventListener("change", (e) => {
+  ipc.send("updatePixelDensity", e.target.value);
+});
+
 // send display size params to main process & unlock p5 sketch & midi device select buttons
 applyDisplaySettings.addEventListener("click", function (e) {
   // validate display settings

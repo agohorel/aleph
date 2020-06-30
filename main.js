@@ -132,6 +132,10 @@ ipcMain.on("audioDeviceSelected", (event, args) => {
   sendToEditorWindow("audioDeviceSelected", args);
 });
 
+ipcMain.on("updatePixelDensity", (event, pixelDensity) => {
+  sendToSelectedDisplayWindows("updatePixelDensity", pixelDensity);
+});
+
 ipcMain.on("selectedDisplayWindow", (event, displayId) => {
   if (displayId === "ALL" || displayId === "All") {
     selectedDisplays = displays;
