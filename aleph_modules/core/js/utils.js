@@ -54,10 +54,15 @@ exports.scanAssets = (assetFolders, element) => {
       assetList += `${folder}\n`.toUpperCase();
       let assets = fs.readdirSync(path.join(assetsPath, folder));
 
-      assets.forEach((asset) => {
+      assets.forEach((asset, idx) => {
         // filter out font licenses
         if (!asset.toUpperCase().includes("LICENSE")) {
-          assetList += `|__assets.${folder}.${
+          if (idx < assets.length - 1) {
+            assetList += "├─";
+          } else {
+            assetList += "└─";
+          }
+          assetList += `assets.${folder}.${
             asset.substring(0, asset.lastIndexOf(".")) || asset
           }\n`;
         }
