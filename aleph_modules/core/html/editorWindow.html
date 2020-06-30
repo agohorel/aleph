@@ -24,6 +24,7 @@
           min="200"
           max="3840"
         />
+
         <label for="displayWindowHeight">Height:</label>
         <input
           id="displayWindowHeight"
@@ -33,6 +34,7 @@
           min="200"
           max="2160"
         />
+
         <label for="pxlDensity">Pixel Density:</label>
         <input
           id="pxlDensity"
@@ -42,6 +44,7 @@
           min="0.1"
           max="8"
         />
+
         <label for="antiAliasing">Anti-Aliasing:</label>
         <input
           type="checkbox"
@@ -58,7 +61,7 @@
     </div>
 
     <div id="activeDisplaysDiv" class="section">
-      <h3 class="textHeaders">Send Sketch To Displays:</h3>
+      <h3 class="textHeaders">Display Selection:</h3>
       <button id="midiMapDisplaySelect" class="btn btnSmall">Midi Map</button>
       <div id="activeDisplayIcons" class="buttons">
         <button id="display_ALL" class="btn activeDisplayButtons">All</button>
@@ -108,10 +111,23 @@
       </div>
     </div>
 
-    <div id="audioDeviceSelectorDiv" class="section">
-      <h3 id="midiDeviceHeader" class="textHeaders">Audio Device Selection:</h3>
-      <div id="audioDeviceButtons" class="buttons">
-        <!-- dynamically generated buttons go here -->
+    <div class="deviceSelectionContainer">
+      <div id="audioDeviceSelectorDiv">
+        <h3 id="midiDeviceHeader" class="textHeaders">
+          Audio Device Selection:
+        </h3>
+        <div id="audioDeviceButtons" class="buttons">
+          <select id="audioDeviceSelect"></select>
+        </div>
+      </div>
+
+      <div id="midiSelectorDiv">
+        <h3 id="midiDeviceHeader" class="textHeaders">
+          Midi Device Selection:
+        </h3>
+        <div id="midiDeviceButtons" class="buttons">
+          <!-- dynamically generated buttons go here -->
+        </div>
       </div>
     </div>
 
@@ -144,13 +160,6 @@
         </button>
       </div>
       <div id="sketchSelectorButtons" class="buttons">
-        <!-- dynamically generated buttons go here -->
-      </div>
-    </div>
-
-    <div id="midiSelectorDiv" class="section">
-      <h3 id="midiDeviceHeader" class="textHeaders">Midi Device Selection:</h3>
-      <div id="midiDeviceButtons" class="buttons">
         <!-- dynamically generated buttons go here -->
       </div>
     </div>

@@ -161,15 +161,10 @@ window.onload = () => {
 // AUDIO DEVICE SELECTION
 /////////////////////////
 
-const audioDeviceButtons = document.querySelector("#audioDeviceButtons");
+const audioDeviceDropdown = document.querySelector("#audioDeviceSelect");
 
-// set and highlight selected audio device
-audioDeviceButtons.addEventListener("click", function (e) {
-  if (e.target.className.includes("audioDeviceButton")) {
-    utils.highlightSelectedItem(".audioDeviceButton", e.target);
-    // midi.selectMidiDevice(e.target.innerText);
-    ipc.send("audioDeviceSelected", e.target.id);
-  }
+audioDeviceDropdown.addEventListener("change", (e) => {
+  ipc.send("audioDeviceSelected", e.target.selectedIndex);
 });
 
 ///////////////////////

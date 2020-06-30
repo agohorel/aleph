@@ -29,16 +29,13 @@ ipc.on("audioDeviceSelected", (event, args) => {
 
 function setup() {
   input = new p5.AudioIn();
-  input.getSources(devices => {
+  const deviceDropdown = document.querySelector("#audioDeviceSelect");
+  input.getSources((devices) => {
     devices.forEach((device, index) => {
-      utils.makeDomElementWithId(
-        "BUTTON",
-        device.label,
-        index,
-        ["btn", "audioDeviceButton"],
-        "#audioDeviceButtons",
-        false
-      );
+      let option = document.createElement("option");
+      option.text = device.label;
+      option.id = index;
+      deviceDropdown.add(option);
     });
   });
 
@@ -78,7 +75,7 @@ function analyzeAudio() {
     spectralCentroid,
     volEased,
     leftVolEased,
-    rightVolEased
+    rightVolEased,
   });
 }
 
