@@ -90,10 +90,19 @@ exports.makeDomElement = (type, text, className, destParent, boolean) => {
 
 exports.highlightSelectedItem = (className, target) => {
   let selectedClass = document.querySelectorAll(className);
-  Array.from(selectedClass).forEach((item) =>
-    item.classList.toggle("active", "")
-  );
-  target.classList.add("active");
+
+  Array.from(selectedClass).forEach((item) => {
+    if (className === ".sketchSelectButton") {
+      item.classList.toggle("sketchActive", "");
+    } else {
+      item.classList.toggle("active", "");
+    }
+  });
+  if (className === ".sketchSelectButton") {
+    target.classList.add("sketchActive");
+  } else {
+    target.classList.add("active");
+  }
 };
 
 exports.importFileDialog = (filetype) => {

@@ -151,16 +151,6 @@ option {
   color: #000;
 }
 
-.active {
-  background-color: #757d80;
-  color: var(--aleph-nearblack);
-}
-
-.active:hover {
-  background-color: #757d80;
-  color: var(--aleph-nearblack);
-}
-
 .section {
   margin: 15px;
 }
@@ -235,11 +225,15 @@ option {
   min-width: 200px;
 }
 
+.sketchSelectButton:active {
+  background-color: var(--aleph-green);
+}
+
 .sketchSelectButton:before {
   /* play button ► */
   content: "\25BA";
   background-color: var(--aleph-nearblack);
-  color: var(--aleph-green);
+  color: var(--aleph-lightgrey);
   padding: 1px 5px 2px 5px;
   margin-right: 5px;
 }
@@ -260,4 +254,27 @@ option {
 
 #midiMapDisplaySelect {
   margin-top: 7px;
+}
+
+.active {
+  background-color: #757d80;
+  color: var(--aleph-nearblack);
+}
+
+.sketchActive {
+  background-color: var(--aleph-blue);
+  color: white;
+}
+
+.sketchActive:before {
+  content: "\25BA";
+  background-color: var(--aleph-nearblack);
+  color: var(--aleph-green);
+  padding: 1px 5px 2px 5px;
+  margin-right: 5px;
+}
+
+.active:hover {
+  background-color: #656d80;
+  color: var(--aleph-nearblack);
 }
