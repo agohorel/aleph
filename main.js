@@ -247,16 +247,11 @@ function createDisplayWindow(displayParams) {
   selectedDisplays = displays;
 
   // wait for the window to exist before trying to ipc to it
-  setTimeout(
-    () => (
-      {
-        if(displayWindow) {
-          displayWindow.webContents.send("applyDisplaySettings", args);
-        },
-      },
-      1000
-    )
-  );
+  setTimeout(() => {
+    if (displayWindow) {
+      displayWindow.webContents.send("applyDisplaySettings", displayParams);
+    }
+  }, 1000);
 
   displayWindow.on("close", () => {
     sendToEditorWindow("removeDisplay", displayParams.index);
