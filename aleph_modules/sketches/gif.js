@@ -2,7 +2,7 @@ let pathToGif;
 
 function setup() {
   // to render the gif, we'll need to access it's file path
-  pathToGif = assets.textures.glitchdotcool.path;
+  pathToGif = assets.images.glitchdotcool.path;
 }
 
 function draw() {

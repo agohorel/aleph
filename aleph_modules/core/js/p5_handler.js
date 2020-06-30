@@ -14,7 +14,7 @@ const sketchesPath = path.resolve(__dirname, "../../sketches/");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let moduleName = "";
-let assets = { models: {}, textures: {}, fonts: {}, shaders: {}, videos: {} };
+let assets = { models: {}, images: {}, fonts: {}, shaders: {}, videos: {} };
 let cnv, _2D, _3D;
 
 ipc.on("updateAudio", (event, args) => {
@@ -37,7 +37,7 @@ ipc.on("antiAliasingToggle", (event, aaBool) => {
 
 function preload() {
   importer("models");
-  importer("textures");
+  importer("images");
   importer("fonts");
   importer("shaders");
   importer("videos");
@@ -146,10 +146,10 @@ function importer(folder) {
             const filePath = path.join(assetsPath, "models", file);
             assets.models[name] = loadModel(filePath, true);
             assets.models[name].path = filePath;
-          } else if (folder === "textures") {
-            const filePath = path.join(assetsPath, "textures", file);
-            assets.textures[name] = loadImage(filePath);
-            assets.textures[name].path = filePath;
+          } else if (folder === "images") {
+            const filePath = path.join(assetsPath, "images", file);
+            assets.images[name] = loadImage(filePath);
+            assets.images[name].path = filePath;
           } else if (folder === "videos") {
             const filePath = path.join(assetsPath, "videos", file);
             assets.videos[name] = createVideo(filePath);

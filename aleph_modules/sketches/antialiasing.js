@@ -4,7 +4,7 @@ function draw() {
     "try toggling the antialiasing checkbox \nin the editor to see the effect.";
   push();
   scale(10);
-  image(assets.textures.glitcht, 0, 0, width / 2, height / 2);
+  image(assets.images.glitcht, 0, 0, width / 2, height / 2);
   pop();
 
   fill(18, 228, 166);

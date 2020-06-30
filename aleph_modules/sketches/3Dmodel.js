@@ -18,11 +18,11 @@ function draw() {
   _3D.scale(2);
 
   // check if we've already packed the array so we don't keep adding to it
-  if (textures.length < Object.keys(assets.textures).length) {
+  if (textures.length < Object.keys(assets.images).length) {
     // loop through the textures object
-    Object.keys(assets.textures).forEach((texture) => {
+    Object.keys(assets.images).forEach((texture) => {
       // add each texture into the textures array so we can pull them at random
-      textures.push(assets.textures[texture]);
+      textures.push(assets.images[texture]);
     });
   }
 
