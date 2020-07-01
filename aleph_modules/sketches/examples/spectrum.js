@@ -2,6 +2,10 @@
 // to construct our own custom spectrums using p5's 2D primitives, in this case rect().
 // try swapping rect() out for a different shape (arc, ellipse, line, point, quad, or triangle).
 
+function setup() {
+  console.log("testing examples - this should only happen once!");
+}
+
 function draw() {
   // create color variables based on frequency content
   let r = audio.bass,

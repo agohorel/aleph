@@ -146,6 +146,10 @@ ipcMain.on("selectedDisplayWindow", (event, displayId) => {
   }
 });
 
+ipcMain.on("sketchFolderSelected", (event, pathToSketchFolder) => {
+  sendToSelectedDisplayWindows("sketchFolderSelected", pathToSketchFolder);
+});
+
 function sendToEditorWindow(channel, args) {
   // check if editorWindow exists before making IPC calls
   if (editorWindow) {

@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 const assetsPath = path.resolve(__dirname, "../../assets/");
-const sketchesPath = path.resolve(__dirname, "../../sketches/");
+const sketchesPath = path.resolve(__dirname, "../../sketches/examples");
 const midi = require(path.resolve(__dirname, "../js/midi.js"));
 
 /////////////////////////
@@ -223,7 +223,11 @@ listAssetsBtn.addEventListener("click", () => {
 // SKETCH SELECTION STUFF
 /////////////////////////
 
+const sketchFolderSelect = document.querySelector("#sketchFolderSelect");
 let sketchSelectModeActive = true;
+
+// select sketch folder
+sketchFolderSelect.addEventListener("click", utils.folderSelectDialog);
 
 //read and display available p5 sketches
 fs.readdir(sketchesPath, (err, files) => {

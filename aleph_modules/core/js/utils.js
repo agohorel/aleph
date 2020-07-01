@@ -1,3 +1,5 @@
+const generateState = require(path.resolve(__dirname, "generateState"));
+
 exports.runOnce = (hasRun, codeToRun) => {
   if (hasRun.state === false) {
     codeToRun();
@@ -309,4 +311,44 @@ exports.renderGif = (pathToGif, options) => {
     // default to center of canvas
     gif.position(width * 0.5 - gif.width * 0.5, height * 0.5 - gif.height / 2);
   }
+};
+
+module.exports.folderSelectDialog = () => {
+  const sketchesPath = path.resolve(__dirname, "../../sketches");
+  dialog.showOpenDialog(
+    {
+      defaultPath: sketchesPath,
+      title: "Select Sketch Folder",
+      filters: [utils.applyFiletypeFilter("js")],
+      properties: ["openDirectory"],
+    },
+    (path) => {
+      if (!path) {
+        return;
+      }
+
+      // remove old buttons
+      const oldSketchButtons = document.querySelectorAll(".sketchSelectButton");
+      oldSketchButtons.forEach((btn) => btn.parentNode.removeChild(btn));
+
+      // add buttons for newly selected sketches
+      fs.readdir(path[0], (err, files) => {
+        if (err) {
+          console.error(err);
+        } else {
+          files.forEach((file) => {
+            module.exports.makeDomElement(
+              "BUTTON",
+              file.substring(0, file.lastIndexOf(".")),
+              ["sketchSelectButton", "btn"],
+              "#sketchSelectorButtons",
+              false
+            );
+          });
+
+          ipc.send("sketchFolderSelected", path[0]);
+        }
+      });
+    }
+  );
 };

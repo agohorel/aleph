@@ -8,14 +8,25 @@ const path = require("path");
 
 p5.disableFriendlyErrors = true;
 
-const state = require(path.resolve(__dirname, "../js/generateState.js"));
+const generateState = require(path.resolve(
+  __dirname,
+  "../js/generateState.js"
+));
 const assetsPath = path.resolve(__dirname, "../../assets/");
-const sketchesPath = path.resolve(__dirname, "../../sketches/");
+let sketchesPath = path.resolve(__dirname, "../../sketches/examples");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let moduleName = "";
 let assets = { models: {}, images: {}, fonts: {}, shaders: {}, videos: {} };
 let cnv, _2D, _3D;
+
+let state = generateState(sketchesPath);
+console.log(state);
+
+ipc.on("sketchFolderSelected", (event, pathToSketchFolder) => {
+  state = generateState(pathToSketchFolder);
+  sketchesPath = pathToSketchFolder;
+});
 
 ipc.on("updateAudio", (event, args) => {
   audio = args;
@@ -69,11 +80,7 @@ function setup() {
 function draw() {
   if (moduleName !== "") {
     try {
-      let moduleFile = require(path.resolve(
-        __dirname,
-        "../../sketches/",
-        moduleName
-      ));
+      let moduleFile = require(path.resolve(sketchesPath, moduleName));
       moduleFile.run();
     } catch (err) {
       console.error(err);
