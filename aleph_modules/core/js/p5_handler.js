@@ -62,10 +62,11 @@ function preload() {
   });
 
   // ipc calls to check for previously loaded MIDI if window is refreshed
-  ipc.send("p5MidiInit", null);
+  ipc.send("p5Init", null);
 
-  ipc.on("p5MidiInit", (event, args) => {
-    midi = args;
+  ipc.on("p5Init", (event, lastUsedSettings) => {
+    midi = lastUsedSettings.midi;
+    moduleName = lastUsedSettings.sketch;
   });
 }
 
