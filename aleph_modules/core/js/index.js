@@ -1,6 +1,6 @@
 const electron = require("electron");
 const BrowserWindow = electron.remote.BrowserWindow;
-const { dialog } = electron.remote;
+const { dialog, globalShortcut } = electron.remote;
 const ipc = electron.ipcRenderer;
 const path = require("path");
 const fs = require("fs");
@@ -40,8 +40,7 @@ pxlDensity.addEventListener("change", (e) => {
   ipc.send("updatePixelDensity", e.target.value);
 });
 
-// send display size params to main process & unlock p5 sketch & midi device select buttons
-applyDisplaySettings.addEventListener("click", function (e) {
+function setupDisplayParams() {
   // validate display settings
   validateInputRanges(displayWidth);
   validateInputRanges(displayHeight);
@@ -89,6 +88,15 @@ applyDisplaySettings.addEventListener("click", function (e) {
   activeDisplayCount++;
   numDisplaysCreated++;
   showActiveDisplays(activeDisplayCount);
+}
+
+// send display size params to main process & unlock p5 sketch & midi device select buttons
+applyDisplaySettings.addEventListener("click", function (e) {
+  setupDisplayParams();
+});
+
+globalShortcut.register("CommandOrControl+N", () => {
+  setupDisplayParams();
 });
 
 function validateInputRanges(elt) {
