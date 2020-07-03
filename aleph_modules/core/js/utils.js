@@ -54,22 +54,27 @@ exports.scanAssets = (assetFolders, element) => {
     // filter out aleph system icons
     if (folder !== "icons") {
       assetList += `${folder}\n`.toUpperCase();
-      let assets = fs.readdirSync(path.join(assetsPath, folder));
+      let assets;
+      let assetFolderPath = path.join(assetsPath, folder);
+      let stat = fs.statSync(assetFolderPath);
 
-      assets.forEach((asset, idx) => {
-        // filter out font licenses
-        if (!asset.toUpperCase().includes("LICENSE")) {
-          if (idx < assets.length - 1) {
-            assetList += "├─";
-          } else {
-            assetList += "└─";
+      if (stat.isDirectory()) {
+        assets = fs.readdirSync(assetFolderPath);
+        assets.forEach((asset, idx) => {
+          // filter out font licenses
+          if (!asset.toUpperCase().includes("LICENSE")) {
+            if (idx < assets.length - 1) {
+              assetList += "├─";
+            } else {
+              assetList += "└─";
+            }
+            assetList += `assets.${folder}.${
+              asset.substring(0, asset.lastIndexOf(".")) || asset
+            }\n`;
           }
-          assetList += `assets.${folder}.${
-            asset.substring(0, asset.lastIndexOf(".")) || asset
-          }\n`;
-        }
-      });
-      assetList += "\n";
+        });
+        assetList += "\n";
+      }
     }
   });
 
