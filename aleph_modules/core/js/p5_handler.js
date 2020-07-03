@@ -21,7 +21,6 @@ let assets = { models: {}, images: {}, fonts: {}, shaders: {}, videos: {} };
 let cnv, _2D, _3D;
 
 let state = generateState(sketchesPath);
-console.log(state);
 
 ipc.on("sketchFolderSelected", (event, pathToSketchFolder) => {
   state = generateState(pathToSketchFolder);
@@ -66,7 +65,7 @@ function preload() {
 
   ipc.on("p5Init", (event, lastUsedSettings) => {
     midi = lastUsedSettings.midi;
-    moduleName = lastUsedSettings.sketch;
+    moduleName = lastUsedSettings.sketch || "";
   });
 }
 
