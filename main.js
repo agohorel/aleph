@@ -8,6 +8,7 @@ let lastMidi = {}; // stores the last state of the midi object to use when refre
 let displays = []; // stores p5 display windows
 let selectedDisplays = []; // stores references to display windows we want to send p5 sketch program changes to
 let lastSketch; // stores the last selected sketch, QoL for having to ctrl+r a lot while developing sketches
+let lastSketchFolderPath;
 
 electronDebug({
   enabled: true,
@@ -119,7 +120,11 @@ ipcMain.on("updateMidi", (event, args) => {
 });
 
 ipcMain.on("p5Init", (event, args) => {
-  sendToDisplayWindow("p5Init", { midi: lastMidi, sketch: lastSketch });
+  sendToDisplayWindow("p5Init", {
+    midi: lastMidi,
+    sketch: lastSketch,
+    sketchFolder: lastSketchFolderPath,
+  });
 });
 
 ipcMain.on("sketchChangedWithMidi", (event, args) => {
@@ -150,6 +155,7 @@ ipcMain.on("selectedDisplayWindow", (event, displayId) => {
 
 ipcMain.on("sketchFolderSelected", (event, pathToSketchFolder) => {
   sendToSelectedDisplayWindows("sketchFolderSelected", pathToSketchFolder);
+  lastSketchFolderPath = pathToSketchFolder;
 });
 
 function sendToEditorWindow(channel, args) {

@@ -63,9 +63,15 @@ function preload() {
   // ipc calls to check for previously loaded MIDI if window is refreshed
   ipc.send("p5Init", null);
 
+  // recall previous values for midi, sketch, sketch folder, and sketch state on refresh
+  // on the first init (i.e. haven't refreshed yet), sketch name/folder are irrelevant
   ipc.on("p5Init", (event, lastUsedSettings) => {
     midi = lastUsedSettings.midi;
     moduleName = lastUsedSettings.sketch || "";
+    if (lastUsedSettings.sketchFolder) {
+      sketchesPath = lastUsedSettings.sketchFolder;
+    }
+    state = generateState(sketchesPath);
   });
 }
 
