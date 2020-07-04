@@ -8,7 +8,6 @@ function setup() {
 }
 
 function draw() {
-  background(255);
   // display the video by passing it into image(source, x, y, width, height)
   image(video, 0, 0, width / 2, height / 2);
   // we can use p5's built-in filter's to effect the video
