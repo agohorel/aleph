@@ -2,7 +2,7 @@ let pathToGif;
 
 function setup() {
   // to render the gif, we'll need to access it's file path
-  pathToGif = assets.images.glitchdotcool.path;
+  pathToGif = assets.images.wave.path;
 }
 
 function draw() {
@@ -15,18 +15,19 @@ function draw() {
   // scale (scales x,y uniformly, where 1 = 100% = normal size)
   // and an array of objects representing standard CSS filters:
   // https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+
   utils.renderGif(pathToGif, {
     x: mouseX,
     y: mouseY,
     scale: map(mouseY, 0, height, 0.5, 2),
     filters: [
       {
-        name: "invert",
+        name: "sepia",
         amount: map(mouseX, 0, width, 0, 1),
       },
       {
-        name: "blur",
-        amount: "3px",
+        name: "hue-rotate",
+        amount: `${map(mouseY, 0, height, 0, 360)}deg`,
       },
     ],
   });

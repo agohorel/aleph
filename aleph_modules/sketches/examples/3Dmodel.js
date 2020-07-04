@@ -3,32 +3,31 @@
 // initialize empty textures array
 let textures = [];
 
+function setup() {
+  // loop through the textures object
+  for (texture in assets.images) {
+    // add each texture into the textures array so we can pull them at random
+    textures.push(assets.images[texture]);
+  }
+}
+
 function draw() {
   // set white background
   _3D.background(255);
 
   // rotate the model based on the smoothed volume (Y axis) and bass (X axis)
-  _3D.rotateY(audio.volEased * 10);
-  _3D.rotateX(audio.bass * 0.01);
+  _3D.rotateY(frameCount * 0.02);
+  _3D.rotateX(frameCount * 0.01);
 
   // set stroke color to the smoothed volume parameter
-  _3D.stroke(map(audio.volEased, 0, 0.025, 255, 0));
+  _3D.stroke(map(audio.volEased, 0, 0.25, 200, 0));
 
   // scale everything up by 2x
   _3D.scale(2);
 
-  // check if we've already packed the array so we don't keep adding to it
-  if (textures.length < Object.keys(assets.images).length) {
-    // loop through the textures object
-    Object.keys(assets.images).forEach((texture) => {
-      // add each texture into the textures array so we can pull them at random
-      textures.push(assets.images[texture]);
-    });
-  }
-
   // randomly change the texture when the volume hits a certain threshold
-  if (audio.volume > 0.2) {
-    _3D.texture(textures[Math.floor(Math.random() * textures.length)]);
+  if (audio.volume > 0.4) {
+    _3D.texture(textures[floor(random() * textures.length)]);
   }
 
   // display the 3D model
