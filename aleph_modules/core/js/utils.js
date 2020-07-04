@@ -1,3 +1,4 @@
+const path = require("path");
 const generateState = require(path.resolve(__dirname, "generateState"));
 
 exports.runOnce = (hasRun, codeToRun) => {
@@ -356,4 +357,14 @@ module.exports.folderSelectDialog = () => {
       });
     }
   );
+};
+
+module.exports.setIconByOS = () => {
+  if (process.platform === "darwin") {
+    return path.resolve(__dirname, "../../", "assets/icons/mac/logo.icns");
+  } else if (process.platform === "linux") {
+    return path.resolve(__dirname, "../../", "assets/icons/png/64x64.png");
+  } else if (process.platform === "win32") {
+    return path.resolve(__dirname, "../../", "assets/icons/win/logo.ico");
+  }
 };

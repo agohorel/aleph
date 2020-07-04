@@ -1,6 +1,7 @@
 const { Menu, BrowserWindow } = require("electron");
 const electron = require("electron");
 const app = electron.app;
+const { setIconByOS } = require("./utils.js");
 
 const template = [
   {
@@ -185,6 +186,7 @@ function showDocs() {
   docs = new BrowserWindow({
     width: width,
     height: height,
+    icon: setIconByOS(),
   });
   docs.loadFile("./docs/README.html");
 

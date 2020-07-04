@@ -1,7 +1,9 @@
 const electron = require("electron");
 const { app, BrowserWindow, ipcMain, dialog } = electron;
 const electronDebug = require("electron-debug");
-const path = require("path");
+// const path = require("path");
+const { setIconByOS } = require("./aleph_modules/core/js/utils.js");
+
 // global reference to windows to prevent closing on js garbage collection
 let editorWindow, splash;
 let lastMidi = {}; // stores the last state of the midi object to use when refreshing displayWindows
@@ -184,16 +186,6 @@ function sendToSelectedDisplayWindows(channel, args) {
         display.displayWindow.webContents.send(channel, args);
       }
     });
-  }
-}
-
-function setIconByOS() {
-  if (process.platform === "darwin") {
-    return path.join(__dirname, "aleph_modules/assets/icons/mac/logo.icns");
-  } else if (process.platform === "linux") {
-    return path.join(__dirname, "aleph_modules/assets/icons/png/64x64.png");
-  } else if (process.platform === "win32") {
-    return path.join(__dirname, "aleph_modules/assets/icons/win/logo.ico");
   }
 }
 
