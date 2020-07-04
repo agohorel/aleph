@@ -259,6 +259,8 @@ To display videos, you do the same, but pass in a video reference instead:
 image(assets.videos.NAME_OF_VIDEO, X_POSITION, Y_POSITION, WIDTH, HEIGHT);
 ```
 
+_Note: when working with videos, setting a `background()` has been known to introduce flickering when working with high resolution videos._
+
 For both images and videos, it's possible to load all the pixels and manipulate them directly using [`loadPixels()`](https://p5js.org/reference/#/p5/loadPixels) and [`updatePixels()`](https://p5js.org/reference/#/p5/updatePixels).
 
 You can pass a gif file to `image()`, but it will only render the first frame. To render an _animated_ gif, use the built-in `utils.renderGif()` utility. However here instead of passing an image, simply pass the _path_ to the image.
