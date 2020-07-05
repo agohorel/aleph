@@ -1,17 +1,21 @@
 const electron = require("electron");
 const { app, BrowserWindow, ipcMain, dialog } = electron;
 const electronDebug = require("electron-debug");
-const path = require("path");
+// const path = require("path");
+const { setIconByOS } = require("./aleph_modules/core/js/utils.js");
+
 // global reference to windows to prevent closing on js garbage collection
 let editorWindow, splash;
 let lastMidi = {}; // stores the last state of the midi object to use when refreshing displayWindows
 let displays = []; // stores p5 display windows
 let selectedDisplays = []; // stores references to display windows we want to send p5 sketch program changes to
+let lastSketch; // stores the last selected sketch, QoL for having to ctrl+r a lot while developing sketches
+let lastSketchFolderPath;
 
 electronDebug({
   enabled: true,
   showDevTools: false,
-  devToolsMode: "bottom"
+  devToolsMode: "bottom",
 });
 
 function createSplashScreen() {
@@ -19,7 +23,7 @@ function createSplashScreen() {
     width: 512,
     height: 512,
     transparent: true,
-    frame: false
+    frame: false,
   });
   splash.loadFile("./aleph_modules/core/html/splash.html");
 }
@@ -38,8 +42,9 @@ app.on("window-all-closed", () => {
   }
 });
 
-ipcMain.on("changeSketch", (event, args) => {
-  sendToSelectedDisplayWindows("sketchSelector", args);
+ipcMain.on("changeSketch", (event, sketchName) => {
+  sendToSelectedDisplayWindows("sketchSelector", sketchName);
+  lastSketch = sketchName;
 });
 
 ipcMain.on("listMidi", (event, args) => {
@@ -67,22 +72,22 @@ ipcMain.on("devModeToggle", (event, devmodeBool) => {
 });
 
 ipcMain.on("antiAliasingToggle", (event, aaBool) => {
-  sendToDisplayWindow("antiAliasingToggle", aaBool);
+  sendToSelectedDisplayWindows("antiAliasingToggle", aaBool);
 });
 
-ipcMain.on("saveMidi", event => {
+ipcMain.on("saveMidi", (event) => {
   sendToEditorWindow("saveMidi");
 });
 
-ipcMain.on("loadMidi", event => {
+ipcMain.on("loadMidi", (event) => {
   sendToEditorWindow("loadMidi");
 });
 
-ipcMain.on("midiLoaded", event => {
+ipcMain.on("midiLoaded", (event) => {
   sendToEditorWindow("midiLoaded");
 });
 
-ipcMain.on("midiSaved", event => {
+ipcMain.on("midiSaved", (event) => {
   sendToEditorWindow("midiSaved");
   sendToDisplayWindow("midiSaved");
 });
@@ -108,7 +113,7 @@ ipcMain.on("displayOutputChanged", (event, displayId) => {
 });
 
 ipcMain.on("forceMomentary", (event, args) => {
-  sendToDisplayWindow("forceMomentary", args);
+  sendToEditorWindow("forceMomentary", args);
 });
 
 ipcMain.on("updateMidi", (event, args) => {
@@ -116,8 +121,12 @@ ipcMain.on("updateMidi", (event, args) => {
   lastMidi = args;
 });
 
-ipcMain.on("p5MidiInit", (event, args) => {
-  sendToDisplayWindow("p5MidiInit", lastMidi);
+ipcMain.on("p5Init", (event, args) => {
+  sendToDisplayWindow("p5Init", {
+    midi: lastMidi,
+    sketch: lastSketch,
+    sketchFolder: lastSketchFolderPath,
+  });
 });
 
 ipcMain.on("sketchChangedWithMidi", (event, args) => {
@@ -132,14 +141,23 @@ ipcMain.on("audioDeviceSelected", (event, args) => {
   sendToEditorWindow("audioDeviceSelected", args);
 });
 
+ipcMain.on("updatePixelDensity", (event, pixelDensity) => {
+  sendToSelectedDisplayWindows("updatePixelDensity", pixelDensity);
+});
+
 ipcMain.on("selectedDisplayWindow", (event, displayId) => {
   if (displayId === "ALL" || displayId === "All") {
     selectedDisplays = displays;
   } else {
     selectedDisplays = displays.filter(
-      display => display.index === Number(displayId)
+      (display) => display.index === Number(displayId)
     );
   }
+});
+
+ipcMain.on("sketchFolderSelected", (event, pathToSketchFolder) => {
+  sendToSelectedDisplayWindows("sketchFolderSelected", pathToSketchFolder);
+  lastSketchFolderPath = pathToSketchFolder;
 });
 
 function sendToEditorWindow(channel, args) {
@@ -152,7 +170,7 @@ function sendToEditorWindow(channel, args) {
 function sendToDisplayWindow(channel, args) {
   // check for displays
   if (displays.length) {
-    displays.forEach(display => {
+    displays.forEach((display) => {
       // skip over destroyed displays
       if (!display.displayWindow.isDestroyed()) {
         display.displayWindow.webContents.send(channel, args);
@@ -163,21 +181,11 @@ function sendToDisplayWindow(channel, args) {
 
 function sendToSelectedDisplayWindows(channel, args) {
   if (selectedDisplays) {
-    selectedDisplays.forEach(display => {
+    selectedDisplays.forEach((display) => {
       if (!display.displayWindow.isDestroyed()) {
         display.displayWindow.webContents.send(channel, args);
       }
     });
-  }
-}
-
-function setIconByOS() {
-  if (process.platform === "darwin") {
-    return path.join(__dirname, "aleph_modules/assets/icons/mac/logo.icns");
-  } else if (process.platform === "linux") {
-    return path.join(__dirname, "aleph_modules/assets/icons/png/64x64.png");
-  } else if (process.platform === "win32") {
-    return path.join(__dirname, "aleph_modules/assets/icons/win/logo.ico");
   }
 }
 
@@ -188,7 +196,7 @@ function createEditorWindow() {
     width,
     height,
     show: false,
-    icon: setIconByOS()
+    icon: setIconByOS(),
   });
   require("./aleph_modules/core/js/menu.js");
   editorWindow.loadFile("./aleph_modules/core/html/editorWindow.html");
@@ -209,12 +217,12 @@ function createEditorWindow() {
   });
 
   // show confirm dialog when attempting to close editorWindow
-  editorWindow.on("close", e => {
+  editorWindow.on("close", (e) => {
     let choice = dialog.showMessageBox(editorWindow, {
       type: "question",
       buttons: ["Yes", "No"],
       title: "Confirm",
-      message: "Are you sure you want to quit?"
+      message: "Are you sure you want to quit?",
     });
     if (choice == 1) {
       e.preventDefault();
@@ -231,7 +239,7 @@ function createDisplayWindow(displayParams) {
   let displayWindow = new BrowserWindow({
     width: displayParams.width,
     height: displayParams.height,
-    icon: setIconByOS()
+    icon: setIconByOS(),
   });
 
   displayWindow.loadFile("./aleph_modules/core/html/displayWindow.html");
@@ -241,22 +249,17 @@ function createDisplayWindow(displayParams) {
 
   displays.push({
     displayWindow,
-    index: displayParams.index
+    index: displayParams.index,
   });
 
   selectedDisplays = displays;
 
   // wait for the window to exist before trying to ipc to it
-  setTimeout(
-    () => (
-      {
-        if(displayWindow) {
-          displayWindow.webContents.send("applyDisplaySettings", args);
-        }
-      },
-      1000
-    )
-  );
+  setTimeout(() => {
+    if (displayWindow) {
+      displayWindow.webContents.send("applyDisplaySettings", displayParams);
+    }
+  }, 1000);
 
   displayWindow.on("close", () => {
     sendToEditorWindow("removeDisplay", displayParams.index);

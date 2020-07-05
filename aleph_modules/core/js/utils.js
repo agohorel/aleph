@@ -1,3 +1,6 @@
+const path = require("path");
+const generateState = require(path.resolve(__dirname, "generateState"));
+
 exports.runOnce = (hasRun, codeToRun) => {
   if (hasRun.state === false) {
     codeToRun();
@@ -5,7 +8,7 @@ exports.runOnce = (hasRun, codeToRun) => {
   }
 };
 
-exports.getSketchName = myPath => {
+exports.getSketchName = (myPath) => {
   return (sketch = path.basename(myPath, ".js"));
 };
 
@@ -14,10 +17,15 @@ exports.update3D = (renderer, yourCode, reset) => {
   reset ? renderer.reset() : null; // optionally reset transforms and lighting information each frame
 };
 
-exports.renderLoop = (hasRun, setup, renderer, draw, resetTransforms) => {
+exports.render3D = (hasRun, setup, renderer, draw, resetTransforms) => {
   module.exports.runOnce(hasRun, setup);
   module.exports.update3D(renderer, draw, resetTransforms);
   image(renderer, 0, 0, width, height);
+};
+
+exports.render2D = (hasRun, setup, draw) => {
+  module.exports.runOnce(hasRun, setup);
+  draw();
 };
 
 exports.makeDomElementWithId = (
@@ -43,22 +51,31 @@ exports.makeDomElementWithId = (
 
 exports.scanAssets = (assetFolders, element) => {
   let assetList = "";
-  assetFolders.forEach(folder => {
+  assetFolders.forEach((folder) => {
     // filter out aleph system icons
     if (folder !== "icons") {
       assetList += `${folder}\n`.toUpperCase();
-      let assets = fs.readdirSync(path.join(assetsPath, folder));
+      let assets;
+      let assetFolderPath = path.join(assetsPath, folder);
+      let stat = fs.statSync(assetFolderPath);
 
-      assets.forEach(asset => {
-        // filter out font licenses
-        if (!asset.toUpperCase().includes("LICENSE")) {
-          assetList += `|__assets.${folder}.${asset.substring(
-            0,
-            asset.lastIndexOf(".")
-          ) || asset}\n`;
-        }
-      });
-      assetList += "\n";
+      if (stat.isDirectory()) {
+        assets = fs.readdirSync(assetFolderPath);
+        assets.forEach((asset, idx) => {
+          // filter out font licenses
+          if (!asset.toUpperCase().includes("LICENSE")) {
+            if (idx < assets.length - 1) {
+              assetList += "├─";
+            } else {
+              assetList += "└─";
+            }
+            assetList += `assets.${folder}.${
+              asset.substring(0, asset.lastIndexOf(".")) || asset
+            }\n`;
+          }
+        });
+        assetList += "\n";
+      }
     }
   });
 
@@ -81,26 +98,35 @@ exports.makeDomElement = (type, text, className, destParent, boolean) => {
 
 exports.highlightSelectedItem = (className, target) => {
   let selectedClass = document.querySelectorAll(className);
-  Array.from(selectedClass).forEach(item =>
-    item.classList.toggle("active", "")
-  );
-  target.classList.add("active");
+
+  Array.from(selectedClass).forEach((item) => {
+    if (className === ".sketchSelectButton") {
+      item.classList.toggle("sketchActive", "");
+    } else {
+      item.classList.toggle("active", "");
+    }
+  });
+  if (className === ".sketchSelectButton") {
+    target.classList.add("sketchActive");
+  } else {
+    target.classList.add("active");
+  }
 };
 
-exports.importFileDialog = filetype => {
+exports.importFileDialog = (filetype) => {
   dialog.showOpenDialog(
     {
       filters: [utils.applyFiletypeFilter(filetype)],
-      properties: ["openFile", "multiSelections"]
+      properties: ["openFile", "multiSelections"],
     },
-    files => {
+    (files) => {
       if (files === undefined) return;
       utils.copySelectedFiles(files, path.resolve(assetsPath, filetype));
     }
   );
 };
 
-exports.applyFiletypeFilter = filetype => {
+exports.applyFiletypeFilter = (filetype) => {
   let filter = {};
   if (filetype === "3d" || filetype === "obj" || filetype === "models") {
     filter.name = filetype;
@@ -126,6 +152,10 @@ exports.applyFiletypeFilter = filetype => {
     filter.name = "json";
     filter.extensions = ["json"];
     return filter;
+  } else if (filetype === "videos") {
+    filter.name = "videos";
+    filter.extensions = ["mp4", "ogg", "webm", "mov"];
+    return filter;
   }
 };
 
@@ -135,7 +165,7 @@ exports.copySelectedFiles = (selectedFiles, destination) => {
   for (let i = 0; i < selectedFiles.length; i++) {
     // strip filename off path
     let filename = path.parse(selectedFiles[i]).base.replace(/[- ]/g, "_");
-    fs.copyFile(selectedFiles[i], path.join(destination, filename), err => {
+    fs.copyFile(selectedFiles[i], path.join(destination, filename), (err) => {
       if (err) throw err;
       console.log(
         `${selectedFiles[i]} copied to ${path.join(destination, filename)}`
@@ -150,9 +180,9 @@ exports.newSketchDialog = (type, sketchesPath) => {
     {
       defaultPath: sketchesPath,
       title: "Save New Sketch As",
-      filters: [utils.applyFiletypeFilter("js")]
+      filters: [utils.applyFiletypeFilter("js")],
     },
-    sketchPath => {
+    (sketchPath) => {
       if (sketchPath === undefined) return;
       let sketchName = path.parse(sketchPath).base;
       utils.copySketchTemplate(sketchName, type);
@@ -170,14 +200,14 @@ exports.copySketchTemplate = (name, type) => {
     srcPath = path.resolve(__dirname, "../js/3D_template.js");
   }
 
-  fs.copyFile(srcPath, path.join(sketchesPath, name), err => {
+  fs.copyFile(srcPath, path.join(sketchesPath, name), (err) => {
     if (err) throw err;
     console.log(`created new sketch "${name}"`);
     utils.appendNewSketchBtn(name.substring(0, name.lastIndexOf(".")));
   });
 };
 
-exports.appendNewSketchBtn = newSketch => {
+exports.appendNewSketchBtn = (newSketch) => {
   let bool = true;
   let sketchBtn = document.querySelector(".sketchSelectButton");
   // if existing buttons are disabled, bool = true (btn is created in disabled state)
@@ -200,15 +230,15 @@ exports.saveMidiDialog = (mappingsPath, array) => {
     {
       defaultPath: mappingsPath,
       title: "Save Mapping File As",
-      filters: [utils.applyFiletypeFilter("json")]
+      filters: [utils.applyFiletypeFilter("json")],
     },
-    filePath => {
+    (filePath) => {
       if (filePath === undefined) return;
       let fileName = path.parse(filePath).base;
       fs.writeFile(
         path.join(mappingsPath, fileName),
         JSON.stringify(array, null, 2),
-        err => {
+        (err) => {
           if (err) throw err;
           // send msg to main process to trigger UI save indicator
           ipc.send("midiSaved");
@@ -229,14 +259,15 @@ exports.loadMidiDialog = (
     {
       defaultPath: mappingsPath,
       filters: [utils.applyFiletypeFilter("json")],
-      properties: ["openFile"]
+      properties: ["openFile"],
     },
-    filePath => {
+    (filePath) => {
       if (filePath === undefined) return;
 
       fs.readFile(filePath[0], "utf-8", (err, data) => {
         if (err) throw err;
         let obj = JSON.parse(data);
+
         // loop through entire mappings object
         for (let i = 0; i < obj.length; i++) {
           // check if we're dealing w/ the "default" midi controls, or the "audioCtrls" (i.e. the UI knobs)
@@ -244,7 +275,7 @@ exports.loadMidiDialog = (
             midiMappings.push(obj[i]);
           } else if (obj[i].name.indexOf("knob") > -1) {
             audioCtrlMappings.push(obj[i]);
-          } else if (obj[i].name.indexOf("display")) {
+          } else if (obj[i].name.indexOf("display") > -1) {
             displayOutputMappings.push(obj[i]);
           } else {
             sketchCtrlMappings.push(obj[i]);
@@ -255,4 +286,85 @@ exports.loadMidiDialog = (
       ipc.send("midiLoaded");
     }
   );
+};
+
+exports.renderGif = (pathToGif, options) => {
+  let gifID = path.basename(pathToGif);
+  gifID = gifID.substring(0, gifID.lastIndexOf("."));
+  const img = document.querySelector(`#${gifID}`);
+
+  if (!document.getElementsByTagName("img").length) {
+    gif = createImg(pathToGif);
+    gif.id(gifID);
+  }
+
+  if (options && options.scale) {
+    img.style.transform = `scale(${options.scale})`;
+  }
+
+  if (options && options.filters) {
+    let filterString = "";
+
+    options.filters.forEach((filter) => {
+      filterString += `${filter.name}(${filter.amount}) `;
+      img.style.filter = filterString;
+    });
+  }
+
+  if (options && options.x && options.y) {
+    gif.position(options.x - gif.width * 0.5, options.y - gif.height * 0.5);
+  } else {
+    // default to center of canvas
+    gif.position(width * 0.5 - gif.width * 0.5, height * 0.5 - gif.height / 2);
+  }
+};
+
+module.exports.folderSelectDialog = () => {
+  const sketchesPath = path.resolve(__dirname, "../../sketches");
+  dialog.showOpenDialog(
+    {
+      defaultPath: sketchesPath,
+      title: "Select Sketch Folder",
+      filters: [utils.applyFiletypeFilter("js")],
+      properties: ["openDirectory"],
+    },
+    (path) => {
+      if (!path) {
+        return;
+      }
+
+      // remove old buttons
+      const oldSketchButtons = document.querySelectorAll(".sketchSelectButton");
+      oldSketchButtons.forEach((btn) => btn.parentNode.removeChild(btn));
+
+      // add buttons for newly selected sketches
+      fs.readdir(path[0], (err, files) => {
+        if (err) {
+          console.error(err);
+        } else {
+          files.forEach((file) => {
+            module.exports.makeDomElement(
+              "BUTTON",
+              file.substring(0, file.lastIndexOf(".")),
+              ["sketchSelectButton", "btn"],
+              "#sketchSelectorButtons",
+              false
+            );
+          });
+
+          ipc.send("sketchFolderSelected", path[0]);
+        }
+      });
+    }
+  );
+};
+
+module.exports.setIconByOS = () => {
+  if (process.platform === "darwin") {
+    return path.resolve(__dirname, "../../", "assets/icons/mac/logo.icns");
+  } else if (process.platform === "linux") {
+    return path.resolve(__dirname, "../../", "assets/icons/png/64x64.png");
+  } else if (process.platform === "win32") {
+    return path.resolve(__dirname, "../../", "assets/icons/win/logo.ico");
+  }
 };

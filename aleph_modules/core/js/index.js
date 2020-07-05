@@ -1,12 +1,12 @@
 const electron = require("electron");
 const BrowserWindow = electron.remote.BrowserWindow;
-const { dialog } = electron.remote;
+const { dialog, globalShortcut } = electron.remote;
 const ipc = electron.ipcRenderer;
 const path = require("path");
 const fs = require("fs");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 const assetsPath = path.resolve(__dirname, "../../assets/");
-const sketchesPath = path.resolve(__dirname, "../../sketches/");
+const sketchesPath = path.resolve(__dirname, "../../sketches/examples");
 const midi = require(path.resolve(__dirname, "../js/midi.js"));
 
 /////////////////////////
@@ -36,8 +36,11 @@ antiAliasingToggle.addEventListener("click", () => {
   ipc.send("antiAliasingToggle", antiAliasingToggle.checked);
 });
 
-// send display size params to main process & unlock p5 sketch & midi device select buttons
-applyDisplaySettings.addEventListener("click", function(e) {
+pxlDensity.addEventListener("change", (e) => {
+  ipc.send("updatePixelDensity", e.target.value);
+});
+
+function setupDisplayParams() {
   // validate display settings
   validateInputRanges(displayWidth);
   validateInputRanges(displayHeight);
@@ -52,10 +55,10 @@ applyDisplaySettings.addEventListener("click", function(e) {
   let loadBtn = document.querySelector("#loadMidi");
   let forceMomentaryBtn = document.getElementById("forceMomentary");
 
-  sketchBtns.forEach(btn => {
+  sketchBtns.forEach((btn) => {
     btn.disabled = false;
   });
-  midiBtns.forEach(btn => {
+  midiBtns.forEach((btn) => {
     btn.disabled = false;
   });
   addCtrlBtn.disabled = false;
@@ -78,13 +81,22 @@ applyDisplaySettings.addEventListener("click", function(e) {
     width: Number(displayWidth.value),
     height: Number(displayHeight.value),
     pixelDensity: Number(pxlDensity.value),
-    index: numDisplaysCreated
+    index: numDisplaysCreated,
   };
 
   ipc.send("applyDisplaySettings", displayParams);
   activeDisplayCount++;
   numDisplaysCreated++;
   showActiveDisplays(activeDisplayCount);
+}
+
+// send display size params to main process & unlock p5 sketch & midi device select buttons
+applyDisplaySettings.addEventListener("click", function (e) {
+  setupDisplayParams();
+});
+
+globalShortcut.register("CommandOrControl+N", () => {
+  setupDisplayParams();
 });
 
 function validateInputRanges(elt) {
@@ -118,7 +130,7 @@ midiMapDisplaySelect.addEventListener("click", () => {
 });
 
 // highlight selected mode & send mode to p5 via main process
-activeDisplayIcons.addEventListener("click", function(e) {
+activeDisplayIcons.addEventListener("click", function (e) {
   if (e.target.className.includes("activeDisplayButtons")) {
     utils.highlightSelectedItem(".activeDisplayButtons", e.target);
     // only send ipc call to change selected displayWindow if mapping mode is not enabled
@@ -146,7 +158,7 @@ ipc.on("displayOutputChanged", (event, displayId) => {
 window.onload = () => {
   let audioCtrlsMapBtns = document.querySelectorAll(".audioCtrlsMapBtn");
 
-  audioCtrlsMapBtns.forEach(button => {
+  audioCtrlsMapBtns.forEach((button) => {
     button.addEventListener("click", () => {
       midi.listenForAudioCtrlMapping(button.parentElement.id);
     });
@@ -157,15 +169,10 @@ window.onload = () => {
 // AUDIO DEVICE SELECTION
 /////////////////////////
 
-const audioDeviceButtons = document.querySelector("#audioDeviceButtons");
+const audioDeviceDropdown = document.querySelector("#audioDeviceSelect");
 
-// set and highlight selected audio device
-audioDeviceButtons.addEventListener("click", function(e) {
-  if (e.target.className.includes("audioDeviceButton")) {
-    utils.highlightSelectedItem(".audioDeviceButton", e.target);
-    // midi.selectMidiDevice(e.target.innerText);
-    ipc.send("audioDeviceSelected", e.target.id);
-  }
+audioDeviceDropdown.addEventListener("change", (e) => {
+  ipc.send("audioDeviceSelected", e.target.selectedIndex);
 });
 
 ///////////////////////
@@ -173,15 +180,16 @@ audioDeviceButtons.addEventListener("click", function(e) {
 ///////////////////////
 
 const objBtn = document.querySelector("#objBtn");
-const texturesBtn = document.querySelector("#texturesBtn");
+const imagesBtn = document.querySelector("#imagesBtn");
 const fontsBtn = document.querySelector("#fontsBtn");
 const shadersBtn = document.querySelector("#shadersBtn");
+const videosBtn = document.querySelector("#videosBtn");
 
 objBtn.addEventListener("click", () => {
   utils.importFileDialog("models");
 });
 
-texturesBtn.addEventListener("click", () => {
+imagesBtn.addEventListener("click", () => {
   utils.importFileDialog("textures");
 });
 
@@ -191,6 +199,10 @@ fontsBtn.addEventListener("click", () => {
 
 shadersBtn.addEventListener("click", () => {
   utils.importFileDialog("shaders");
+});
+
+videosBtn.addEventListener("click", () => {
+  utils.importFileDialog("videos");
 });
 
 /////////////////////////
@@ -219,14 +231,18 @@ listAssetsBtn.addEventListener("click", () => {
 // SKETCH SELECTION STUFF
 /////////////////////////
 
+const sketchFolderSelect = document.querySelector("#sketchFolderSelect");
 let sketchSelectModeActive = true;
+
+// select sketch folder
+sketchFolderSelect.addEventListener("click", utils.folderSelectDialog);
 
 //read and display available p5 sketches
 fs.readdir(sketchesPath, (err, files) => {
   if (err) {
     console.log(err);
   } else {
-    files.forEach(file => {
+    files.forEach((file) => {
       utils.makeDomElement(
         "BUTTON",
         file.substring(0, file.lastIndexOf(".")),
@@ -239,7 +255,7 @@ fs.readdir(sketchesPath, (err, files) => {
 });
 
 // highlight selected mode & send mode to p5 via main process
-sketchSelectorButtons.addEventListener("click", function(e) {
+sketchSelectorButtons.addEventListener("click", function (e) {
   if (e.target.className.includes("sketchSelectButton")) {
     utils.highlightSelectedItem(".sketchSelectButton", e.target);
     // only send ipc call to switch p5 sketch if mapping mode is not active
@@ -278,7 +294,7 @@ new3DSketch.addEventListener("click", () => {
 const midiDeviceButtons = document.querySelector("#midiDeviceButtons");
 
 // highlight selected midi device & send to main process
-midiDeviceButtons.addEventListener("click", function(e) {
+midiDeviceButtons.addEventListener("click", function (e) {
   if (e.target.className.includes("midiDeviceButtons")) {
     utils.highlightSelectedItem(".midiDeviceButtons", e.target);
     midi.selectMidiDevice(e.target.innerText);
@@ -324,7 +340,7 @@ removeMidiMap.addEventListener("click", () => {
   }
 });
 
-midiMappingButtons.addEventListener("click", function(e) {
+midiMappingButtons.addEventListener("click", function (e) {
   if (e.target.className.includes("midiMapping")) {
     utils.highlightSelectedItem(".midiMapping", e.target);
     midi.addMidiEntry(`controller_${e.target.id}`);
@@ -333,7 +349,7 @@ midiMappingButtons.addEventListener("click", function(e) {
 
 // toggle midi control mapping
 lockMidi.addEventListener("click", () => {
-  document.querySelectorAll(".midiMapping").forEach(btn => {
+  document.querySelectorAll(".midiMapping").forEach((btn) => {
     if (btn.disabled) {
       btn.disabled = false;
       lockMidi.innerText = "Lock Midi Assignments";
@@ -350,7 +366,7 @@ saveMidi.addEventListener("click", () => {
   midi.save();
 });
 
-ipc.on("midiSaved", event => {
+ipc.on("midiSaved", (event) => {
   flashButton(document.getElementById("saveMidi"));
 });
 
@@ -366,7 +382,7 @@ function flashButton(buttonElement) {
   }, 250);
 }
 
-ipc.on("midiLoaded", event => {
+ipc.on("midiLoaded", (event) => {
   flashButton(document.getElementById("loadMidi"));
 });
 

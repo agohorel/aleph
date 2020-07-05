@@ -8,16 +8,24 @@ const path = require("path");
 
 p5.disableFriendlyErrors = true;
 
-const state = require(path.resolve(__dirname, "../js/generateState.js"));
+const generateState = require(path.resolve(
+  __dirname,
+  "../js/generateState.js"
+));
 const assetsPath = path.resolve(__dirname, "../../assets/");
-const sketchesPath = path.resolve(__dirname, "../../sketches/");
+let sketchesPath = path.resolve(__dirname, "../../sketches/examples");
 const utils = require(path.resolve(__dirname, "../js/utils.js"));
 
 let moduleName = "";
-let assets = { models: {}, textures: {}, fonts: {}, shaders: {} };
+let assets = { models: {}, images: {}, fonts: {}, shaders: {}, videos: {} };
 let cnv, _2D, _3D;
-let midi = {};
-let audio = {};
+
+let state = generateState(sketchesPath);
+
+ipc.on("sketchFolderSelected", (event, pathToSketchFolder) => {
+  state = generateState(pathToSketchFolder);
+  sketchesPath = pathToSketchFolder;
+});
 
 ipc.on("updateAudio", (event, args) => {
   audio = args;
@@ -37,21 +45,33 @@ ipc.on("antiAliasingToggle", (event, aaBool) => {
   setAA(aaBool);
 });
 
+ipc.on("updatePixelDensity", (event, pxlDensity) => {
+  pixelDensity(Number(pxlDensity));
+});
+
 function preload() {
   importer("models");
-  importer("textures");
+  importer("images");
   importer("fonts");
   importer("shaders");
+  importer("videos");
 
   ipc.on("applyDisplaySettings", (event, displayParams) => {
     pixelDensity(displayParams.pixelDensity);
   });
 
   // ipc calls to check for previously loaded MIDI if window is refreshed
-  ipc.send("p5MidiInit", null);
+  ipc.send("p5Init", null);
 
-  ipc.on("p5MidiInit", (event, args) => {
-    midi = args;
+  // recall previous values for midi, sketch, sketch folder, and sketch state on refresh
+  // on the first init (i.e. haven't refreshed yet), sketch name/folder are irrelevant
+  ipc.on("p5Init", (event, lastUsedSettings) => {
+    midi = lastUsedSettings.midi;
+    moduleName = lastUsedSettings.sketch || "";
+    if (lastUsedSettings.sketchFolder) {
+      sketchesPath = lastUsedSettings.sketchFolder;
+    }
+    state = generateState(sketchesPath);
   });
 }
 
@@ -66,11 +86,7 @@ function setup() {
 function draw() {
   if (moduleName !== "") {
     try {
-      let moduleFile = require(path.resolve(
-        __dirname,
-        "../../sketches/",
-        moduleName
-      ));
+      let moduleFile = require(path.resolve(sketchesPath, moduleName));
       moduleFile.run();
     } catch (err) {
       console.error(err);
@@ -88,8 +104,14 @@ function forwardSketchChangesToUI(controlsArray) {
   }
 }
 
+function clearImgTags() {
+  const imgs = document.querySelectorAll("img");
+  imgs.forEach((img) => img.remove());
+}
+
 ipc.on("sketchSelector", (event, arg) => {
   resetStyles();
+  clearImgTags(); // remove Img tags embedded via p5's createImg()
   moduleName = arg;
 });
 
@@ -128,42 +150,42 @@ function importer(folder) {
     } else {
       if (folder === "shaders") {
         scanShaders();
-      }
+      } else {
+        files.forEach((file) => {
+          // get file name
+          let name =
+            file.substring(0, file.lastIndexOf(".")).replace(/[- ]/g, "_") ||
+            file;
 
-      files.forEach((file, index) => {
-        // get file name
-        let name =
-          file.substring(0, file.lastIndexOf(".")).replace(/[- ]/g, "_") ||
-          file;
-
-        // check which folder we're importing from
-        if (folder === "models") {
-          // create entry on assets object & load file
-          assets.models[name] = loadModel(
-            path.join(assetsPath, "models", file),
-            true
-          );
-        }
-
-        if (folder === "textures") {
-          assets.textures[name] = loadImage(
-            path.join(assetsPath, "textures", file)
-          );
-        }
-
-        if (folder === "fonts") {
-          // grab file names and replace hyphens with underscores
-          let fontName = file
-            .substring(0, file.lastIndexOf("."))
-            .replace(/[- ]/g, "_");
-          // filter out font license txt files
-          if (file.substring(file.length - 4, file.length) !== ".txt") {
-            assets.fonts[fontName] = loadFont(
-              path.join(assetsPath, "fonts", file)
-            );
+          // check which folder we're importing from
+          if (folder === "models") {
+            // create entry on assets object & load file
+            const filePath = path.join(assetsPath, "models", file);
+            assets.models[name] = loadModel(filePath, true);
+            assets.models[name].path = filePath;
+          } else if (folder === "images") {
+            const filePath = path.join(assetsPath, "images", file);
+            assets.images[name] = loadImage(filePath);
+            assets.images[name].path = filePath;
+          } else if (folder === "videos") {
+            const filePath = path.join(assetsPath, "videos", file);
+            assets.videos[name] = createVideo(filePath);
+            assets.videos[name].path = filePath;
+            assets.videos[name].hide();
+          } else if (folder === "fonts") {
+            const filePath = path.join(assetsPath, "fonts", file);
+            // grab file names and replace hyphens with underscores
+            let fontName = file
+              .substring(0, file.lastIndexOf("."))
+              .replace(/[- ]/g, "_");
+            // filter out font license txt files
+            if (file.substring(file.length - 4, file.length) !== ".txt") {
+              assets.fonts[fontName] = loadFont(filePath);
+              assets.fonts[fontName].path = filePath;
+            }
           }
-        }
-      });
+        });
+      }
     }
   });
 }
