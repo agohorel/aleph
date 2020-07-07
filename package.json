@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^2.0.9",
+    "electron": "^7.2.4",
     "electron-packager": "^12.2.0",
     "electron-rebuild": "^1.8.4",
     "grunt": "^1.0.4"
