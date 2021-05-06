@@ -1,3 +1,5 @@
+**Note: this repo is no longer maintained - I am rebuilding aleph from the ground up [here](https://github.com/a-l-e-p-h/aleph)**
+
 # a l e p h ![aleph logo](./img/32x32.png)
 
 Aleph is a cross-platform desktop client and programming framework for developing and performing audio reactive visualizations. It is built on [Electron](https://electronjs.org/) and uses [P5.js](https://p5js.org/) for graphics and audio analysis. Aleph handles most of the behind-the-scenes work so you can get straight to writing code and getting things up on the screen and adds MIDI control support allowing for expressive live performances.
